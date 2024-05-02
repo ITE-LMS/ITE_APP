@@ -8,6 +8,7 @@ import 'package:public_testing_app/Project%201/controllers/Auth_Controllers/emai
 import 'package:public_testing_app/Project%201/components/TextFormField.dart';
 import 'package:public_testing_app/Project%201/views/Auth_Screens/Elements_For_Auth/SignIn_Container.dart';
 import 'package:public_testing_app/Themes.dart';
+import 'package:public_testing_app/main.dart';
 import 'Elements_For_Auth/Custom_Shape_top.dart';
 
 final EmailController controller = Get.put(EmailController());
@@ -19,10 +20,10 @@ class EmailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        statusBarColor: Get.isDarkMode
+        statusBarColor: is_Dark!.getString('is_dark') == 'true'
             ? Themes.darkColorScheme.primary
             : Themes.colorScheme.primary,
-        systemNavigationBarColor: Get.isDarkMode
+        systemNavigationBarColor: is_Dark!.getString('is_dark') == 'true'
             ? Themes.darkColorScheme.primary
             : Themes.colorScheme.primary,
       ),
@@ -39,7 +40,7 @@ class EmailScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         backgroundColor:
-            Get.isDarkMode ? Themes.darkColorScheme.background : Colors.white,
+            is_Dark!.getString('is_dark') == 'true' ? Themes.darkColorScheme.background : Colors.white,
         body: SizedBox(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,

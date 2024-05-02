@@ -19,8 +19,9 @@ class VerificationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor:
-            Get.isDarkMode ? Themes.darkColorScheme.background : Colors.white,
+        backgroundColor: is_Dark!.getString('is_dark') == 'true'
+            ? Themes.darkColorScheme.background
+            : Colors.white,
         body: SizedBox(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
@@ -190,8 +191,9 @@ class VerificationScreen extends StatelessWidget {
                           children: [
                             Icon(
                               Icons.arrow_back_rounded,
-                              color:
-                                  Get.isDarkMode ? Colors.white : Colors.black,
+                              color: is_Dark!.getString('is_dark') == 'true'
+                                  ? Colors.white
+                                  : Colors.black,
                             ),
                             const SizedBox(
                               width: 10,

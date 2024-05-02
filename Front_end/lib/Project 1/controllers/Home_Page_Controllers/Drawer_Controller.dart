@@ -7,9 +7,6 @@ import 'package:get/get.dart';
 import '../../../Themes.dart';
 
 class DrawersController extends GetxController {
-  double Drawer_Activater = 0;
-
-
   @override
   void onInit() {
     SystemChrome.setSystemUIOverlayStyle(
@@ -24,6 +21,4 @@ class DrawersController extends GetxController {
     );
     super.onInit();
   }
-
-
 }

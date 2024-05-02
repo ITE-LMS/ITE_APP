@@ -1,7 +1,6 @@
 // ignore_for_file: file_names, body_might_complete_normally_nullable, invalid_use_of_protected_member, non_constant_identifier_names, unused_local_variable
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:public_testing_app/Project%201/components/elevatedButton.dart';
 import 'package:public_testing_app/Project%201/controllers/Auth_Controllers/pass_Controller.dart';
@@ -18,17 +17,6 @@ class PasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarColor: Get.isDarkMode
-            ? Themes.darkColorScheme.primary
-            : Themes.colorScheme.primary,
-        systemNavigationBarColor: Get.isDarkMode
-            ? Themes.darkColorScheme.primary
-            : Themes.colorScheme.primary,
-      ),
-    );
-
     List<Widget> content = [const SizedBox(height: 15)];
     if (Auth!.getString('email&verification') == 'false') {
       content = [
@@ -60,8 +48,9 @@ class PasswordScreen extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
-        backgroundColor:
-            Get.isDarkMode ? Themes.darkColorScheme.background : Colors.white,
+        backgroundColor: is_Dark!.getString('is_dark') == 'true'
+            ? Themes.darkColorScheme.background
+            : Colors.white,
         body: SizedBox(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
@@ -201,8 +190,9 @@ class PasswordScreen extends StatelessWidget {
                           children: [
                             Icon(
                               Icons.arrow_back_rounded,
-                              color:
-                                  Get.isDarkMode ? Colors.white : Colors.black,
+                              color: is_Dark!.getString('is_dark') == 'true'
+                                  ? Colors.white
+                                  : Colors.black,
                             ),
                             const SizedBox(
                               width: 10,

@@ -349,30 +349,19 @@ import 'package:public_testing_app/Project%201/views/Auth_Screens/email_Screen.d
 import 'package:public_testing_app/Project%201/views/Auth_Screens/password_Screen.dart';
 import 'package:public_testing_app/Project%201/views/Auth_Screens/verfication_screen.dart';
 import 'package:public_testing_app/Project%201/views/Introduction_Screens/IntroductionScreen.dart';
-import 'package:public_testing_app/Project%201/views/Student_app/Student_Drawer_Screen.dart';
+import 'package:public_testing_app/Project%201/views/Student_app/Student_HomePage_Screen.dart';
 import 'package:public_testing_app/Themes.dart';
 import 'package:public_testing_app/firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'Project 1/controllers/dark_mode_Controller.dart';
 import 'Project 1/middlewares/is_Doctor_Middleware.dart';
-import 'Project 1/views/Doctor_app/Doctor_HomePage_Screen.dart';
 
 SharedPreferences? Auth;
 SharedPreferences? is_Dark;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle(
-      statusBarColor: Get.isDarkMode
-          ? Themes.darkColorScheme.primary
-          : Themes.colorScheme.primary,
-      systemNavigationBarColor: Get.isDarkMode
-          ? Themes.darkColorScheme.primary
-          : Themes.colorScheme.primary,
-    ),
-  );
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -404,12 +393,12 @@ Future<void> main() async {
             page: () => const VerificationScreen()),
         GetPage(
           name: '/StudentHomePageScreen',
-          page: () => const StudentDrawerScreen(),
+          page: () => const StudentHomePageScreen(),
         ),
-        GetPage(
-          name: '/DoctorHomePageScreen',
-          page: () => const DoctorHomePageScreen(),
-        ),
+        // GetPage(
+        //   name: '/DoctorHomePageScreen',
+        //   page: () => const DoctorDrawerScreen(),
+        // ),
       ],
     ),
   );

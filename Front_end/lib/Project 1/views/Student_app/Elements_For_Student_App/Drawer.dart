@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:public_testing_app/Project%201/components/ListTile.dart';
 import 'package:public_testing_app/Project%201/controllers/dark_mode_Controller.dart';
 import 'package:public_testing_app/Themes.dart';
@@ -14,7 +13,7 @@ class MyDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Get.isDarkMode
+      backgroundColor: is_Dark!.getString('is_dark') == 'true'
           ? Themes.darkColorScheme.secondaryContainer
           : Themes.colorScheme.primaryContainer,
       child: Column(
@@ -25,7 +24,9 @@ class MyDrawer extends StatelessWidget {
             child: Column(
               children: [
                 CircleAvatar(
-                  backgroundColor: Get.isDarkMode ? Colors.white : Colors.black,
+                  backgroundColor: is_Dark!.getString('is_dark') == 'true'
+                      ? Colors.white
+                      : Colors.black,
                   radius: MediaQuery.of(context).size.width / 9,
                   child: CircleAvatar(
                     radius: MediaQuery.of(context).size.width / 9.5,
@@ -53,22 +54,58 @@ class MyDrawer extends StatelessWidget {
             ),
           ),
           MyListTile(
-            label: 'Home',
-            onTap: () {},
-            prefix: const Icon(Icons.home),
-          ),
+              label: 'Home',
+              onTap: () {},
+              prefix: Image(
+                  height: MediaQuery.of(context).size.width / 12,
+                  width: MediaQuery.of(context).size.width / 10,
+                  color: is_Dark!.getString('is_dark') == 'true'
+                      ? Colors.white
+                      : Colors.black,
+                  image: const AssetImage('assets/images/home.png'))),
           MyListTile(
-            label: 'Profile',
-            onTap: () {},
-            prefix: const Icon(Icons.person_rounded),
-          ),
+              label: 'My Subject',
+              onTap: () {},
+              prefix: Image(
+                  height: MediaQuery.of(context).size.width / 12,
+                  width: MediaQuery.of(context).size.width / 10,
+                  color: is_Dark!.getString('is_dark') == 'true'
+                      ? Colors.white
+                      : Colors.black,
+                  image: const AssetImage('assets/images/library.png'))),
+          MyListTile(
+              label: 'Courses',
+              onTap: () {},
+              prefix: Image(
+                  height: MediaQuery.of(context).size.width / 12,
+                  width: MediaQuery.of(context).size.width / 10,
+                  color: is_Dark!.getString('is_dark') == 'true'
+                      ? Colors.white
+                      : Colors.black,
+                  image: const AssetImage('assets/images/seminar.png'))),
+          MyListTile(
+              label: 'Saved Files',
+              onTap: () {},
+              prefix: Image(
+                  height: MediaQuery.of(context).size.width / 12,
+                  width: MediaQuery.of(context).size.width / 10,
+                  color: is_Dark!.getString('is_dark') == 'true'
+                      ? Colors.white
+                      : Colors.black,
+                  image: const AssetImage('assets/images/bookmark.png'))),
           GetBuilder<DarkModeController>(
               init: DarkModeController(),
               builder: (controller) {
                 return SwitchListTile(
                   title: Row(
                     children: [
-                      const Icon(Icons.nightlight_outlined),
+                      Image(
+                          color: is_Dark!.getString('is_dark') == 'true'
+                              ? Colors.white
+                              : Colors.black,
+                          height: MediaQuery.of(context).size.width / 12,
+                          width: MediaQuery.of(context).size.width / 10,
+                          image: const AssetImage('assets/images/night.png')),
                       const SizedBox(width: 15),
                       Text(
                         'Night Mode',
@@ -86,14 +123,30 @@ class MyDrawer extends StatelessWidget {
                 );
               }),
           MyListTile(
-            label: 'logOut',
+            label: 'Edit Profile',
             onTap: () async {
-              await GoogleSignIn().signOut();
-              Auth!.setString('logedIn', 'flase');
-              Get.offAllNamed('EmailPageScreen');
+              // await GoogleSignIn().signOut();
+              // Auth!.setString('logedIn', 'false');
+              // Get.offAllNamed('EmailPageScreen');
             },
-            prefix: const Icon(Icons.logout_rounded),
+            prefix: Image(
+                color: is_Dark!.getString('is_dark') == 'true'
+                    ? Colors.white
+                    : Colors.black,
+                height: MediaQuery.of(context).size.width / 12,
+                width: MediaQuery.of(context).size.width / 10,
+                image: const AssetImage('assets/images/edit.png')),
           ),
+          MyListTile(
+              label: 'Settings',
+              onTap: () {},
+              prefix: Image(
+                  height: MediaQuery.of(context).size.width / 12,
+                  width: MediaQuery.of(context).size.width / 10,
+                  color: is_Dark!.getString('is_dark') == 'true'
+                      ? Colors.white
+                      : Colors.black,
+                  image: const AssetImage('assets/images/settings.png'))),
         ],
       ),
     );

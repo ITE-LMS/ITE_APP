@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
-import 'package:get/get.dart';
 import 'package:public_testing_app/Themes.dart';
+import 'package:public_testing_app/main.dart';
 
 class CustomShapeTop extends StatelessWidget {
   const CustomShapeTop({super.key});
@@ -34,9 +34,15 @@ class RPSCustomPainter extends CustomPainter {
       ..strokeJoin = StrokeJoin.miter;
     paint_fill_1.shader = ui.Gradient.linear(
         Offset(size.width * 0.25, size.height * -0.00),
-        Offset(size.width * 0.25, size.height * 0.86),
-        [!Get.isDarkMode? Themes.colorScheme.primary : Themes.darkColorScheme.primary, const Color(0xffffffff)],
-        [0.00, 1.00]);
+        Offset(size.width * 0.25, size.height * 0.86), [
+      (is_Dark!.getString('is_dark') == 'true')
+          ? Themes.darkColorScheme.primary
+          : Themes.colorScheme.primary,
+      const Color(0xffffffff)
+    ], [
+      0.00,
+      1.00
+    ]);
 
     Path path_1 = Path();
     path_1.moveTo(size.width * 0.5006417, size.height * -0.0007429);
@@ -63,11 +69,16 @@ class RPSCustomPainter extends CustomPainter {
       ..strokeWidth = size.width * 0.00
       ..strokeCap = StrokeCap.butt
       ..strokeJoin = StrokeJoin.miter;
-    paint_fill_2.shader = ui.Gradient.linear(
-        Offset(size.width * 0.75, 0),
-        Offset(size.width * 0.75, size.height * 0.86),
-        [!Get.isDarkMode? Themes.colorScheme.primary : Themes.darkColorScheme.primary, const Color(0xffffffff)],
-        [0.00, 1.00]);
+    paint_fill_2.shader = ui.Gradient.linear(Offset(size.width * 0.75, 0),
+        Offset(size.width * 0.75, size.height * 0.86), [
+      (is_Dark!.getString('is_dark') == 'true')
+          ? Themes.darkColorScheme.primary
+          : Themes.colorScheme.primary,
+      const Color(0xffffffff)
+    ], [
+      0.00,
+      1.00
+    ]);
 
     Path path_2 = Path();
     path_2.moveTo(size.width * 0.4986667, 0);

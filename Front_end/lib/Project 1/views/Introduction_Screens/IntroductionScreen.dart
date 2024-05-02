@@ -6,6 +6,7 @@ import 'package:introduction_screen/introduction_screen.dart';
 import 'package:lottie/lottie.dart';
 import 'package:public_testing_app/Project%201/controllers/dark_mode_Controller.dart';
 import 'package:public_testing_app/Themes.dart';
+import 'package:public_testing_app/main.dart';
 
 DarkModeController controller = Get.put(DarkModeController());
 
@@ -18,10 +19,10 @@ class IntroductionScreens extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         backgroundColor:
-            Get.isDarkMode ? Themes.darkColorScheme.background : Colors.white,
+            is_Dark!.getString('is_dark') == 'true' ? Themes.darkColorScheme.background : Colors.white,
         body: IntroductionScreen(
           globalBackgroundColor:
-              Get.isDarkMode ? Themes.darkColorScheme.background : Colors.white,
+              is_Dark!.getString('is_dark') == 'true' ? Themes.darkColorScheme.background : Colors.white,
           pages: [
             PageViewModel(
               decoration: const PageDecoration(
@@ -148,7 +149,7 @@ class IntroductionScreens extends StatelessWidget {
           dotsDecorator: DotsDecorator(
             size: const Size.square(10.0),
             activeSize: const Size(20.0, 10.0),
-            color: Get.isDarkMode ? Colors.white60 : Colors.black54,
+            color: is_Dark!.getString('is_dark') == 'true' ? Colors.white60 : Colors.black54,
             activeColor: Get.isDarkMode
                 ? Themes.darkColorScheme.primary
                 : Themes.colorScheme.primary,
