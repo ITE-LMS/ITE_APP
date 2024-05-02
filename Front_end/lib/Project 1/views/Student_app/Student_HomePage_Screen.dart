@@ -7,6 +7,8 @@ import 'package:public_testing_app/Project%201/views/Student_app/Elements_For_St
 import 'package:public_testing_app/Themes.dart';
 import 'package:public_testing_app/main.dart';
 
+import 'Elements_For_Student_App/Animated_darkMode_button.dart';
+
 DrawersController controller = Get.put(DrawersController());
 
 class StudentHomePageScreen extends StatelessWidget {
@@ -21,26 +23,37 @@ class StudentHomePageScreen extends StatelessWidget {
             ? Themes.darkColorScheme.background
             : Colors.white,
         appBar: AppBar(
-          leading: Builder(builder: (context) {
-            return IconButton(
+          actions: const [
+            Padding(
+              padding: EdgeInsets.only(right: 6.0),
+              child: AnimatedDarkModeButton(),
+            ),
+          ],
+          leading: Builder(
+            builder: (context) {
+              return IconButton(
                 onPressed: () {
                   Scaffold.of(context).openDrawer();
                 },
                 icon: Image(
-                    height: MediaQuery.of(context).size.width / 12,
-                    width: MediaQuery.of(context).size.width / 10,
-                    color: is_Dark!.getString('is_dark') == 'true'
-                        ? Colors.green
-                        : Colors.blue,
-                    image: const AssetImage('assets/images/option.png')));
-          }),
+                  height: MediaQuery.of(context).size.width / 12,
+                  width: MediaQuery.of(context).size.width / 10,
+                  color: is_Dark!.getString('is_dark') == 'true'
+                      ? Themes.darkColorScheme.primary
+                      : Themes.colorScheme.primary,
+                  image: const AssetImage('assets/images/option.png'),
+                ),
+              );
+            },
+          ),
           centerTitle: true,
           title: Text(
             'ITE',
             style: Theme.of(context).textTheme.titleLarge!.copyWith(
                   color: is_Dark!.getString('is_dark') == 'true'
-                      ? Colors.green
-                      : Colors.blue,
+                      ? Themes.darkColorScheme.primary
+                      : Themes.colorScheme.primary,
+                  fontSize: MediaQuery.of(context).size.width / 12,
                 ),
           ),
         ),

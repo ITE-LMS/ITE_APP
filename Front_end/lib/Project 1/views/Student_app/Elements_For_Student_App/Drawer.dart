@@ -1,9 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:public_testing_app/Project%201/components/ListTile.dart';
-import 'package:public_testing_app/Project%201/controllers/dark_mode_Controller.dart';
 import 'package:public_testing_app/Themes.dart';
 import 'package:public_testing_app/main.dart';
 
@@ -54,74 +52,53 @@ class MyDrawer extends StatelessWidget {
             ),
           ),
           MyListTile(
-              label: 'Home',
-              onTap: () {},
-              prefix: Image(
-                  height: MediaQuery.of(context).size.width / 12,
-                  width: MediaQuery.of(context).size.width / 10,
-                  color: is_Dark!.getString('is_dark') == 'true'
-                      ? Colors.white
-                      : Colors.black,
-                  image: const AssetImage('assets/images/home.png'))),
+            label: 'Home',
+            onTap: () {},
+            prefix: Image(
+              height: MediaQuery.of(context).size.width / 12,
+              width: MediaQuery.of(context).size.width / 10,
+              color: is_Dark!.getString('is_dark') == 'true'
+                  ? Colors.white
+                  : Colors.black,
+              image: const AssetImage('assets/images/home.png'),
+            ),
+          ),
           MyListTile(
-              label: 'My Subject',
-              onTap: () {},
-              prefix: Image(
-                  height: MediaQuery.of(context).size.width / 12,
-                  width: MediaQuery.of(context).size.width / 10,
-                  color: is_Dark!.getString('is_dark') == 'true'
-                      ? Colors.white
-                      : Colors.black,
-                  image: const AssetImage('assets/images/library.png'))),
+            label: 'My Subject',
+            onTap: () {},
+            prefix: Image(
+              height: MediaQuery.of(context).size.width / 12,
+              width: MediaQuery.of(context).size.width / 10,
+              color: is_Dark!.getString('is_dark') == 'true'
+                  ? Colors.white
+                  : Colors.black,
+              image: const AssetImage('assets/images/library.png'),
+            ),
+          ),
           MyListTile(
-              label: 'Courses',
-              onTap: () {},
-              prefix: Image(
-                  height: MediaQuery.of(context).size.width / 12,
-                  width: MediaQuery.of(context).size.width / 10,
-                  color: is_Dark!.getString('is_dark') == 'true'
-                      ? Colors.white
-                      : Colors.black,
-                  image: const AssetImage('assets/images/seminar.png'))),
+            label: 'Courses',
+            onTap: () {},
+            prefix: Image(
+              height: MediaQuery.of(context).size.width / 12,
+              width: MediaQuery.of(context).size.width / 10,
+              color: is_Dark!.getString('is_dark') == 'true'
+                  ? Colors.white
+                  : Colors.black,
+              image: const AssetImage('assets/images/seminar.png'),
+            ),
+          ),
           MyListTile(
-              label: 'Saved Files',
-              onTap: () {},
-              prefix: Image(
-                  height: MediaQuery.of(context).size.width / 12,
-                  width: MediaQuery.of(context).size.width / 10,
-                  color: is_Dark!.getString('is_dark') == 'true'
-                      ? Colors.white
-                      : Colors.black,
-                  image: const AssetImage('assets/images/bookmark.png'))),
-          GetBuilder<DarkModeController>(
-              init: DarkModeController(),
-              builder: (controller) {
-                return SwitchListTile(
-                  title: Row(
-                    children: [
-                      Image(
-                          color: is_Dark!.getString('is_dark') == 'true'
-                              ? Colors.white
-                              : Colors.black,
-                          height: MediaQuery.of(context).size.width / 12,
-                          width: MediaQuery.of(context).size.width / 10,
-                          image: const AssetImage('assets/images/night.png')),
-                      const SizedBox(width: 15),
-                      Text(
-                        'Night Mode',
-                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            fontSize: MediaQuery.of(context).size.width / 23),
-                      ),
-                    ],
-                  ),
-                  value: controller.is_dark_mode,
-                  onChanged: (value) {
-                    controller.is_dark_mode = !controller.is_dark_mode;
-                    controller.changeMode(controller.is_dark_mode);
-                    controller.update();
-                  },
-                );
-              }),
+            label: 'Saved Files',
+            onTap: () {},
+            prefix: Image(
+              height: MediaQuery.of(context).size.width / 12,
+              width: MediaQuery.of(context).size.width / 10,
+              color: is_Dark!.getString('is_dark') == 'true'
+                  ? Colors.white
+                  : Colors.black,
+              image: const AssetImage('assets/images/bookmark.png'),
+            ),
+          ),
           MyListTile(
             label: 'Edit Profile',
             onTap: () async {
@@ -138,15 +115,17 @@ class MyDrawer extends StatelessWidget {
                 image: const AssetImage('assets/images/edit.png')),
           ),
           MyListTile(
-              label: 'Settings',
-              onTap: () {},
-              prefix: Image(
-                  height: MediaQuery.of(context).size.width / 12,
-                  width: MediaQuery.of(context).size.width / 10,
-                  color: is_Dark!.getString('is_dark') == 'true'
-                      ? Colors.white
-                      : Colors.black,
-                  image: const AssetImage('assets/images/settings.png'))),
+            label: 'Settings',
+            onTap: () {},
+            prefix: Image(
+              height: MediaQuery.of(context).size.width / 12,
+              width: MediaQuery.of(context).size.width / 10,
+              color: is_Dark!.getString('is_dark') == 'true'
+                  ? Colors.white
+                  : Colors.black,
+              image: const AssetImage('assets/images/settings.png'),
+            ),
+          ),
         ],
       ),
     );

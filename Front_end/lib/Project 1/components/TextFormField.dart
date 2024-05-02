@@ -36,7 +36,7 @@ class MyTextFormField extends StatelessWidget {
         obscureText: Pass_Security ?? false,
         controller: TextController,
         decoration: InputDecoration(
-          contentPadding: const EdgeInsets.all(20),
+          contentPadding: const EdgeInsets.all(18),
           border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(12),
