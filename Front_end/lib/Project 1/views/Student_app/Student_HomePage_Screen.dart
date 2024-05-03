@@ -8,6 +8,7 @@ import 'package:public_testing_app/Themes.dart';
 import 'package:public_testing_app/main.dart';
 
 import 'Elements_For_Student_App/Animated_darkMode_button.dart';
+import 'Elements_For_Student_App/drawer_icon.dart';
 
 DrawersController controller = Get.put(DrawersController());
 
@@ -23,29 +24,22 @@ class StudentHomePageScreen extends StatelessWidget {
             ? Themes.darkColorScheme.background
             : Colors.white,
         appBar: AppBar(
+          backgroundColor: is_Dark!.getString('is_dark') == 'true'
+              ? Themes.darkColorScheme.background
+              : Themes.colorScheme.primaryContainer,
+          elevation: 3,
           actions: const [
             Padding(
               padding: EdgeInsets.only(right: 6.0),
               child: AnimatedDarkModeButton(),
             ),
           ],
-          leading: Builder(
-            builder: (context) {
-              return IconButton(
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-                icon: Image(
-                  height: MediaQuery.of(context).size.width / 12,
-                  width: MediaQuery.of(context).size.width / 10,
-                  color: is_Dark!.getString('is_dark') == 'true'
-                      ? Themes.darkColorScheme.primary
-                      : Themes.colorScheme.primary,
-                  image: const AssetImage('assets/images/option.png'),
+          leading: Get.locale == const Locale('en')
+              ? const drawerIcon()
+              : const Padding(
+                  padding: EdgeInsets.only(right: 6.0),
+                  child: AnimatedDarkModeButton(),
                 ),
-              );
-            },
-          ),
           centerTitle: true,
           title: Text(
             'ITE',

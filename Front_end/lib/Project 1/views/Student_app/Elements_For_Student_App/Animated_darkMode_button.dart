@@ -21,15 +21,16 @@ class AnimatedDarkModeButton extends StatelessWidget {
               dark_controller.update();
             },
             child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 1000),
+              duration: const Duration(milliseconds: 800),
               transitionBuilder: (child, animation) {
                 return RotationTransition(
-                  turns: Tween<double>(begin:0.3 , end: 1.0).animate(animation),
+                  turns: Tween<double>(begin: 0.3, end: 1.0).animate(animation),
                   child: child,
                 );
               },
               child: is_Dark!.getString('is_dark') == 'true'
                   ? Image(
+                      filterQuality: FilterQuality.high,
                       key: ValueKey(is_Dark!.getString('is_dark')),
                       color: is_Dark!.getString('is_dark') == 'true'
                           ? Themes.darkColorScheme.primary
@@ -39,6 +40,7 @@ class AnimatedDarkModeButton extends StatelessWidget {
                       image: const AssetImage('assets/images/sun.png'),
                     )
                   : Image(
+                      filterQuality: FilterQuality.high,
                       key: ValueKey(is_Dark!.getString('is_dark')),
                       color: is_Dark!.getString('is_dark') == 'true'
                           ? Themes.darkColorScheme.primary

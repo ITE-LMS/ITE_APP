@@ -341,7 +341,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:public_testing_app/Project%201/controllers/Auth_Controllers/pass_Controller.dart';
 import 'package:public_testing_app/Project%201/controllers/Auth_Controllers/verification_controller.dart';
@@ -402,7 +401,6 @@ Future<void> main() async {
       ],
     ),
   );
-  FlutterNativeSplash.remove();
 }
 
 class Binding extends Bindings {
@@ -411,15 +409,3 @@ class Binding extends Bindings {
     Get.put(DarkModeController());
   }
 }
-
-
-  // AwesomeDialog warning_attempts = AwesomeDialog(
-    //   context: context,
-    //   dialogType: DialogType.error,
-    //   animType: AnimType.topSlide,
-    //   showCloseIcon: true,
-    //   title: 'error',
-    //   desc: 'Too many attempts reLogin please!',
-    //   btnCancelOnPress: () {},
-    //   btnOkOnPress: () {},
-    // );
