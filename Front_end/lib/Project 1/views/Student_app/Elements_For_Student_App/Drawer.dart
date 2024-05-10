@@ -1,9 +1,13 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:public_testing_app/Project%201/components/ListTile.dart';
-import 'package:public_testing_app/Themes.dart';
+import 'package:public_testing_app/Project 1/models/Themes.dart';
+import 'package:public_testing_app/Project%201/controllers/Auth_Controllers/logout_Controller.dart';
 import 'package:public_testing_app/main.dart';
+
+LogoutController controller = Get.put(LogoutController());
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
@@ -17,17 +21,16 @@ class MyDrawer extends StatelessWidget {
       child: Column(
         children: [
           DrawerHeader(
-            padding:
-                EdgeInsets.only(top: MediaQuery.of(context).size.width / 40),
+            padding: EdgeInsets.only(top: Themes.getWidth(context) / 40),
             child: Column(
               children: [
                 CircleAvatar(
                   backgroundColor: is_Dark!.getString('is_dark') == 'true'
                       ? Colors.white
                       : Colors.black,
-                  radius: MediaQuery.of(context).size.width / 9,
+                  radius: Themes.getWidth(context) / 9,
                   child: CircleAvatar(
-                    radius: MediaQuery.of(context).size.width / 9.5,
+                    radius: Themes.getWidth(context) / 9.5,
                     backgroundImage: const AssetImage(
                       //photo!getString('url') ??
                       'assets/images/student.png',
@@ -37,14 +40,14 @@ class MyDrawer extends StatelessWidget {
                 Text(
                   Auth!.getString('user_name') ?? '',
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        fontSize: MediaQuery.of(context).size.width / 20,
+                        fontSize: Themes.getWidth(context) / 20,
                       ),
                   textAlign: TextAlign.start,
                 ),
                 Text(
                   Auth!.getString('email')!,
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        fontSize: MediaQuery.of(context).size.width / 35,
+                        fontSize: Themes.getWidth(context) / 35,
                       ),
                   textAlign: TextAlign.start,
                 ),
@@ -55,8 +58,8 @@ class MyDrawer extends StatelessWidget {
             label: 'Home',
             onTap: () {},
             prefix: Image(
-              height: MediaQuery.of(context).size.width / 12,
-              width: MediaQuery.of(context).size.width / 10,
+              height: Themes.getWidth(context) / 12,
+              width: Themes.getWidth(context) / 10,
               color: is_Dark!.getString('is_dark') == 'true'
                   ? Colors.white
                   : Colors.black,
@@ -67,8 +70,8 @@ class MyDrawer extends StatelessWidget {
             label: 'My Subject',
             onTap: () {},
             prefix: Image(
-              height: MediaQuery.of(context).size.width / 12,
-              width: MediaQuery.of(context).size.width / 10,
+              height: Themes.getWidth(context) / 12,
+              width: Themes.getWidth(context) / 10,
               color: is_Dark!.getString('is_dark') == 'true'
                   ? Colors.white
                   : Colors.black,
@@ -76,23 +79,11 @@ class MyDrawer extends StatelessWidget {
             ),
           ),
           MyListTile(
-            label: 'Courses',
-            onTap: () {},
-            prefix: Image(
-              height: MediaQuery.of(context).size.width / 12,
-              width: MediaQuery.of(context).size.width / 10,
-              color: is_Dark!.getString('is_dark') == 'true'
-                  ? Colors.white
-                  : Colors.black,
-              image: const AssetImage('assets/images/seminar.png'),
-            ),
-          ),
-          MyListTile(
             label: 'Saved Files',
             onTap: () {},
             prefix: Image(
-              height: MediaQuery.of(context).size.width / 12,
-              width: MediaQuery.of(context).size.width / 10,
+              height: Themes.getWidth(context) / 12,
+              width: Themes.getWidth(context) / 10,
               color: is_Dark!.getString('is_dark') == 'true'
                   ? Colors.white
                   : Colors.black,
@@ -100,30 +91,40 @@ class MyDrawer extends StatelessWidget {
             ),
           ),
           MyListTile(
-            label: 'Edit Profile',
-            onTap: () async {
-              // await GoogleSignIn().signOut();
-              // Auth!.setString('logedIn', 'false');
-              // Get.offAllNamed('EmailPageScreen');
-            },
+            label: 'Change Password',
+            onTap: () {},
+            prefix: Image(
+              height: Themes.getWidth(context) / 12,
+              width: Themes.getWidth(context) / 10,
+              color: is_Dark!.getString('is_dark') == 'true'
+                  ? Colors.white
+                  : Colors.black,
+              image: const AssetImage('assets/images/reset-password.png'),
+            ),
+          ),
+          MyListTile(
+            label: 'Change Language',
+            onTap: () {},
             prefix: Image(
                 color: is_Dark!.getString('is_dark') == 'true'
                     ? Colors.white
                     : Colors.black,
-                height: MediaQuery.of(context).size.width / 12,
-                width: MediaQuery.of(context).size.width / 10,
-                image: const AssetImage('assets/images/edit.png')),
+                height: Themes.getWidth(context) / 12,
+                width: Themes.getWidth(context) / 10,
+                image: const AssetImage('assets/images/translation.png')),
           ),
           MyListTile(
-            label: 'Settings',
-            onTap: () {},
+            label: 'Log Out',
+            onTap: () {
+              controller.onLogOut();
+            },
             prefix: Image(
-              height: MediaQuery.of(context).size.width / 12,
-              width: MediaQuery.of(context).size.width / 10,
+              height: Themes.getWidth(context) / 12,
+              width: Themes.getWidth(context) / 10,
               color: is_Dark!.getString('is_dark') == 'true'
                   ? Colors.white
                   : Colors.black,
-              image: const AssetImage('assets/images/settings.png'),
+              image: const AssetImage('assets/images/logout.png'),
             ),
           ),
         ],

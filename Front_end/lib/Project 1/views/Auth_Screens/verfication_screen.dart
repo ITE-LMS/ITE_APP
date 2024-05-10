@@ -6,25 +6,31 @@ import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 import 'package:public_testing_app/Project%201/components/elevatedButton.dart';
 import 'package:public_testing_app/Project%201/controllers/Auth_Controllers/verification_controller.dart';
-import 'package:public_testing_app/Themes.dart';
+import 'package:public_testing_app/Project 1/models/Themes.dart';
 import 'package:public_testing_app/main.dart';
 import 'Elements_For_Auth/Custom_Shape_top.dart';
-
-VerificationController controller = Get.put(VerificationController());
 
 class VerificationScreen extends StatelessWidget {
   const VerificationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    VerificationController controller = Get.put(VerificationController());
+
+    Widget confirm = Text(
+      'confirm',
+      style: Theme.of(context).textTheme.labelLarge!.copyWith(
+          fontSize: Themes.getWidth(context) / 22, color: Colors.white),
+    );
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: is_Dark!.getString('is_dark') == 'true'
             ? Themes.darkColorScheme.background
             : Colors.white,
         body: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
+          width: Themes.getWidth(context),
+          height: Themes.getHeight(context),
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -41,7 +47,7 @@ class VerificationScreen extends StatelessWidget {
                       left: 0,
                       child: Image(
                         image: const AssetImage('assets/images/programmer.png'),
-                        width: MediaQuery.of(context).size.width / 3.5,
+                        width: Themes.getWidth(context) / 3.5,
                         height: MediaQuery.of(context).size.height / 6,
                       ),
                     ),
@@ -50,20 +56,24 @@ class VerificationScreen extends StatelessWidget {
                 const SizedBox(height: 80),
                 Text(
                   'Verification Code',
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      fontSize: MediaQuery.of(context).size.width / 12),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge!
+                      .copyWith(fontSize: Themes.getWidth(context) / 12),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 10),
                 Text(
                   'enter the code that we have sent to your email ${Auth!.getString('email')}',
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      fontSize: MediaQuery.of(context).size.width / 24),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium!
+                      .copyWith(fontSize: Themes.getWidth(context) / 24),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 20),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width / 0.75,
+                  width: Themes.getWidth(context) / 0.75,
                   child: Form(
                     key: controller.Form_Key,
                     child: Pinput(
@@ -71,8 +81,8 @@ class VerificationScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       defaultPinTheme: PinTheme(
-                        height: MediaQuery.of(context).size.width / 8,
-                        width: MediaQuery.of(context).size.width / 7.7,
+                        height: Themes.getWidth(context) / 8,
+                        width: Themes.getWidth(context) / 7.7,
                         textStyle: Theme.of(context)
                             .textTheme
                             .titleLarge!
@@ -91,7 +101,7 @@ class VerificationScreen extends StatelessWidget {
                       ),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'missin code';
+                          return 'code required';
                         } else if (int.tryParse(value) == null) {
                           return 'enter a valid code';
                         } else if (value.length != 6) {
@@ -106,8 +116,7 @@ class VerificationScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 Padding(
-                  padding: EdgeInsets.only(
-                      left: MediaQuery.of(context).size.width / 15),
+                  padding: EdgeInsets.only(left: Themes.getWidth(context) / 15),
                   child: Row(
                     children: [
                       Text(
@@ -126,6 +135,7 @@ class VerificationScreen extends StatelessWidget {
                                   timeController.counter++;
                                   timeController.onReady();
                                   timeController.update(['resend_code']);
+                                  controller.ResendCode();
                                 }
                               },
                               child: timeController.remainingSeconds <= 0
@@ -152,7 +162,7 @@ class VerificationScreen extends StatelessWidget {
                                     ),
                             );
                           }),
-                      SizedBox(width: MediaQuery.of(context).size.width / 6),
+                      SizedBox(width: Themes.getWidth(context) / 6),
                       GetX<VerificationController>(
                         init: VerificationController(),
                         builder: (controller) => Text(
@@ -165,27 +175,34 @@ class VerificationScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 30),
                 // Login Button :
-                MyElevetedButton(
-                  onTap: () {
-                    controller.onSave();
-                  },
-                  width: 3.6,
-                  height: 35,
-                  BackColor:
-                      Theme.of(context).colorScheme.primary.withOpacity(.7),
-                  label: 'confirm',
-                ),
+                GetBuilder<VerificationController>(
+                    id: 'circleIndicater',
+                    init: VerificationController(),
+                    builder: (verfy_controller) {
+                      return MyElevetedButton(
+                        onTap: () {
+                          controller.onSave();
+                        },
+                        width: 3.6,
+                        height: 35,
+                        BackColor: Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withOpacity(.7),
+                        widget: verfy_controller.circle ?? confirm,
+                      );
+                    }),
                 const SizedBox(height: 30),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Padding(
                       padding: EdgeInsets.only(
-                        left: MediaQuery.of(context).size.width / 15,
+                        left: Themes.getWidth(context) / 15,
                       ),
                       child: MyElevetedButton(
                         onTap: () {
-                          Get.offAllNamed('EmailPageScreen');
+                          Get.back();
                         },
                         widget: Row(
                           children: [
@@ -204,9 +221,7 @@ class VerificationScreen extends StatelessWidget {
                                   .textTheme
                                   .labelLarge!
                                   .copyWith(
-                                      fontSize:
-                                          MediaQuery.of(context).size.width /
-                                              25),
+                                      fontSize: Themes.getWidth(context) / 25),
                             ),
                           ],
                         ),

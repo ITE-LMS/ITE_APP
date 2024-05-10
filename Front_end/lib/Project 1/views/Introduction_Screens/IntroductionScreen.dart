@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:lottie/lottie.dart';
 import 'package:public_testing_app/Project%201/controllers/dark_mode_Controller.dart';
-import 'package:public_testing_app/Themes.dart';
+import 'package:public_testing_app/Project 1/models/Themes.dart';
 import 'package:public_testing_app/main.dart';
 
 DarkModeController controller = Get.put(DarkModeController());
@@ -31,7 +31,7 @@ class IntroductionScreens extends StatelessWidget {
               titleWidget: Text(
                 'Welcome To The ITE Learning Management System !',
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      fontSize: MediaQuery.of(context).size.width / 20,
+                      fontSize: Themes.getWidth(context) / 20,
                     ),
                 textAlign: TextAlign.center,
               ),
@@ -39,12 +39,12 @@ class IntroductionScreens extends StatelessWidget {
                 textAlign: TextAlign.center,
                 'Stay organized and save time with our streamlined LMS.',
                 style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      fontSize: MediaQuery.of(context).size.width / 30,
+                      fontSize: Themes.getWidth(context) / 30,
                     ),
               ),
               image: Lottie.asset(
                 'assets/json/First.json',
-                width: MediaQuery.of(context).size.width,
+                width: Themes.getWidth(context),
                 height: MediaQuery.of(context).size.height,
               ),
             ),
@@ -55,14 +55,14 @@ class IntroductionScreens extends StatelessWidget {
               titleWidget: Text(
                 'Simplify your teaching and enhance student engagement with our user-friendly LMS designed exclusively for ITE Engineering faculty.',
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      fontSize: MediaQuery.of(context).size.width / 20,
+                      fontSize: Themes.getWidth(context) / 20,
                     ),
                 textAlign: TextAlign.center,
               ),
               bodyWidget: const Text(''),
               image: Lottie.asset(
                 'assets/json/Second.json',
-                width: MediaQuery.of(context).size.width,
+                width: Themes.getWidth(context),
                 height: MediaQuery.of(context).size.height,
               ),
             ),
@@ -73,7 +73,7 @@ class IntroductionScreens extends StatelessWidget {
               titleWidget: Text(
                 'Prepare ITE Engineering students for real-world challenges with our LMS.',
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      fontSize: MediaQuery.of(context).size.width / 20,
+                      fontSize: Themes.getWidth(context) / 20,
                     ),
                 textAlign: TextAlign.center,
               ),
@@ -81,12 +81,12 @@ class IntroductionScreens extends StatelessWidget {
                 textAlign: TextAlign.center,
                 'Stay informed about everything happening in your college.',
                 style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      fontSize: MediaQuery.of(context).size.width / 30,
+                      fontSize: Themes.getWidth(context) / 30,
                     ),
               ),
               image: Lottie.asset(
                 'assets/json/Fourth.json',
-                width: MediaQuery.of(context).size.width,
+                width: Themes.getWidth(context),
                 height: MediaQuery.of(context).size.height,
               ),
             ),
@@ -97,7 +97,7 @@ class IntroductionScreens extends StatelessWidget {
               titleWidget: Text(
                 'are you ready ?',
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      fontSize: MediaQuery.of(context).size.width / 20,
+                      fontSize: Themes.getWidth(context) / 20,
                     ),
                 textAlign: TextAlign.center,
               ),
@@ -105,12 +105,12 @@ class IntroductionScreens extends StatelessWidget {
                 textAlign: TextAlign.center,
                 'please use a vpn',
                 style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      fontSize: MediaQuery.of(context).size.width / 30,
+                      fontSize: Themes.getWidth(context) / 30,
                     ),
               ),
               image: Lottie.asset(
                 'assets/json/Third.json',
-                width: MediaQuery.of(context).size.width,
+                width: Themes.getWidth(context),
                 height: MediaQuery.of(context).size.height,
               ),
             ),
@@ -119,7 +119,7 @@ class IntroductionScreens extends StatelessWidget {
           next: Text(
             'Next',
             style: TextStyle(
-              fontSize: MediaQuery.of(context).size.width / 20,
+              fontSize: Themes.getWidth(context) / 20,
               color: Theme.of(context).colorScheme.primary,
             ),
           ),
@@ -132,7 +132,7 @@ class IntroductionScreens extends StatelessWidget {
           skip: Text(
             'Skip',
             style: TextStyle(
-              fontSize: MediaQuery.of(context).size.width / 20,
+              fontSize: Themes.getWidth(context) / 20,
             ),
           ),
           showDoneButton: true,
@@ -142,7 +142,7 @@ class IntroductionScreens extends StatelessWidget {
           done: Text(
             'Get Started',
             style: TextStyle(
-              fontSize: MediaQuery.of(context).size.width / 25,
+              fontSize: Themes.getWidth(context) / 25,
               color: Theme.of(context).colorScheme.primary,
             ),
           ),

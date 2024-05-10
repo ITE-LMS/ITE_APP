@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:public_testing_app/Project%201/controllers/dark_mode_Controller.dart';
-import 'package:public_testing_app/Themes.dart';
+import 'package:public_testing_app/Project 1/models/Themes.dart';
 import 'package:public_testing_app/main.dart';
 
 class AnimatedDarkModeButton extends StatelessWidget {
@@ -35,8 +35,8 @@ class AnimatedDarkModeButton extends StatelessWidget {
                       color: is_Dark!.getString('is_dark') == 'true'
                           ? Themes.darkColorScheme.primary
                           : Themes.colorScheme.primary,
-                      height: MediaQuery.of(context).size.width / 12,
-                      width: MediaQuery.of(context).size.width / 10,
+                      height: Themes.getWidth(context) / 12,
+                      width: Themes.getWidth(context) / 10,
                       image: const AssetImage('assets/images/sun.png'),
                     )
                   : Image(
@@ -45,8 +45,8 @@ class AnimatedDarkModeButton extends StatelessWidget {
                       color: is_Dark!.getString('is_dark') == 'true'
                           ? Themes.darkColorScheme.primary
                           : Themes.colorScheme.primary,
-                      height: MediaQuery.of(context).size.width / 12,
-                      width: MediaQuery.of(context).size.width / 10,
+                      height: Themes.getWidth(context) / 12,
+                      width: Themes.getWidth(context) / 10,
                       image: const AssetImage('assets/images/moon.png'),
                     ),
             ),

@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:public_testing_app/Project%201/controllers/dark_mode_Controller.dart';
 import 'package:public_testing_app/main.dart';
 
-import '../../../../Themes.dart';
+import 'package:public_testing_app/Project 1/models/Themes.dart';
 
 DarkModeController controller = Get.put(DarkModeController());
 

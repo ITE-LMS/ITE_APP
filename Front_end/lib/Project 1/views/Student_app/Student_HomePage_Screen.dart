@@ -1,10 +1,12 @@
 // ignore_for_file: file_names, avoid_print, unused_local_variable, non_constant_identifier_names
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:public_testing_app/Project%201/controllers/Home_Page_Controllers/Drawer_Controller.dart';
 import 'package:public_testing_app/Project%201/views/Student_app/Elements_For_Student_App/Drawer.dart';
-import 'package:public_testing_app/Themes.dart';
+import 'package:public_testing_app/Project 1/models/Themes.dart';
 import 'package:public_testing_app/main.dart';
 
 import 'Elements_For_Student_App/Animated_darkMode_button.dart';
@@ -17,6 +19,7 @@ class StudentHomePageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log(Auth!.getString('user')!);
     return SafeArea(
       child: Scaffold(
         drawer: const MyDrawer(),
@@ -34,12 +37,7 @@ class StudentHomePageScreen extends StatelessWidget {
               child: AnimatedDarkModeButton(),
             ),
           ],
-          leading: Get.locale == const Locale('en')
-              ? const drawerIcon()
-              : const Padding(
-                  padding: EdgeInsets.only(right: 6.0),
-                  child: AnimatedDarkModeButton(),
-                ),
+          leading: const drawerIcon(),
           centerTitle: true,
           title: Text(
             'ITE',
@@ -47,7 +45,7 @@ class StudentHomePageScreen extends StatelessWidget {
                   color: is_Dark!.getString('is_dark') == 'true'
                       ? Themes.darkColorScheme.primary
                       : Themes.colorScheme.primary,
-                  fontSize: MediaQuery.of(context).size.width / 12,
+                  fontSize: Themes.getWidth(context) / 12,
                 ),
           ),
         ),

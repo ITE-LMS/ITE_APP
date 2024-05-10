@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
-import 'package:public_testing_app/Themes.dart';
+import 'package:public_testing_app/Project 1/models/Themes.dart';
 import 'package:public_testing_app/main.dart';
 
 class CustomShapeTop extends StatelessWidget {
@@ -14,8 +14,8 @@ class CustomShapeTop extends StatelessWidget {
     return CustomPaint(
       painter: RPSCustomPainter(),
       child: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height / 4.5,
+        width: Themes.getWidth(context),
+        height: Themes.getHeight(context) / 4.5,
       ),
     );
   }

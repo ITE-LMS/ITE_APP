@@ -5,10 +5,11 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:public_testing_app/main.dart';
 
-import '../../Themes.dart';
+import 'package:public_testing_app/Project 1/models/Themes.dart';
 
 class DarkModeController extends GetxController {
   bool is_dark_mode = is_Dark!.getString('is_dark') == 'true';
+
   @override
   void onInit() {
     SystemChrome.setSystemUIOverlayStyle(

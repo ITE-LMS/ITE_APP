@@ -1,31 +1,36 @@
 // ignore_for_file: camel_case_types
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:public_testing_app/Project%201/controllers/dark_mode_Controller.dart';
 import 'package:public_testing_app/main.dart';
 
-import '../../../../Themes.dart';
+import 'package:public_testing_app/Project 1/models/Themes.dart';
 
 class drawerIcon extends StatelessWidget {
   const drawerIcon({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Builder(
-      builder: (context) {
-        return IconButton(
-          onPressed: () {
-            Scaffold.of(context).openDrawer();
-          },
-          icon: Image(
-            height: MediaQuery.of(context).size.width / 12,
-            width: MediaQuery.of(context).size.width / 10,
-            color: is_Dark!.getString('is_dark') == 'true'
-                ? Themes.darkColorScheme.primary
-                : Themes.colorScheme.primary,
-            image: const AssetImage('assets/images/option.png'),
-          ),
-        );
-      },
+    return GetBuilder<DarkModeController>(
+      init: DarkModeController(),
+      builder: (controller) => Builder(
+        builder: (context) {
+          return IconButton(
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
+            icon: Image(
+              height: Themes.getWidth(context) / 12,
+              width: Themes.getWidth(context) / 10,
+              color: is_Dark!.getString('is_dark') == 'true'
+                  ? Themes.darkColorScheme.primary
+                  : Themes.colorScheme.primary,
+              image: const AssetImage('assets/images/option.png'),
+            ),
+          );
+        },
+      ),
     );
   }
 }

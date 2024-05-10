@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, body_might_complete_normally_nullable, invalid_use_of_protected_member, non_constant_identifier_names, unused_local_variable
+// ignore_for_file: file_names, body_might_complete_normally_nullable, invalid_use_of_protected_member, non_constant_identifier_names, unused_local_variable, unrelated_type_equality_checks
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,18 +6,17 @@ import 'package:get/get.dart';
 import 'package:public_testing_app/Project%201/components/elevatedButton.dart';
 import 'package:public_testing_app/Project%201/controllers/Auth_Controllers/email_Controller.dart';
 import 'package:public_testing_app/Project%201/components/TextFormField.dart';
-import 'package:public_testing_app/Project%201/views/Auth_Screens/Elements_For_Auth/SignIn_Container.dart';
-import 'package:public_testing_app/Themes.dart';
+import 'package:public_testing_app/Project 1/models/Themes.dart';
 import 'package:public_testing_app/main.dart';
 import 'Elements_For_Auth/Custom_Shape_top.dart';
-
-final EmailController controller = Get.put(EmailController());
 
 class EmailScreen extends StatelessWidget {
   const EmailScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final EmailController controller = Get.put(EmailController());
+
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         statusBarColor: is_Dark!.getString('is_dark') == 'true'
@@ -28,19 +27,24 @@ class EmailScreen extends StatelessWidget {
             : Themes.colorScheme.primary,
       ),
     );
-    Widget content = MyElevetedButton(
-      onTap: () {
-        controller.onSave();
-      },
-      label: 'check',
-      width: 3.6,
-      height: 35,
-      BackColor: Theme.of(context).colorScheme.primary.withOpacity(.7),
+    Widget check = Text(
+      'check',
+      style: Theme.of(context).textTheme.labelLarge!.copyWith(
+            fontSize: Themes.getWidth(context) / 22,
+            color: Colors.white,
+          ),
     );
+
+    Widget circle = const CircularProgressIndicator(
+      color: Colors.white,
+      strokeWidth: 2,
+    );
+
     return SafeArea(
       child: Scaffold(
-        backgroundColor:
-            is_Dark!.getString('is_dark') == 'true' ? Themes.darkColorScheme.background : Colors.white,
+        backgroundColor: is_Dark!.getString('is_dark') == 'true'
+            ? Themes.darkColorScheme.background
+            : Colors.white,
         body: SizedBox(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
@@ -55,30 +59,34 @@ class EmailScreen extends StatelessWidget {
                   children: [
                     const CustomShapeTop(),
                     Positioned(
-                      top: 70,
+                      top: 100,
                       right: 0,
                       left: 0,
                       child: Image(
                         image: const AssetImage('assets/images/programmer.png'),
-                        width: MediaQuery.of(context).size.width / 3.5,
-                        height: MediaQuery.of(context).size.height / 6,
+                        width: Themes.getWidth(context) / 3.5,
+                        height: Themes.getHeight(context) / 6,
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 70),
                 // Some Text
                 Text(
                   'Log in',
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      fontSize: MediaQuery.of(context).size.width / 12),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge!
+                      .copyWith(fontSize: Themes.getWidth(context) / 12),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 10),
                 Text(
                   'Glad To Meet You !',
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      fontSize: MediaQuery.of(context).size.width / 28),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium!
+                      .copyWith(fontSize: Themes.getWidth(context) / 28),
                 ),
                 const SizedBox(height: 15),
                 // Informations Fields :
@@ -93,7 +101,7 @@ class EmailScreen extends StatelessWidget {
                       MyTextFormField(
                         validate: (value) {
                           if (value == null || value.trim().isEmpty) {
-                            return "email missing";
+                            return "email required";
                           }
                           int index = 0;
                           for (int i = 0; i < value.length; i++) {
@@ -124,22 +132,19 @@ class EmailScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 // Login Button :
-                content,
-                const SizedBox(height: 12),
-                //Another Login Methods :
-                Center(
-                  child: Text(
-                    'OR Sign in with',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                // sign in with google :
-                SignInContainer(
-                  leading: 'assets/images/google.png',
-                  trailing: 'continue with google',
-                  onTap: () {
-                    controller.signInWithGoogle();
+                GetBuilder<EmailController>(
+                  init: EmailController(),
+                  builder: (circle_controller) {
+                    return MyElevetedButton(
+                      onTap: () {
+                        controller.onSave();
+                      },
+                      widget: circle_controller.circle == true ? circle : check,
+                      width: 3.6,
+                      height: 35,
+                      BackColor:
+                          Theme.of(context).colorScheme.primary.withOpacity(.7),
+                    );
                   },
                 ),
               ],

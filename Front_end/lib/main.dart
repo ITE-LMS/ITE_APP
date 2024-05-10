@@ -342,19 +342,20 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:public_testing_app/Project%201/controllers/Auth_Controllers/pass_Controller.dart';
+import 'package:public_testing_app/Project%201/controllers/Auth_Controllers/login_pass_Controller.dart';
 import 'package:public_testing_app/Project%201/controllers/Auth_Controllers/verification_controller.dart';
 import 'package:public_testing_app/Project%201/views/Auth_Screens/email_Screen.dart';
-import 'package:public_testing_app/Project%201/views/Auth_Screens/password_Screen.dart';
+import 'package:public_testing_app/Project%201/views/Auth_Screens/login_pass_Screen.dart';
 import 'package:public_testing_app/Project%201/views/Auth_Screens/verfication_screen.dart';
 import 'package:public_testing_app/Project%201/views/Introduction_Screens/IntroductionScreen.dart';
 import 'package:public_testing_app/Project%201/views/Student_app/Student_HomePage_Screen.dart';
-import 'package:public_testing_app/Themes.dart';
+import 'package:public_testing_app/Project 1/models/Themes.dart';
 import 'package:public_testing_app/firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'Project 1/controllers/dark_mode_Controller.dart';
-import 'Project 1/middlewares/is_Doctor_Middleware.dart';
+import 'Project 1/middlewares/is_userLogedIn_Middleware.dart';
+import 'Project 1/views/Auth_Screens/register_pass_screen.dart';
 
 SharedPreferences? Auth;
 SharedPreferences? is_Dark;
@@ -381,15 +382,26 @@ Future<void> main() async {
         GetPage(
           name: '/IntroductionScreens',
           page: () => const IntroductionScreens(),
-          middlewares: [
-            isDoctorMiddleware(),
-          ],
+          // middlewares: [
+          //   isDoctorMiddleware(),
+          // ],
         ),
-        GetPage(name: '/EmailPageScreen', page: () => const EmailScreen()),
-        GetPage(name: '/PassPageScreen', page: () => const PasswordScreen()),
         GetPage(
-            name: '/VerificationPageScreen',
-            page: () => const VerificationScreen()),
+          name: '/EmailPageScreen',
+          page: () => const EmailScreen(),
+        ),
+        GetPage(
+          name: '/loginPassPageScreen',
+          page: () => const LoginScreen(),
+        ),
+        GetPage(
+          name: '/RegisterPassPageScreen',
+          page: () => const RegisterScreen(),
+        ),
+        GetPage(
+          name: '/VerificationPageScreen',
+          page: () => const VerificationScreen(),
+        ),
         GetPage(
           name: '/StudentHomePageScreen',
           page: () => const StudentHomePageScreen(),

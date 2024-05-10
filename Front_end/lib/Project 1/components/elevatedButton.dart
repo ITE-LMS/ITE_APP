@@ -23,8 +23,9 @@ class MyElevetedButton extends StatelessWidget {
     Widget content = Text(
       label ?? '',
       style: Theme.of(context).textTheme.labelLarge!.copyWith(
-          fontSize: MediaQuery.of(context).size.width / 22,
-          color: Colors.white),
+            fontSize: MediaQuery.of(context).size.width / 22,
+            color: Colors.white,
+          ),
     );
 
     return ElevatedButton(
