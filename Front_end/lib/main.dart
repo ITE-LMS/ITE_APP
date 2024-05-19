@@ -342,23 +342,27 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:public_testing_app/Project%201/controllers/Auth_Controllers/login_pass_Controller.dart';
-import 'package:public_testing_app/Project%201/controllers/Auth_Controllers/verification_controller.dart';
-import 'package:public_testing_app/Project%201/views/Auth_Screens/email_Screen.dart';
-import 'package:public_testing_app/Project%201/views/Auth_Screens/login_pass_Screen.dart';
-import 'package:public_testing_app/Project%201/views/Auth_Screens/verfication_screen.dart';
-import 'package:public_testing_app/Project%201/views/Introduction_Screens/IntroductionScreen.dart';
-import 'package:public_testing_app/Project%201/views/Student_app/Student_HomePage_Screen.dart';
-import 'package:public_testing_app/Project 1/models/Themes.dart';
+import 'package:public_testing_app/src/controllers/Auth_Controllers/login_pass_Controller.dart';
+import 'package:public_testing_app/src/controllers/Auth_Controllers/verification_controller.dart';
+import 'package:public_testing_app/src/views/auth/log_in_screens/email_screen.dart';
+import 'package:public_testing_app/src/views/auth/log_in_screens/login_pass_screen.dart';
+import 'package:public_testing_app/src/views/auth/log_in_screens/verfication_screen.dart';
+import 'package:public_testing_app/src/views/Introduction/IntroductionScreen.dart';
+import 'package:public_testing_app/src/views/src/Home/home.dart';
+import 'package:public_testing_app/src/views/src/Home_Page.dart';
+import 'package:public_testing_app/src/models/Themes.dart';
 import 'package:public_testing_app/firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'Project 1/controllers/dark_mode_Controller.dart';
-import 'Project 1/middlewares/is_userLogedIn_Middleware.dart';
-import 'Project 1/views/Auth_Screens/register_pass_screen.dart';
+import 'src/controllers/dark_mode_Controller.dart';
+import 'src/middlewares/is_userLogedIn_Middleware.dart';
+import 'src/views/auth/change_pass_screens/new_pass_screen.dart';
+import 'src/views/auth/change_pass_screens/old_pass_screen.dart';
+import 'src/views/auth/log_in_screens/register_pass_screen.dart';
 
 SharedPreferences? Auth;
 SharedPreferences? is_Dark;
+SharedPreferences? appData;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -368,6 +372,7 @@ Future<void> main() async {
   );
   Auth = await SharedPreferences.getInstance();
   is_Dark = await SharedPreferences.getInstance();
+  appData = await SharedPreferences.getInstance();
   runApp(
     GetMaterialApp(
       initialBinding: Binding(),
@@ -382,34 +387,56 @@ Future<void> main() async {
         GetPage(
           name: '/IntroductionScreens',
           page: () => const IntroductionScreens(),
-          // middlewares: [
-          //   isDoctorMiddleware(),
-          // ],
+          middlewares: [
+            isDoctorMiddleware(),
+          ],
         ),
         GetPage(
+          transition: Transition.cupertino,
+          transitionDuration: const Duration(seconds: 2),
           name: '/EmailPageScreen',
           page: () => const EmailScreen(),
         ),
         GetPage(
+          transition: Transition.cupertino,
+          transitionDuration: const Duration(seconds: 2),
           name: '/loginPassPageScreen',
           page: () => const LoginScreen(),
         ),
         GetPage(
+          transition: Transition.cupertino,
+          transitionDuration: const Duration(seconds: 2),
           name: '/RegisterPassPageScreen',
           page: () => const RegisterScreen(),
         ),
         GetPage(
+          transition: Transition.cupertino,
+          transitionDuration: const Duration(seconds: 2),
           name: '/VerificationPageScreen',
           page: () => const VerificationScreen(),
         ),
         GetPage(
+          transition: Transition.rightToLeftWithFade,
+          transitionDuration: const Duration(milliseconds: 500),
           name: '/StudentHomePageScreen',
-          page: () => const StudentHomePageScreen(),
+          page: () => const HomePage(),
         ),
-        // GetPage(
-        //   name: '/DoctorHomePageScreen',
-        //   page: () => const DoctorDrawerScreen(),
-        // ),
+        GetPage(
+          transition: Transition.leftToRightWithFade,
+          transitionDuration: const Duration(milliseconds: 500),
+          name: '/OldPassPageScreen',
+          page: () => const OldPassScreen(),
+        ),
+        GetPage(
+          transition: Transition.leftToRightWithFade,
+          transitionDuration: const Duration(milliseconds: 500),
+          name: '/NewPassPageScreen',
+          page: () => const NewPassScreen(),
+        ),
+        GetPage(
+          name: '/Home',
+          page: () => const Home(),
+        ),
       ],
     ),
   );
