@@ -15,6 +15,7 @@ class MyTextFormField extends StatelessWidget {
     required this.save,
     this.keyboard,
     super.key,
+    this.initValue,
   });
 
   final Widget? prefixIcon;
@@ -26,6 +27,7 @@ class MyTextFormField extends StatelessWidget {
   final void Function(String? value) save;
   final bool? Pass_Security;
   final TextAlign? Text_Position;
+  final String? initValue;
 
   @override
   Widget build(BuildContext context) {
@@ -42,13 +44,13 @@ class MyTextFormField extends StatelessWidget {
               Radius.circular(12),
             ),
           ),
-          label: Text(
-            label!,
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall!
-                .copyWith(fontSize: MediaQuery.of(context).size.width / 30),
-          ),
+          label: label != null
+              ? Text(
+                  label!,
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      fontSize: MediaQuery.of(context).size.width / 30),
+                )
+              : null,
           filled: true,
           fillColor: is_Dark!.getString('is_dark') == 'true'
               ? Colors.black54
@@ -61,6 +63,7 @@ class MyTextFormField extends StatelessWidget {
         onSaved: save,
         obscuringCharacter: '*',
         textCapitalization: TextCapitalization.none,
+        initialValue: initValue,
       ),
     );
   }

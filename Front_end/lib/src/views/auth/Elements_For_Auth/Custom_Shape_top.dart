@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
 import 'package:public_testing_app/src/models/Themes.dart';
-import 'package:public_testing_app/main.dart';
+
 
 class CustomShapeTop extends StatelessWidget {
   const CustomShapeTop({super.key});
@@ -35,9 +35,8 @@ class RPSCustomPainter extends CustomPainter {
     paint_fill_1.shader = ui.Gradient.linear(
         Offset(size.width * 0.25, size.height * -0.00),
         Offset(size.width * 0.25, size.height * 0.86), [
-      (is_Dark!.getString('is_dark') == 'true')
-          ? Themes.darkColorScheme.primary
-          : Themes.colorScheme.primary,
+      Themes.getColor(
+          Themes.darkColorScheme.primary, Themes.colorScheme.primary),
       const Color(0xffffffff)
     ], [
       0.00,
@@ -71,9 +70,8 @@ class RPSCustomPainter extends CustomPainter {
       ..strokeJoin = StrokeJoin.miter;
     paint_fill_2.shader = ui.Gradient.linear(Offset(size.width * 0.75, 0),
         Offset(size.width * 0.75, size.height * 0.86), [
-      (is_Dark!.getString('is_dark') == 'true')
-          ? Themes.darkColorScheme.primary
-          : Themes.colorScheme.primary,
+      Themes.getColor(
+          Themes.darkColorScheme.primary, Themes.colorScheme.primary),
       const Color(0xffffffff)
     ], [
       0.00,

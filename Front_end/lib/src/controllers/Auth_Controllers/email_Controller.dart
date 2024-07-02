@@ -49,7 +49,8 @@ class EmailController extends GetxController {
           else if (decodedResponse["message"] == "active_student") {
             Auth!.setString('user', 'active_student');
           }
-          Get.toNamed('loginPassPageScreen');
+
+          Get.offNamed('loginPassPageScreen');
         }
         // non active user :
         else if (decodedResponse["status"] == 201) {
@@ -65,7 +66,7 @@ class EmailController extends GetxController {
           else if (decodedResponse["message"] == "non_active_student") {
             Auth!.setString('user', 'non_active_student');
           }
-          Get.toNamed('VerificationPageScreen');
+          Get.offNamed('VerificationPageScreen');
         }
         // user doesn`t exist : 404
         else if (decodedResponse["status"] == 404) {
@@ -121,12 +122,14 @@ class EmailController extends GetxController {
   void onInit() {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        statusBarColor: is_Dark!.getString('is_dark') == 'true'
-            ? Themes.darkColorScheme.primary
-            : Themes.colorScheme.primary,
-        systemNavigationBarColor: is_Dark!.getString('is_dark') == 'true'
-            ? Themes.darkColorScheme.primary
-            : Themes.colorScheme.primary,
+        statusBarColor: Themes.getColor(
+          Themes.darkColorScheme.primary,
+          Themes.colorScheme.primary,
+        ),
+        systemNavigationBarColor: Themes.getColor(
+          Themes.darkColorScheme.primary,
+          Themes.colorScheme.primary,
+        ),
       ),
     );
     super.onInit();

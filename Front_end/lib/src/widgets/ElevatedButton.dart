@@ -18,6 +18,7 @@ class MyElevetedButton extends StatelessWidget {
   final double height;
   final Widget? widget;
   final Color BackColor;
+
   @override
   Widget build(BuildContext context) {
     Widget content = Text(
@@ -29,19 +30,20 @@ class MyElevetedButton extends StatelessWidget {
     );
 
     return ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(12),
-            ),
-          ),
-          backgroundColor: BackColor,
-          padding: EdgeInsets.symmetric(
-            horizontal: MediaQuery.of(context).size.width / width,
-            vertical: MediaQuery.of(context).size.width / height,
+      style: ElevatedButton.styleFrom(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(12),
           ),
         ),
-        onPressed: onTap,
-        child: widget ?? content);
+        backgroundColor: BackColor,
+        padding: EdgeInsets.symmetric(
+          horizontal: MediaQuery.of(context).size.width / width,
+          vertical: MediaQuery.of(context).size.width / height,
+        ),
+      ),
+      onPressed: onTap,
+      child: widget ?? content,
+    );
   }
 }

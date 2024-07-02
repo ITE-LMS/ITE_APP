@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:public_testing_app/main.dart';
 
 class Themes {
   static final colorScheme = ColorScheme.fromSeed(
@@ -124,5 +125,13 @@ class Themes {
 
   static double getHeight(BuildContext context) {
     return MediaQuery.of(context).size.height;
+  }
+
+  static Color getColor(Color dark, Color light) {
+    return is_Dark!.getString('is_dark') == 'true' ? dark : light;
+  }
+
+  static bool isDarkMode() {
+    return is_Dark!.getString('is_dark') == 'true' ? true : false;
   }
 }

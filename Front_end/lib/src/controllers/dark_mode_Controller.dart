@@ -14,17 +14,20 @@ class DarkModeController extends GetxController {
   void onInit() {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        statusBarColor: is_Dark!.getString('is_dark') == 'true'
-            ? Themes.darkColorScheme.primary
-            : Themes.colorScheme.primary,
-        systemNavigationBarColor: is_Dark!.getString('is_dark') == 'true'
-            ? Themes.darkColorScheme.primary
-            : Themes.colorScheme.primary,
+        statusBarColor: Themes.getColor(
+          Themes.darkColorScheme.primary,
+          Themes.colorScheme.primary,
+        ),
+        systemNavigationBarColor: Themes.getColor(
+          Themes.darkColorScheme.primary,
+          Themes.colorScheme.primary,
+        ),
       ),
     );
     super.onInit();
   }
 
+  // change to dark mode and visa versa :
   void changeMode(bool dark) {
     if (dark == true) {
       Get.changeThemeMode(ThemeMode.dark);

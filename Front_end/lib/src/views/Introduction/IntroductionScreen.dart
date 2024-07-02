@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:lottie/lottie.dart';
-import 'package:public_testing_app/src/controllers/dark_mode_Controller.dart';
+import 'package:public_testing_app/src/controllers/Dark_mode_Controller.dart';
 import 'package:public_testing_app/src/models/Themes.dart';
-import 'package:public_testing_app/main.dart';
 
 DarkModeController controller = Get.put(DarkModeController());
 
@@ -17,13 +16,11 @@ class IntroductionScreens extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: is_Dark!.getString('is_dark') == 'true'
-            ? Themes.darkColorScheme.background
-            : Colors.white,
+        backgroundColor:
+            Themes.getColor(Themes.darkColorScheme.background, Colors.white),
         body: IntroductionScreen(
-          globalBackgroundColor: is_Dark!.getString('is_dark') == 'true'
-              ? Themes.darkColorScheme.background
-              : Colors.white,
+          globalBackgroundColor:
+              Themes.getColor(Themes.darkColorScheme.background, Colors.white),
           pages: [
             PageViewModel(
               decoration: const PageDecoration(
@@ -150,12 +147,9 @@ class IntroductionScreens extends StatelessWidget {
           dotsDecorator: DotsDecorator(
             size: const Size.square(10.0),
             activeSize: const Size(20.0, 10.0),
-            color: is_Dark!.getString('is_dark') == 'true'
-                ? Colors.white60
-                : Colors.black54,
-            activeColor: is_Dark!.getString('is_dark') == 'true'
-                ? Themes.darkColorScheme.primary
-                : Themes.colorScheme.primary,
+            color: Themes.getColor(Colors.white60, Colors.black54),
+            activeColor: Themes.getColor(
+                Themes.darkColorScheme.primary, Themes.colorScheme.primary),
             spacing: const EdgeInsets.symmetric(horizontal: 3.0),
             activeShape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25.0),

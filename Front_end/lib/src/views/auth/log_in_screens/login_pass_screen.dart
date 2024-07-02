@@ -3,10 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:public_testing_app/src/widgets/ElevatedButton.dart';
-import 'package:public_testing_app/src/controllers/Auth_Controllers/login_pass_Controller.dart';
+import 'package:public_testing_app/src/controllers/Auth_Controllers/login/login_pass_Controller.dart';
 import 'package:public_testing_app/src/widgets/TextFormField.dart';
 import 'package:public_testing_app/src/models/Themes.dart';
-import 'package:public_testing_app/main.dart';
 import '../Elements_For_Auth/Custom_Shape_top.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -32,7 +31,7 @@ class LoginScreen extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                Get.offNamed('VerificationPageScreen');
+                Get.toNamed('VerificationPageScreen');
                 controller.onForgotPassword();
               },
               child: Text(
@@ -51,9 +50,8 @@ class LoginScreen extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
-        backgroundColor: is_Dark!.getString('is_dark') == 'true'
-            ? Themes.darkColorScheme.background
-            : Colors.white,
+        backgroundColor:
+            Themes.getColor(Themes.darkColorScheme.background, Colors.white),
         body: SizedBox(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
@@ -176,46 +174,6 @@ class LoginScreen extends StatelessWidget {
                       widget: circle_controller.circle ?? logIn,
                     );
                   },
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(
-                        left: MediaQuery.of(context).size.width / 20,
-                      ),
-                      child: MyElevetedButton(
-                        onTap: () async {
-                          Get.back();
-                          Get.back();
-                        },
-                        widget: Row(
-                          children: [
-                            Icon(
-                              Icons.arrow_back_rounded,
-                              color: is_Dark!.getString('is_dark') == 'true'
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
-                            const SizedBox(width: 10),
-                            Text(
-                              'cancel',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelLarge!
-                                  .copyWith(
-                                      fontSize: Themes.getWidth(context) / 25),
-                            ),
-                          ],
-                        ),
-                        width: 20,
-                        height: 35,
-                        BackColor:
-                            Theme.of(context).colorScheme.secondaryContainer,
-                      ),
-                    ),
-                  ],
                 ),
               ],
             ),
