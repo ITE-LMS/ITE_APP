@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:public_testing_app/src/controllers/Home_Controllers/Home_Controller.dart';
 import 'package:public_testing_app/src/widgets/ListTile.dart';
 import 'package:public_testing_app/src/controllers/Home_Page_Controllers/Drawer_Controller.dart';
 import 'package:public_testing_app/src/models/Themes.dart';
@@ -18,6 +19,7 @@ final class MyDrawer extends StatelessWidget {
     final logout_controller = Get.put(LogoutController());
     final changePass_controller = Get.put(ChangePassController());
     final drawer_controller = Get.put(DrawersController());
+    final HomeController h_controller = Get.find();
 
     List<Widget> content = [];
     if (Auth!.getString("user") == "active_student") {
@@ -25,6 +27,8 @@ final class MyDrawer extends StatelessWidget {
         MyListTile(
           label: 'Saved Files',
           onTap: () {
+            h_controller.getStudentSavedFiles();
+            Get.toNamed('saved_files');
             Scaffold.of(context).closeDrawer();
           },
           prefix: Image(

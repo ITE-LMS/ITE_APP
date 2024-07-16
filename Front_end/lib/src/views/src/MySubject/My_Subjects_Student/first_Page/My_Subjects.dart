@@ -17,7 +17,7 @@ class MySubjects extends StatelessWidget {
         // Text for clearify section :
         Container(
           width: Themes.getWidth(context),
-          height: 120,
+          height: 70,
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
@@ -27,7 +27,7 @@ class MySubjects extends StatelessWidget {
                 blurStyle: BlurStyle.outer,
                 offset: const Offset(0, 1),
                 blurRadius: 4,
-              )
+              ),
             ],
             color: is_Dark!.getString('is_dark') == 'true'
                 ? Themes.darkColorScheme.background
@@ -38,40 +38,12 @@ class MySubjects extends StatelessWidget {
             ),
           ),
           child: Center(
-            child: Container(
-              width: Themes.getWidth(context) - 50,
-              height: 70,
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: is_Dark!.getString('is_dark') == 'true'
-                        ? Colors.green.withGreen(255)
-                        : Colors.blue.withBlue(255),
-                    blurStyle: BlurStyle.outer,
-                    offset: const Offset(0, 1),
-                    blurRadius: 4,
-                  )
-                ],
-                color: is_Dark!.getString('is_dark') == 'true'
-                    ? Colors.black.withOpacity(.7)
-                    : Colors.white,
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(15),
-                ),
-              ),
-              child: ListTile(
-                title: Text(
-                  "Your Subjects :",
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        fontSize: 25,
-                      ),
-                ),
-                subtitle: Text(
-                  "Hint : Dissmiss To Delete .",
-                  style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                        fontSize: 18,
-                      ),
-                ),
+            child: ListTile(
+              title: Text(
+                "Your Subjects :",
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontSize: 25,
+                    ),
               ),
             ),
           ),
@@ -82,15 +54,33 @@ class MySubjects extends StatelessWidget {
             id: 'subjects',
             init: StudentSubjectsController(),
             builder: (st_sub_controller) {
-              return ListView.builder(
-                itemCount: st_sub_controller.student_subjects.length,
-                itemBuilder: (ctx, index) {
-                  return MySubjectsCard(
-                    index: index,
-                  );
-                },
-              );
-            }
+              return st_sub_controller.student_subjects.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Image(
+                            width: 100,
+                            height: 100,
+                            image: AssetImage('assets/images/error-404.png'),
+                          ),
+                          Text(
+                            'No Subjects added yet',
+                            style: Get.textTheme.titleMedium,
+                          ),
+                        ],
+                      ),
+                    )
+                  : ListView.builder(
+                      itemCount: st_sub_controller.student_subjects.length,
+                      itemBuilder: (ctx, index) {
+                        return MySubjectsCard(
+                          index: index,
+                        );
+                      },
+                    );
+            },
           ),
         ),
       ],

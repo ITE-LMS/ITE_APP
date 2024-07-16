@@ -1,9 +1,13 @@
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:public_testing_app/main.dart';
 import 'package:public_testing_app/src/controllers/Home_Controllers/Home_Controller.dart';
 import 'package:public_testing_app/src/models/Themes.dart';
 import 'package:marquee_text/marquee_text.dart';
+import 'package:public_testing_app/src/views/src/Home/fifth_Page/Adds.dart';
+import 'package:public_testing_app/src/views/src/Home/fifth_Page/Files_Card.dart';
+import 'package:public_testing_app/src/views/src/Home/fifth_Page/Images.dart';
 import 'package:public_testing_app/src/views/src/Home/fourth_Page/FilesTypes.dart';
 
 class Files extends StatelessWidget {
@@ -22,11 +26,6 @@ class Files extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    subject_type = subject_type.substring(
-      0,
-      subject_type.length - 2,
-    );
-
     final width = Themes.getWidth(context);
     final height = Themes.getHeight(context);
     final Home_Controller = Get.put(HomeController());
@@ -117,7 +116,47 @@ class Files extends StatelessWidget {
               ),
             ),
           ),
-        
+          const SizedBox(height: 10),
+          Home_Controller.files_names.isEmpty
+              ? Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: Get.size.height / 3),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Image(
+                          width: 100,
+                          height: 100,
+                          image: AssetImage('assets/images/error-404.png'),
+                        ),
+                        Text(
+                          'No items added yet',
+                          style: Get.textTheme.titleMedium,
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              : Expanded(
+                  child: ListView.builder(
+                    itemCount: Home_Controller.files_ids.length,
+                    itemBuilder: (ctx, index) {
+                      return type.name == 'pdf' ||
+                              type.name == 'word' ||
+                              type.name == 'powerpoint'
+                          ? FilesCard(index: index , type: type.name)
+                          : type.name == 'image'
+                              ? Images(
+                                  year: year,
+                                  index: index,
+                                  subject_name: subject_name,
+                                  subject_type: subject_type,
+                                )
+                              : Adds(index: index);
+                    },
+                  ),
+                ),
         ],
       ),
     );

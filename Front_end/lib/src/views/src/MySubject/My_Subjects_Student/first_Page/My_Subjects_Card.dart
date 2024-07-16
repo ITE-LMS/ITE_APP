@@ -21,14 +21,6 @@ class MySubjectsCard extends StatelessWidget {
     final student_subject_controller = Get.put(StudentSubjectsController());
     final width = Themes.getWidth(context);
     final height = Themes.getHeight(context);
-    String year = '';
-    if (student_subject_controller.year_id[index] == 1) {
-      year = "first year";
-    } else if (student_subject_controller.year_id[index] == 2) {
-      year = "second year";
-    } else if (student_subject_controller.year_id[index] == 3) {
-      year = "third year";
-    }
 
     return GetBuilder<DarkModeController>(
       init: DarkModeController(),
@@ -53,9 +45,9 @@ class MySubjectsCard extends StatelessWidget {
                         student_subject_controller.remove_subject(
                           student_subject_controller.student_subjects[index],
                           context,
-                          student_subject_controller.student_subjects,
                           student_subject_controller.Subjects_ids[index],
                         );
+                        student_subject_controller.update_timer(student_subject_controller.Subjects_ids[index]);
                       },
                       icon: Iconsax.trash,
                       borderRadius: BorderRadius.circular(10),
@@ -87,10 +79,13 @@ class MySubjectsCard extends StatelessWidget {
                         child: ListTile(
                           title: Text(
                             "${index + 1} . ${student_subject_controller.student_subjects[index]}",
-                            style: Theme.of(context).textTheme.titleLarge,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge!
+                                .copyWith(fontSize: 18),
                           ),
                           subtitle: Text(
-                            year,
+                            student_subject_controller.years_of_subjects[index],
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                         ),

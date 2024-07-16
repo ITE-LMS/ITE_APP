@@ -47,7 +47,7 @@ class Home extends StatelessWidget {
                     leading: h_controller.numbers_of_years[index],
                     title: h_controller.years[index],
                     onTap: () {
-                      h_controller.viewSubjectsOfTheYear(index+1);
+                      h_controller.viewSubjectsOfTheYear(index + 1);
                     },
                   );
                 },

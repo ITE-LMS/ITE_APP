@@ -109,7 +109,7 @@ class Filestypes extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(left: 12, top: 10),
               child: Text(
-                subject_type,
+                '$subject_type :',
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
                     fontSize: width / 15,
                     color: is_Dark!.getString('is_dark') == 'true'

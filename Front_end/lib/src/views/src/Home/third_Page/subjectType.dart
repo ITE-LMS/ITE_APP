@@ -34,7 +34,7 @@ class Subjecttype extends StatelessWidget {
       SubjectTypeCard(
         year: year,
         subject_name: subjectName,
-        Type: 'Theoritical :',
+        Type: 'Theoritical',
         Doctors_Names: doctors,
         path: 'assets/images/design.png',
       ),
@@ -45,7 +45,7 @@ class Subjecttype extends StatelessWidget {
         SubjectTypeCard(
           year: year,
           subject_name: subjectName,
-          Type: 'Theoritical :',
+          Type: 'Theoritical',
           Doctors_Names: doctors,
           path: 'assets/images/design.png',
         ),
@@ -53,7 +53,7 @@ class Subjecttype extends StatelessWidget {
         SubjectTypeCard(
           year: year,
           subject_name: subjectName,
-          Type: 'Practical :',
+          Type: 'Practical',
           Doctors_Names: teacher,
           path: 'assets/images/responsibility.png',
         ),

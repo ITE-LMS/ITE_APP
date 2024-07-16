@@ -65,6 +65,7 @@ class AddQuizScreen extends StatelessWidget {
                 Positioned(
                   right: 5,
                   child: GetBuilder<AddQuizController>(
+                    init: AddQuizController(),
                     builder: (controller) {
                       return Container(
                         padding: const EdgeInsets.only(left: 10),
@@ -148,6 +149,7 @@ class AddQuizScreen extends StatelessWidget {
                     child: Form(
                       key: controller.form_key,
                       child: MyTextFormField(
+                        initValue: '3',
                         keyboard: TextInputType.number,
                         validate: (value) {
                           if (value == null || value.trim().isEmpty) {
@@ -163,7 +165,7 @@ class AddQuizScreen extends StatelessWidget {
                           }
                         },
                         save: (value) {
-                          controller.numQuestions = int.parse(value!);
+                          controller.numQuestion = int.parse(value!);
                         },
                         label: 'Enter number here ...',
                         prefixIcon:
@@ -206,6 +208,7 @@ class AddQuizScreen extends StatelessWidget {
                           ],
                         ),
                         child: GetBuilder<AddQuizController>(
+                          init: AddQuizController(),
                           builder: (controller) {
                             return DropdownButton<String>(
                               iconEnabledColor: Colors.white,
@@ -261,6 +264,7 @@ class AddQuizScreen extends StatelessWidget {
                     width: 250,
                     height: 150,
                     child: GetBuilder<AddQuizController>(
+                      init: AddQuizController(),
                       builder: (controller) {
                         return Column(
                           children: [

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:public_testing_app/src/controllers/Quizzes_Controllers/quiz_controller.dart';
+import 'package:public_testing_app/src/controllers/Quizzes_Controllers/doctor_quiz_controller.dart';
 import 'package:mobkit_dashed_border/mobkit_dashed_border.dart';
 import 'package:public_testing_app/src/models/Themes.dart';
 import 'package:public_testing_app/src/views/src/Quizes/Doctor_Quizzes/add_quiz_screens/add_quiz_screen.dart';
@@ -56,8 +56,8 @@ class QuizScreen extends StatelessWidget {
       ),
     );
 
-    return GetBuilder<QuizController>(
-      init: QuizController(),
+    return GetBuilder<DoctorQuizController>(
+      init: DoctorQuizController(),
       builder: (controller) {
         return Stack(
           children: [
@@ -300,7 +300,7 @@ class QuizScreen extends StatelessWidget {
             ),
             Positioned(
               right: 20,
-              bottom: 20,
+              bottom: 50,
               child: content,
             )
           ],

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:public_testing_app/src/controllers/Quizzes_Controllers/add_quiz_controller.dart';
-import 'package:public_testing_app/src/controllers/Quizzes_Controllers/quiz_controller.dart';
+import 'package:public_testing_app/src/controllers/Quizzes_Controllers/doctor_quiz_controller.dart';
 import 'package:public_testing_app/src/models/Themes.dart';
 
 class QuizTrueOrFalseScreen extends StatelessWidget {
@@ -13,7 +13,7 @@ class QuizTrueOrFalseScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AddQuizController addQuizController = Get.find();
-    final QuizController quizController = Get.find();
+    final DoctorQuizController quizController = Get.find();
     final width = Themes.getWidth(context);
     final hieght = Themes.getHeight(context);
 
@@ -21,7 +21,7 @@ class QuizTrueOrFalseScreen extends StatelessWidget {
       backgroundColor: Themes.getColor(
           Themes.darkColorScheme.background.withOpacity(.9), Colors.white),
       appBar: AppBar(
-        title: const Text('Add Quiz'),
+        title: const Text('True OR False Quiz :'),
         backgroundColor: Themes.getColor(Themes.darkColorScheme.background,
             Themes.colorScheme.primaryContainer),
       ),
@@ -57,32 +57,8 @@ class QuizTrueOrFalseScreen extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 15.0, right: 5),
                         child: InkWell(
                           onTap: () {
-                            var questions = List.generate(numQuestions, (i) {
-                              return {
-                                'question': addQuizController
-                                    .questionControllers[i].text,
-                                'answers': ['True', 'False'],
-                                'correctAnswer':
-                                    addQuizController.answers[i] == 'true'
-                                        ? 0
-                                        : 1,
-                              };
-                            });
-                            quizController.addQuiz({
-                              'subject': addQuizController.selectedSubject,
-                              'type': 'true_or_false',
-                              'questions': questions,
-                              'level': addQuizController.selectedLevel,
-                            });
-                            Get.back();
-                            Get.back();
-                            Get.snackbar(
-                              'Success',
-                              'Quiz published successfully',
-                              snackPosition: SnackPosition.BOTTOM,
-                              backgroundColor: Colors.green,
-                              colorText: Colors.white,
-                            );
+                            addQuizController
+                                .publishQuiz_TrueORFalse(numQuestions);
                           },
                           child: Container(
                             width: width / 2.8,
@@ -173,19 +149,35 @@ class QuizTrueOrFalseScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            child: TextField(
-                              controller:
-                                  addQuizController.questionControllers[index],
-                              decoration: InputDecoration(
-                                hintText: 'Question',
-                                hintStyle:
-                                    Theme.of(context).textTheme.titleMedium,
-                                border: InputBorder.none,
+                            child: Form(
+                              key: addQuizController
+                                  .form_key_for_true_or_false[index],
+                              child: TextFormField(
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return "Please Enter Question";
+                                  }
+                                  if (int.tryParse(value) != null ||
+                                      double.tryParse(value) != null) {
+                                    return "Enter a valid Question";
+                                  }
+                                },
+                                onSaved: (newValue) {
+                                  addQuizController.questionControllers[index]
+                                      .text = newValue!;
+                                },
+                                decoration: InputDecoration(
+                                  hintText: 'Question',
+                                  hintStyle:
+                                      Theme.of(context).textTheme.titleMedium,
+                                  border: InputBorder.none,
+                                ),
                               ),
                             ),
                           ),
                           const SizedBox(height: 8),
                           GetBuilder<AddQuizController>(
+                            init: AddQuizController(),
                             builder: (controller) {
                               return Column(
                                 children: [

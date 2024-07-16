@@ -12,7 +12,8 @@ class Subjectcard extends StatelessWidget {
     super.key,
     required this.subject,
     required this.index,
-    required this.subject_id, required this.year,
+    required this.subject_id,
+    required this.year,
   });
 
   final String subject;
@@ -25,7 +26,10 @@ class Subjectcard extends StatelessWidget {
     final h_controller = Get.put(HomeController());
     // add to my subjects icon :
     final addSubject = InkWell(
-      onTap: () => h_controller.addToMySubjects(subject_id, index),
+      onTap: () => h_controller.isHasPractical(subject)
+          ? h_controller.dialog_for_adding_subject_to_MySubjects(
+              context, subject_id, index)
+          : h_controller.addToMySubjects(subject_id, index),
       child: const Icon(
         size: 30,
         Iconsax.add_square,
@@ -34,7 +38,15 @@ class Subjectcard extends StatelessWidget {
     );
     // remove from my subjects :
     final removeSubject = InkWell(
-      onTap: () => h_controller.removeFromMySubjects(subject_id, index),
+      onTap: () {
+        if (h_controller.isAdded_practical[index]) {
+          h_controller.removeFromMySubjects(subject_id, index);
+          h_controller.removeFromMySubjects(
+              h_controller.subjects_practical_ids[index], index);
+        } else {
+          h_controller.removeFromMySubjects(subject_id, index);
+        }
+      },
       child: const Icon(
         size: 30,
         Iconsax.trash,
@@ -44,7 +56,7 @@ class Subjectcard extends StatelessWidget {
     // Go To Theoritical or practical Button :
     final go = InkWell(
       onTap: () {
-        h_controller.viewSubjectTypes(index, subject , year);
+        h_controller.viewSubjectTypes(index, subject, year);
       },
       child: const Icon(
         size: 30,
@@ -135,7 +147,7 @@ class Subjectcard extends StatelessWidget {
                       id: 'add_reomve_subject',
                       init: HomeController(),
                       builder: (h_controller) {
-                        return h_controller.isAdded[index] == false
+                        return h_controller.isAdded_theoritical[index] == false
                             ? addSubject
                             : removeSubject;
                       },

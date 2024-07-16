@@ -30,8 +30,12 @@ class FilestypesCard extends StatelessWidget {
 
     final go_to_file_screen = InkWell(
       onTap: () {
-        Home_Controller.get_files_for_type(
-            type, subject_type, subject_name, year);
+        Home_Controller.get_files_names_for_type(
+          type,
+          subject_type,
+          subject_name,
+          year,
+        );
       },
       child: const Icon(
         size: 30,
@@ -102,29 +106,41 @@ class FilestypesCard extends StatelessWidget {
         Positioned(
           left: 110,
           top: 120,
-          child: Container(
-            decoration: BoxDecoration(
-              boxShadow: const [
-                BoxShadow(
-                  blurStyle: BlurStyle.outer,
-                  blurRadius: 2,
-                  offset: Offset(0, 0.5),
-                )
-              ],
-              color: Themes.colorScheme.onPrimaryContainer.withOpacity(.8),
-              border: Border.all(
-                width: 2,
-                color: is_Dark!.getString('is_dark') == 'true'
-                    ? Themes.darkColorScheme.primary
-                    : Colors.blue,
-              ),
-              borderRadius: BorderRadius.circular(15),
-            ),
-            width: width / 8,
-            height: height / 19,
-            //! update every subject :
-            child: go_to_file_screen,
-          ),
+          child: GetBuilder<HomeController>(
+              id: 'go_to_files',
+              init: HomeController(),
+              builder: (context) {
+                return Container(
+                  padding: Home_Controller.circle_for_files != null &&
+                          Home_Controller.ctrl_type == type
+                      ? const EdgeInsets.all(10)
+                      : const EdgeInsets.all(0),
+                  decoration: BoxDecoration(
+                    boxShadow: const [
+                      BoxShadow(
+                        blurStyle: BlurStyle.outer,
+                        blurRadius: 2,
+                        offset: Offset(0, 0.5),
+                      )
+                    ],
+                    color:
+                        Themes.colorScheme.onPrimaryContainer.withOpacity(.8),
+                    border: Border.all(
+                      width: 2,
+                      color: is_Dark!.getString('is_dark') == 'true'
+                          ? Themes.darkColorScheme.primary
+                          : Colors.blue,
+                    ),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  width: width / 8,
+                  height: height / 19,
+                  //! update every subject :
+                  child: Home_Controller.ctrl_type == type
+                      ? Home_Controller.circle_for_files ?? go_to_file_screen
+                      : go_to_file_screen,
+                );
+              }),
         ),
       ],
     );

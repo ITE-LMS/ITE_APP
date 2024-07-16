@@ -24,7 +24,7 @@ class snackBar {
         isDismissible: true,
         dismissDirection: DismissDirection.horizontal,
         maxWidth: Get.mediaQuery.size.width - 50,
-        snackPosition: SnackPosition.BOTTOM,
+        snackPosition: SnackPosition.TOP,
         margin: const EdgeInsets.symmetric(vertical: 25),
         backgroundColor: Themes.getColor(
             Themes.darkColorScheme.onPrimary, Themes.colorScheme.primary),

@@ -4,8 +4,8 @@ import 'package:iconsax/iconsax.dart';
 import 'package:public_testing_app/main.dart';
 import 'package:public_testing_app/src/models/Themes.dart';
 
-class Intro extends StatelessWidget {
-  const Intro({super.key});
+class IntroAI extends StatelessWidget {
+  const IntroAI({super.key});
 
   @override
   Widget build(BuildContext context) {

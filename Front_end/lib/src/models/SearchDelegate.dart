@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:public_testing_app/src/controllers/Courses_Controllers/Courses_Controller.dart';
@@ -110,8 +112,6 @@ class CustomSearchDelegate extends SearchDelegate {
                   Get.to(
                     Course(
                       index: index,
-                      name: cs_controller.name[index],
-                      desc: cs_controller.desc[index],
                     ),
                   );
                 },
@@ -161,9 +161,13 @@ class CustomSearchDelegate extends SearchDelegate {
       FilterDesc = [];
       FilterImages = [];
       Filternames = [];
-      Filternames = cs_controller.name
+      Filternames.addAll(cs_controller.name
           .where((element) => element.toLowerCase().startsWith(query))
-          .toList();
+          .toList());
+      Filternames.addAll(cs_controller.name
+          .where((element) => element.toUpperCase().startsWith(query))
+          .toList());
+      log(Filternames.toString());
 
       for (int i = 0; i < cs_controller.name.length; i++) {
         if (Filternames.contains(cs_controller.name[i])) {
@@ -194,10 +198,8 @@ class CustomSearchDelegate extends SearchDelegate {
                     return InkWell(
                       onTap: () {
                         Get.to(
-                          Course(
+                          () => Course(
                             index: index,
-                            name: Filternames[index],
-                            desc: cs_controller.desc[index],
                           ),
                         );
                       },

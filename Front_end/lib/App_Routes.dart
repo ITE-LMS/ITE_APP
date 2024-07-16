@@ -6,6 +6,7 @@ import 'package:public_testing_app/src/views/src/Quizes/Doctor_Quizzes/add_quiz_
 import 'package:public_testing_app/src/views/src/Quizes/Doctor_Quizzes/add_quiz_screens/multiple_answers_screen.dart';
 import 'package:public_testing_app/src/views/src/Quizes/Doctor_Quizzes/add_quiz_screens/quiz_true_or_false_screen.dart';
 import 'package:public_testing_app/src/views/src/Quizes/Doctor_Quizzes/quiz_screens_doctor/quiz_screen.dart';
+import 'package:public_testing_app/src/views/src/homepage_elements/Drawer_Elements.dart/Saved_Files.dart';
 import 'src/middlewares/is_userLogedIn_Middleware.dart';
 
 import 'package:public_testing_app/src/views/auth/change_pass_screens/change_pass_screen.dart';
@@ -37,6 +38,7 @@ class AppNavigation {
   static String addQuiz = '/addQuiz';
   static String quiz_true_false = '/quizTrueOrFalse';
   static String quiz_multi_answers = '/multipleAnswers';
+  static String saved_files = '/saved_files';
 
   static String get getInitRoute => intro;
 
@@ -105,7 +107,7 @@ class AppNavigation {
     ),
     GetPage(
       transition: Transition.zoom,
-      transitionDuration: const Duration(seconds: 1),
+      transitionDuration: const Duration(milliseconds: 200),
       name: AI_Route,
       page: () => const AI(),
     ),
@@ -124,6 +126,12 @@ class AppNavigation {
     GetPage(
       name: quiz_multi_answers,
       page: () => const MultipleAnswersScreen(numQuestions: 0),
+    ),
+    GetPage(
+      transition: Transition.zoom,
+      transitionDuration: const Duration(milliseconds: 400),
+      name: saved_files,
+      page: () => const SavedFiles(),
     ),
   ];
 }

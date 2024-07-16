@@ -94,13 +94,13 @@ class SubjectTypeCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      Type,
+                      Type + ' :',
                       style: Theme.of(context).textTheme.titleLarge!.copyWith(
                             fontSize: width / 12,
                           ),
                     ),
                     Text(
-                      Type == "Practical :" ? Doctors_Names : doctors_names,
+                      Type == "Practical" ? Doctors_Names : doctors_names,
                       style: Theme.of(context).textTheme.titleLarge!.copyWith(
                             fontSize: width / 25,
                           ),
@@ -164,7 +164,8 @@ class SubjectTypeCard extends StatelessWidget {
                           builder: (hController) {
                             return InkWell(
                               onTap: () {
-                                hController.viewFilesTypes(Type, subject_name , year);
+                                hController.viewFilesTypes(
+                                    Type, subject_name, year);
                               },
                               child: hController.circleViewFilesTypes ??
                                   viewFilesTypes,

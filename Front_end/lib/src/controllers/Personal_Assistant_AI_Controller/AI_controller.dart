@@ -7,6 +7,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:lottie/lottie.dart';
+import 'package:public_testing_app/main.dart';
 import 'package:public_testing_app/src/models/SnackBar.dart';
 import '../../views/src/AI_Assistant/Message.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -24,6 +25,7 @@ class AIController extends GetxController {
     connectivityResult = [];
     connectivityResult = await (connectivity.checkConnectivity());
     log(connectivityResult.toString());
+    appData!.setString("connection_result", connectivityResult.toString());
     if (connectivityResult.contains(ConnectivityResult.none)) {
       state = "offline";
       update(["state"]);
@@ -57,7 +59,6 @@ class AIController extends GetxController {
   void checkState(List<ConnectivityResult> connectivityResult) async {
     connectivityResult = [];
     connectivityResult = await (connectivity.checkConnectivity());
-    log(connectivityResult.toString());
     if (connectivityResult.contains(ConnectivityResult.none)) {
       isConnect = false;
       state = "offline";

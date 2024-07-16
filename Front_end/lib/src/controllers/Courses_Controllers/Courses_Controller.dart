@@ -4,6 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CoursesController extends GetxController {
+  bool isVideoSection = true;
+  bool isDiscryption = false;
+
+  final List<String> ids = [
+    '0sacQ4oo-P0',
+  ];
   List name = [
     'flutter',
     'node js',
@@ -12,7 +18,6 @@ class CoursesController extends GetxController {
     'laravel',
     'php',
   ];
-
   List<String> path = [
     'assets/images/Flutter.png',
     'assets/images/node.png',
@@ -69,8 +74,4 @@ class CoursesController extends GetxController {
     'animations in flutter',
     'navigation in flutter',
   ];
-
-  void ChangColor() {
-    update();
-  }
 }
