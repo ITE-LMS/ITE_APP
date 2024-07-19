@@ -359,8 +359,6 @@ class RegisterPassController extends GetxController {
   void dispose() {
     user_name.dispose();
     pass_word.dispose();
-    //confirm_pass_word.dispose();
-    log(Auth!.getString('user')!);
     super.dispose();
   }
 

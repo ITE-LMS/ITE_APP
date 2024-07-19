@@ -1,5 +1,6 @@
-// ignore_for_file: file_names, non_constant_identifier_names, unused_local_variable, camel_case_types, missing_required_param, unused_catch_clause
+// ignore_for_file: file_names, non_constant_identifier_names, unused_local_variable, camel_case_types, missing_required_param, unused_catch_clause, unnecessary_null_comparison
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
@@ -8,7 +9,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:flutter_launcher_icons/custom_exceptions.dart';
 import 'package:get/get.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:public_testing_app/main.dart';
 import 'package:public_testing_app/src/models/SnackBar.dart';
 import 'package:public_testing_app/src/models/Themes.dart';
@@ -42,7 +42,6 @@ class HomeController extends GetxController {
   List<int> subjects_theoritical_ids = [];
   List<int> subjects_practical_ids = [];
   List<bool> isAdded_theoritical = [];
-  List<bool> isAdded_practical = [];
 
   //? Practical SUBJECTS and DOCTORS  names :
   List<String> name_of_pr_subjects = [];
@@ -54,31 +53,28 @@ class HomeController extends GetxController {
 
   //? Files Types Variebles :
   List<String> files_types_photos = [
-    'assets/images/addvertise.png',
+    'assets/images/ringing.png',
     'assets/images/gallery.png',
     'assets/images/file.png',
-    'assets/images/doc-file.png',
-    'assets/images/ppt-file.png',
   ];
   List<String> files_types_names = [
-    'add`s',
-    'images',
-    'pdf`s',
-    'word`s',
-    'powerpoint `s',
+    'Notifications',
+    'Images',
+    'Pdf`s',
   ];
 
   //? variables for fifth page :
   List<String> files_names = [];
   Widget? circle_for_files;
   List<bool> is_added_to_saved_files = [];
-  List<bool> is_downloaded = [];
   Files_Types ctrl_type = Files_Types.adds;
   Widget? download_circle;
   List<int> files_ids = [];
   List<String> files_paths = [];
   File? files_content;
   double _progress = 0;
+  late Timer _timer;
+  RxInt start_timer = 4.obs;
 
   // this function for fetching the subjects :
   void viewSubjectsOfTheYear(int yearNumber) async {
@@ -112,8 +108,8 @@ class HomeController extends GetxController {
           name_of_th_subjects = [];
           doctors_theoritical = [];
           isAdded_theoritical = [];
-          isAdded_practical = [];
           subjects_theoritical_ids = [];
+
           for (int i = 0; i < TheoriticalSubjects.length; i++) {
             final Map<String, dynamic> TH_S = TheoriticalSubjects[i];
 
@@ -122,7 +118,6 @@ class HomeController extends GetxController {
                 if (key == "name") {
                   name_of_th_subjects.add(value);
                   isAdded_theoritical.add(false);
-                  isAdded_practical.add(false);
                 } else if (key == "doctors") {
                   doctors_theoritical.add(value);
                 } else if (key == "id") {
@@ -133,7 +128,7 @@ class HomeController extends GetxController {
           }
         }
         // FETCHING student subjects :
-        fetchStudentSubjectsForChecking();
+        fetch_Student_Subjects_For_Checking();
       } else {
         throw FileNotFoundException(response.body);
       }
@@ -160,7 +155,6 @@ class HomeController extends GetxController {
         subjects_practical_ids = [];
         for (int i = 0; i < PracticalSubjects.length; i++) {
           final Map<String, dynamic> PR_S = PracticalSubjects[i];
-          log(PR_S.toString());
 
           PR_S.forEach(
             (key, value) {
@@ -207,10 +201,9 @@ class HomeController extends GetxController {
     for (int i = 0; i < name_of_th_subjects.length; i++) {
       if (!name_of_pr_subjects.contains(name_of_th_subjects[i])) {
         subjects_practical_ids.insert(i, 0);
+        name_of_pr_subjects.insert(i, ' ');
       }
     }
-
-    log(subjects_practical_ids.toString());
   }
 
   // this function for adding the subjects choosed from student to be hisSubjects :
@@ -221,7 +214,7 @@ class HomeController extends GetxController {
       var response = await http.post(
         url,
         body: {
-          "subject_ids": '$subject_id',
+          "subject_id": '$subject_id',
         },
         headers: {
           "Authorization": "Bearer ${Auth!.getString('token')}",
@@ -230,13 +223,7 @@ class HomeController extends GetxController {
       final decodedResponse = json.decode(response.body);
       //? subject added successfully :
       if (decodedResponse["status"] == 200) {
-        if (subjects_theoritical_ids.contains(subject_id)) {
-          isAdded_theoritical[index] = true;
-        }
-        if (subjects_practical_ids.contains(subject_id)) {
-          isAdded_practical[index] = true;
-        }
-
+        isAdded_theoritical[index] = true;
         update(["add_reomve_subject"]);
       }
     } catch (e) {
@@ -251,7 +238,7 @@ class HomeController extends GetxController {
       var response = await http.post(
         url,
         body: {
-          "subject_ids": '$subject_id',
+          "subject_id": '$subject_id',
         },
         headers: {
           "Authorization": "Bearer ${Auth!.getString('token')}",
@@ -290,7 +277,6 @@ class HomeController extends GetxController {
         }
         break;
       }
-      log(doctors_theoritical.toString());
     }
     Get.to(
       () => Subjecttype(
@@ -314,8 +300,9 @@ class HomeController extends GetxController {
   }
 
   // this function for viewing fileTypes for the speciefic part of the subject :
-  void viewFilesTypes(String type, String subject_name, int year) {
+  void viewFilesTypes(String type, String subject_name, int year, int? index) {
     Get.to(() => Filestypes(
+          index: index,
           year: year,
           subject_type: type,
           subject_name: subject_name,
@@ -337,7 +324,7 @@ class HomeController extends GetxController {
   }
 
   // fetch student subjects :
-  void fetchStudentSubjectsForChecking() async {
+  void fetch_Student_Subjects_For_Checking() async {
     try {
       var url =
           Uri.parse('http://10.0.2.2:8000/api/student-subjects-theoretical');
@@ -366,41 +353,11 @@ class HomeController extends GetxController {
     } catch (e) {
       log(e.toString());
     }
-
-    try {
-      var url =
-          Uri.parse('http://10.0.2.2:8000/api/student-subjects-practical');
-      var response = await http.get(
-        url,
-        headers: {
-          "Authorization": "Bearer ${Auth!.getString('token')}",
-        },
-      );
-      final decodedResponse = json.decode(response.body);
-      if (decodedResponse['status'] == 200) {
-        final List<dynamic> studentSubjects = decodedResponse["data"];
-        for (int i = 0; i < studentSubjects.length; i++) {
-          final Map<String, dynamic> student_subject = studentSubjects[i];
-
-          for (int j = 0; j < name_of_pr_subjects.length; j++) {
-            if (name_of_pr_subjects[j] == student_subject["name_subject"]) {
-              isAdded_practical[j] = true;
-            }
-          }
-        }
-        log(isAdded_practical.toString());
-      } else {
-        log("error");
-      }
-    } catch (e) {
-      log(e.toString());
-    }
   }
 
   // viewing bottom sheet for adding subjects :
   Future dialog_for_adding_subject_to_MySubjects(
       BuildContext context, int subject_id, int index) async {
-    log(name_of_th_subjects[index].toString());
     showGeneralDialog(
       context: context,
       pageBuilder: (context, animation_1, animation_2) {
@@ -527,7 +484,6 @@ class HomeController extends GetxController {
                                 addToMySubjects(subject_id, index);
                                 Get.back();
                               } else if (SelectedChoice == "TP") {
-                                addToMySubjects(subject_id, index);
                                 int sub_id = subjects_practical_ids[index];
                                 addToMySubjects(sub_id, index);
                                 Get.back();
@@ -536,7 +492,7 @@ class HomeController extends GetxController {
                             child: Text(
                               'add',
                               style: Get.textTheme.titleLarge!
-                                  .copyWith(fontSize: 17),
+                                  .copyWith(fontSize: 17, color: Colors.white),
                             ),
                           ),
                         ),
@@ -573,7 +529,7 @@ class HomeController extends GetxController {
                             child: Text(
                               'cancel',
                               style: Get.textTheme.titleLarge!
-                                  .copyWith(fontSize: 17),
+                                  .copyWith(fontSize: 17, color: Colors.white),
                             ),
                           ),
                         ),
@@ -595,13 +551,19 @@ class HomeController extends GetxController {
 
   //? Fourth and Fifth Pages Functions:
   // finally done :
-  void get_files_names_for_type(Files_Types type, String subject_type,
-      String subject_name, int year) async {
+  void get_files_names_for_type(
+      Files_Types type,
+      String subject_type,
+      String subject_name,
+      int year,
+      int? subject_id,
+      bool isDoctor,
+      File? file,
+      int? student_subject_id) async {
     int? id;
     files_ids = [];
     files_names = [];
     is_added_to_saved_files = [];
-    is_downloaded = [];
     files_paths = [];
 
     ctrl_type = type;
@@ -611,12 +573,20 @@ class HomeController extends GetxController {
       strokeWidth: 2,
     );
     update(["go_to_files"]);
-    if (subject_type == "Theoritical") {
-      int i = name_of_th_subjects.indexOf(subject_name);
-      id = subjects_theoritical_ids[i];
-    } else if (subject_type == "Practical") {
-      int i = name_of_pr_subjects.indexOf(subject_name);
-      id = subjects_practical_ids[i];
+    if (Auth!.getString("user") == "active_student") {
+      if (appData!.getBool("is_my_subjects") == false) {
+        if (subject_type == "Theoritical") {
+          int i = name_of_th_subjects.indexOf(subject_name);
+          id = subjects_theoritical_ids[i];
+        } else if (subject_type == "Practical") {
+          int i = name_of_pr_subjects.indexOf(subject_name);
+          id = subjects_practical_ids[i];
+        }
+      } else {
+        id = student_subject_id;
+      }
+    } else {
+      id = subject_id;
     }
     try {
       var url = Uri.parse('http://10.0.2.2:8000/api/get-files-names');
@@ -632,7 +602,6 @@ class HomeController extends GetxController {
         for (int i = 0; i < decodedResponse["data"].length; i++) {
           Map<String, dynamic> FN = decodedResponse["data"][i];
           is_added_to_saved_files.add(false);
-          is_downloaded.add(false);
 
           FN.forEach(
             (key, value) {
@@ -649,21 +618,30 @@ class HomeController extends GetxController {
       }
       circle_for_files = null;
       update(["go_to_files"]);
-      log(files_ids.toString());
-      log(appData!.getString("photo[33]")!);
     } catch (e) {
       log(e.toString());
     }
-    getSavedFiles();
+    if (isDoctor) {
+      if (type.name == "pdf") {
+        appData!.setString("file[${type.name}][${files_ids.last}]", file!.path);
+      } else if (type.name == "image") {
+        appData!.setString("photo[${files_ids.last}]", file!.path);
+      }
 
-    Get.to(
-      () => Files(
-        type: type,
-        subject_name: subject_name,
-        year: year,
-        subject_type: subject_type,
-      ),
-    );
+      update(["doctor_upload"]);
+    } else {
+      getSavedFiles();
+
+      Get.to(
+        () => Files(
+          type: type,
+          subject_name: subject_name,
+          year: year,
+          subject_type: subject_type,
+          subject_id: subject_id,
+        ),
+      );
+    }
   }
 
   // get student saved Files :
@@ -686,12 +664,12 @@ class HomeController extends GetxController {
               if (isSaved) {
                 int index = files_ids.indexOf(value);
                 is_added_to_saved_files[index] = true;
-                update(['saved_files']);
               }
             }
           },
         );
       }
+      update(['saved_files']);
     } catch (e) {
       e.toString();
     }
@@ -715,7 +693,6 @@ class HomeController extends GetxController {
         },
       );
       final decodedResponse = json.decode(response.body);
-      log(decodedResponse["status"].toString());
     } catch (e) {
       e.toString();
     }
@@ -1035,8 +1012,8 @@ class HomeController extends GetxController {
 
       download_circle = null;
       if (files_content != null) {
-        appData!
-            .setString("file[$type][${saved_files_ids[index]}]", files_content!.path);
+        appData!.setString(
+            "file[$type][${saved_files_ids[index]}]", files_content!.path);
         FileDownloader.cancelDownload;
       }
       update(["saved_files_download[$index]"]);
@@ -1132,8 +1109,8 @@ class HomeController extends GetxController {
       );
       final decodedResponse = json.decode(response.body);
       if (decodedResponse["status"] == 200) {
-        savedFiles_information.removeAt(index);
         isStudentSavedFiles.removeAt(index);
+        saved_files_ids.remove(saved_files_ids[index]);
         update(["student_saved_files"]);
       }
     } catch (e) {
@@ -1141,15 +1118,138 @@ class HomeController extends GetxController {
     }
   }
 
+  void remove_saved_file(BuildContext context, int file_id) async {
+    if (Get.isSnackbarOpen) {
+      Get.closeCurrentSnackbar();
+    }
+    try {
+      final index = saved_files_ids.indexOf(file_id);
+
+      Map<String, dynamic> temp = savedFiles_information[index];
+
+      savedFiles_information.remove(savedFiles_information[index]);
+      update(['student_saved_files']);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: GetX<HomeController>(
+            builder: (controller) {
+              return Row(
+                children: [
+                  const Text('file Deleted'),
+                  const SizedBox(width: 20),
+                  Text('$start_timer'),
+                ],
+              );
+            },
+          ),
+          duration: const Duration(seconds: 4),
+          action: SnackBarAction(
+            label: 'Undo',
+            onPressed: () {
+              _timer.cancel();
+              start_timer = 4.obs;
+              savedFiles_information.insert(index, temp);
+              update(['student_saved_files']);
+              return;
+            },
+          ),
+        ),
+      );
+    } catch (e) {
+      snackBar sb = snackBar(
+        path: 'assets/images/cross.png',
+        BorderColor: Colors.greenAccent,
+        message: Padding(
+          padding: const EdgeInsets.only(left: 10.0),
+          child: Text(
+            'Wrong !',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: Get.mediaQuery.size.width / 25,
+            ),
+          ),
+        ),
+        title: Padding(
+          padding: const EdgeInsets.only(left: 10.0),
+          child: Text(
+            'SomeThing Went',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: Get.mediaQuery.size.width / 25,
+            ),
+          ),
+        ),
+      );
+      sb.snackbar();
+    }
+
+    //sending http request to server to remove the subject :
+  }
+
+  void update_timer(int file_id, int index) {
+    _timer = Timer.periodic(
+      const Duration(seconds: 1),
+      (Timer timer) {
+        if (start_timer == 0.obs) {
+          remove_from_saved_files(file_id, index);
+          start_timer = 4.obs;
+          timer.cancel();
+        } else {
+          start_timer--;
+        }
+      },
+    );
+  }
+
+  //? Recent files :
+  void add_to_recent_files(String name, String path) {
+    appData!.setBool("not_empty_recent_files", true);
+    // set file name to recent file :
+    List<String> file_names = appData!.getStringList("recent_files_names")!;
+    file_names.add(name);
+    appData!.setStringList("recent_files_names", file_names);
+
+    // set file path to recent file :
+    List<String> file_paths = appData!.getStringList("recent_files_paths")!;
+    file_paths.add(path);
+    appData!.setStringList("recent_files_paths", file_paths);
+
+    update(['recent_files']);
+  }
+
+  void remove_from_recent_files(String name, String path) {
+    // set file name to recent file :
+    List<String> file_names = appData!.getStringList("recent_files_names")!;
+    file_names.remove(name);
+    appData!.setStringList("recent_files_names", file_names);
+
+    // set file path to recent file :
+    List<String> file_paths = appData!.getStringList("recent_files_paths")!;
+    file_paths.remove(path);
+    appData!.setStringList("recent_files_paths", file_paths);
+
+    if (file_paths.isEmpty) {
+      appData!.setBool("not_empty_recent_files", false);
+    }
+    // view recent file :
+    update(['recent_files']);
+  }
+
   @override
   void onInit() async {
-    appData!.setBool('isSeeAll', false);
-    listenToScrollMoment();
+    if (Auth!.getString("user") == "active_student") {
+      appData!.setBool("is_my_subjects", false);
+      appData!.setBool('isSeeAll', false);
+      listenToScrollMoment();
+      if (appData!.getStringList("recent_files_paths") == null) {
+        appData!.setStringList("recent_files_paths", []);
+        appData!.setStringList("recent_files_names", []);
+        appData!.setBool("not_empty_recent_files", false);
+      }
+    }
     log(Auth!.getString("token").toString());
 
-    final baseStorage = await getApplicationDocumentsDirectory();
-    log(baseStorage.path);
-    appData!.setString("cache_path", "${baseStorage.path}/");
     super.onInit();
   }
 

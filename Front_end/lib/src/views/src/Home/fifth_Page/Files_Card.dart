@@ -1,8 +1,10 @@
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:public_testing_app/main.dart';
 import 'package:public_testing_app/src/controllers/Home_Controllers/Home_Controller.dart';
+import 'package:public_testing_app/src/controllers/My_Subjects_Controllers/Student_Subjects_Controller.dart';
 import 'package:public_testing_app/src/models/Themes.dart';
 import 'package:public_testing_app/src/views/src/Home/fifth_Page/OpenFile.dart';
 
@@ -17,6 +19,10 @@ class FilesCard extends StatelessWidget {
     final width = Themes.getWidth(context);
     final height = Themes.getHeight(context);
     final HomeController controller = Get.find();
+    StudentSubjectsController? student_controller;
+    if (Auth!.getString("user") == "active_student") {
+      student_controller = Get.find();
+    }
 
     Widget added_to_saved_files = const Icon(
       Icons.check,
@@ -36,11 +42,26 @@ class FilesCard extends StatelessWidget {
 
     Widget open = InkWell(
       onTap: () {
+        String path;
+        if (Auth!.getString("user") == "active_student") {
+          int i = controller.files_ids[index];
+
+          path = appData!.getString("file[$type][$i]")!;
+        } else {
+          path = appData!
+              .getString("file[$type][${controller.files_ids[index]}]")!;
+        }
+
         Get.to(
           () => Openfile(
-              file_path: appData!
-                  .getString("file[$type][${controller.files_ids[index]}]")!),
+            file_path: path,
+          ),
         );
+        if (Auth!.getString("user") == "active_student") {
+          String name = controller.files_names[index];
+
+          controller.add_to_recent_files(name, path);
+        }
       },
       child: const Icon(
         Iconsax.folder_open,
@@ -73,11 +94,24 @@ class FilesCard extends StatelessWidget {
             child: Stack(
               children: [
                 Positioned(
-                  top: 20,
+                  top: 25,
                   left: 10,
                   child: Text(
-                    '${index + 1} . ${controller.files_names[index]}',
-                    style: Get.textTheme.titleLarge,
+                    '${index + 1} . ',
+                    style: Get.textTheme.titleLarge!.copyWith(fontSize: 15),
+                  ),
+                ),
+                Positioned(
+                  top: 25,
+                  left: 30,
+                  child: SizedBox(
+                    width: 260,
+                    child: SingleChildScrollView(
+                      child: Text(
+                        controller.files_names[index],
+                        style: Get.textTheme.titleLarge!.copyWith(fontSize: 15),
+                      ),
+                    ),
                   ),
                 ),
                 Positioned(
@@ -128,45 +162,42 @@ class FilesCard extends StatelessWidget {
                     },
                   ),
                 ),
-                GetBuilder<HomeController>(
-                    id: 'download[$index]',
-                    builder: (context) {
-                      return Positioned(
-                        bottom: 10,
-                        right: controller.download_circle == null ? 70 : 85,
-                        child: GetBuilder<HomeController>(
-                          id: 'saved_files',
-                          init: HomeController(),
-                          builder: (controller) {
-                            return Container(
-                              width: width / 8,
-                              height: width / 8,
-                              decoration: BoxDecoration(
-                                color: Themes.colorScheme.onPrimaryContainer,
-                                border: Border.all(
-                                  width: 3,
-                                  color: Themes.getColor(
-                                      Colors.white, Colors.white),
-                                ),
-                                borderRadius: BorderRadius.circular(15),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Themes.getColor(
-                                        Colors.green, Colors.blue),
-                                    blurStyle: BlurStyle.outer,
-                                    blurRadius: 3,
-                                    offset: const Offset(0, 1),
-                                  )
-                                ],
-                              ),
-                              child: controller.is_added_to_saved_files[index]
-                                  ? added_to_saved_files
-                                  : add_to_saved_files,
-                            );
-                          },
-                        ),
-                      );
-                    }),
+                if (Auth!.getString("user") == "active_student")
+                  Positioned(
+                    bottom: 10,
+                    right: controller.download_circle == null ? 70 : 85,
+                    child: GetBuilder<HomeController>(
+                      id: 'saved_files',
+                      init: HomeController(),
+                      builder: (controller) {
+                        return Container(
+                          width: width / 8,
+                          height: width / 8,
+                          decoration: BoxDecoration(
+                            color: Themes.colorScheme.onPrimaryContainer,
+                            border: Border.all(
+                              width: 3,
+                              color:
+                                  Themes.getColor(Colors.white, Colors.white),
+                            ),
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color:
+                                    Themes.getColor(Colors.green, Colors.blue),
+                                blurStyle: BlurStyle.outer,
+                                blurRadius: 3,
+                                offset: const Offset(0, 1),
+                              )
+                            ],
+                          ),
+                          child: controller.is_added_to_saved_files[index]
+                              ? added_to_saved_files
+                              : add_to_saved_files,
+                        );
+                      },
+                    ),
+                  ),
               ],
             ),
           ),

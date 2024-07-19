@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -11,6 +13,17 @@ class AI extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(AIController());
+    ImageProvider getUserImageForChat() {
+      String? photo = appData!.getString("user_photo");
+      if (photo == null || photo == '') {
+        if (Auth!.getString('user') == "active_student") {
+          return const AssetImage("assets/images/student.png");
+        } else {
+          return const AssetImage("assets/images/student.png");
+        }
+      }
+      return FileImage(File(photo));
+    }
 
     return WillPopScope(
       onWillPop: () => controller.onWillPop(),
@@ -68,90 +81,146 @@ class AI extends StatelessWidget {
               child: GetBuilder<AIController>(
                 init: AIController(),
                 builder: (ai_controller) {
-                  return ListView.builder(
-                    itemCount: ai_controller.messages.length,
-                    itemBuilder: (context, index) {
-                      final message = ai_controller.messages[index];
-                      return message.isUser
-                          ? ListTile(
-                              title: Align(
-                                alignment: Alignment.centerRight,
-                                child: Container(
-                                  padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                    color: is_Dark!.getString('is_dark') == 'true'
-                                        ? Colors.green
-                                        : Colors.blue,
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(20),
-                                      bottomLeft: Radius.circular(20),
-                                      bottomRight: Radius.circular(20),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    message.text,
-                                    style: TextStyle(
-                                        color: message.isUser
-                                            ? Colors.white
-                                            : Colors.black),
-                                  ),
-                                ),
-                              ),
-                            )
-                          : message.loading ??
-                              ListTile(
-                                title: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      const Padding(
-                                        padding: EdgeInsets.only(bottom: 3),
-                                        child: Image(
-                                          image: AssetImage(
-                                              'assets/images/robot.png'),
-                                          width: 15,
-                                          height: 15,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 10.0),
-                                        child: Container(
-                                          padding: const EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                            color: message.isUser
-                                                ? Colors.blue
-                                                : Colors.grey[300],
-                                            borderRadius: const BorderRadius.only(
-                                              topRight: Radius.circular(20),
-                                              bottomLeft: Radius.circular(20),
-                                              bottomRight: Radius.circular(20),
+                  return ai_controller.messages.isEmpty
+                      ? const Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image(
+                              image: AssetImage("assets/images/ai.png"),
+                              width: 100,
+                              height: 100,
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Text("Start Your Conversation Now !")
+                          ],
+                        )
+                      : ListView.builder(
+                          itemCount: ai_controller.messages.length,
+                          itemBuilder: (context, index) {
+                            final message = ai_controller.messages[index];
+
+                            return message.isUser
+                                ? ListTile(
+                                    title: Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 3),
+                                            child: Container(
+                                              width: 15,
+                                              height: 15,
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                image: DecorationImage(
+                                                  fit: BoxFit.cover,
+                                                  image: getUserImageForChat(),
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                          child: Text(
-                                            message.text,
-                                            style: TextStyle(
-                                                color: message.isUser
-                                                    ? Colors.white
-                                                    : Colors.black),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 9.0),
+                                            child: Container(
+                                              padding: const EdgeInsets.all(10),
+                                              decoration: BoxDecoration(
+                                                color: is_Dark!.getString(
+                                                            'is_dark') ==
+                                                        'true'
+                                                    ? Colors.green
+                                                    : Colors.blue,
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                  topLeft: Radius.circular(20),
+                                                  bottomLeft:
+                                                      Radius.circular(20),
+                                                  bottomRight:
+                                                      Radius.circular(20),
+                                                ),
+                                              ),
+                                              child: Text(
+                                                message.text,
+                                                style: TextStyle(
+                                                    color: message.isUser
+                                                        ? Colors.white
+                                                        : Colors.black),
+                                              ),
+                                            ),
                                           ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                : message.loading ??
+                                    ListTile(
+                                      title: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Padding(
+                                              padding:
+                                                  EdgeInsets.only(bottom: 3),
+                                              child: Image(
+                                                image: AssetImage(
+                                                    'assets/images/robot.png'),
+                                                width: 15,
+                                                height: 15,
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 10.0),
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.all(10),
+                                                decoration: BoxDecoration(
+                                                  color: message.isUser
+                                                      ? Colors.blue
+                                                      : Colors.grey[300],
+                                                  borderRadius:
+                                                      const BorderRadius.only(
+                                                    topRight:
+                                                        Radius.circular(20),
+                                                    bottomLeft:
+                                                        Radius.circular(20),
+                                                    bottomRight:
+                                                        Radius.circular(20),
+                                                  ),
+                                                ),
+                                                child: Text(
+                                                  message.text,
+                                                  style: TextStyle(
+                                                      color: message.isUser
+                                                          ? Colors.white
+                                                          : Colors.black),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                    },
-                  );
+                                    );
+                          },
+                        );
                 },
               ),
             ),
             // USER INPUT :
             Padding(
-              padding:
-                  const EdgeInsets.only(bottom: 32, top: 16, left: 16, right: 16),
+              padding: const EdgeInsets.only(
+                  bottom: 32, top: 16, left: 16, right: 16),
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,

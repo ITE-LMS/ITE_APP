@@ -6,6 +6,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:public_testing_app/src/controllers/My_Subjects_Controllers/OtherUsers_Subjects_Controller.dart';
 import 'package:public_testing_app/src/models/Themes.dart';
 import 'package:public_testing_app/src/models/SnackBar.dart';
 import 'package:public_testing_app/main.dart';
@@ -50,6 +51,7 @@ class LoginPassController extends GetxController {
           if (decodedResposne["status"] == 200) {
             Auth!.setString('token', "${decodedResposne["data"]["token"]}");
             Auth!.setString('login', '200');
+            OtherusersSubjectsController().onInit();
             Get.offAllNamed('StudentHomePageScreen');
           }
           // 201
@@ -103,6 +105,7 @@ class LoginPassController extends GetxController {
           if (decodedResposne["status"] == 200) {
             Auth!.setString('token', "${decodedResposne["data"]["token"]}");
             Auth!.setString('login', '200');
+            OtherusersSubjectsController().onInit();
             Get.offAllNamed('StudentHomePageScreen');
           } else if (decodedResposne["status"] == 201) {
             snackBar sb = snackBar(
@@ -153,7 +156,6 @@ class LoginPassController extends GetxController {
           // successfull go to homePageDoctor :
           if (decodedResposne["status"] == 200) {
             Auth!.setString('token', "${decodedResposne["data"]["token"]}");
-            log(Auth!.getString('token')!);
             Auth!.setString('login', '200');
             Get.offAllNamed('StudentHomePageScreen');
           } else if (decodedResposne["status"] == 201) {
@@ -240,7 +242,6 @@ class LoginPassController extends GetxController {
   void dispose() {
     user_name.dispose();
     pass_word.dispose();
-    log(Auth!.getString('user')!);
     super.dispose();
   }
 

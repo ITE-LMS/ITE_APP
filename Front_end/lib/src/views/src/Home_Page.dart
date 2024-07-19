@@ -6,6 +6,7 @@ import 'package:public_testing_app/src/controllers/Home_Controllers/Home_Control
 
 import 'package:public_testing_app/src/controllers/Home_Page_Controllers/Bottom_Navigation_Controller.dart';
 import 'package:public_testing_app/src/controllers/Home_Page_Controllers/Drawer_Controller.dart';
+import 'package:public_testing_app/src/controllers/My_Subjects_Controllers/Student_Subjects_Controller.dart';
 import 'package:public_testing_app/src/views/src/homepage_elements/Drawer.dart';
 import 'package:public_testing_app/src/models/Themes.dart';
 import 'package:public_testing_app/main.dart';
@@ -132,6 +133,18 @@ class HomePage extends StatelessWidget {
               elevation: 2,
               selectedIndex: nav_controller.selectedIndex,
               onDestinationSelected: (index) {
+                if (Auth!.getString("user") == "active_student") {
+                  if (index == 2) {
+                    final StudentSubjectsController controller =
+                        Get.put(StudentSubjectsController());
+                    controller.getStudentSubjects();
+
+                    appData!.setBool("is_my_subjects", true);
+                  }
+                  if (index == 0) {
+                    appData!.setBool("is_my_subjects", false);
+                  }
+                }
                 final controllerHome = HomeController();
                 if (appData!.getBool('isSeeAll') == true && index == 0) {
                   appData!.setBool('isSeeAll', false);

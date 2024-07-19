@@ -1,41 +1,75 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:mobkit_dashed_border/mobkit_dashed_border.dart';
 import 'package:public_testing_app/main.dart';
 import 'package:public_testing_app/src/controllers/Home_Controllers/Home_Controller.dart';
+import 'package:public_testing_app/src/controllers/My_Subjects_Controllers/Student_Subjects_Controller.dart';
 import 'package:public_testing_app/src/models/Themes.dart';
 import 'FilesTypes.dart';
 
 class FilestypesCard extends StatelessWidget {
-  const FilestypesCard(
-      {super.key,
-      required this.type,
-      required this.index,
-      required this.subject_type,
-      required this.subject_name,
-      required this.year});
+  FilestypesCard({
+    super.key,
+    required this.type,
+    required this.index,
+    required this.subject_type,
+    required this.subject_name,
+    required this.year,
+    this.subject_id,
+    this.index_for_student,
+  });
 
   final Files_Types type;
   final int index;
   final String subject_type;
   final String subject_name;
   final int year;
+  int? subject_id;
+  int? index_for_student;
 
   @override
   Widget build(BuildContext context) {
     final Home_Controller = Get.put(HomeController());
+    StudentSubjectsController? student_controller;
+    if (Auth!.getString("user") == "active_student") {
+      student_controller = Get.put(StudentSubjectsController());
+    }
     final width = Themes.getWidth(context);
     final height = Themes.getHeight(context);
 
     final go_to_file_screen = InkWell(
       onTap: () {
-        Home_Controller.get_files_names_for_type(
-          type,
-          subject_type,
-          subject_name,
-          year,
-        );
+        if (appData!.getBool("is_my_subjects") == false) {
+          Home_Controller.get_files_names_for_type(
+            type,
+            subject_type,
+            subject_name,
+            year,
+            Auth!.getString("user") == "active_student" ? null : subject_id,
+            false,
+            null,
+            null,
+          );
+        } else {
+          int id = 0;
+          if (subject_type == "Theoritical") {
+            id = student_controller!.student_subjects[index_for_student!]
+                ["id_theo"];
+          } else if (subject_type == "Practical") {
+            id = student_controller!.student_subjects[index_for_student!]
+                ["id_pra"];
+          }
+          Home_Controller.get_files_names_for_type(
+            type,
+            subject_type,
+            subject_name,
+            year,
+            Auth!.getString("user") == "active_student" ? null : subject_id,
+            false,
+            null,
+            id,
+          );
+        }
       },
       child: const Icon(
         size: 30,
@@ -64,16 +98,13 @@ class FilestypesCard extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
-            border: DashedBorder.all(
+            border: Border.all(
+              width: 4,
               color: is_Dark!.getString('is_dark') == 'true'
                   ? Colors.green
                   : Colors.blue,
-              dashLength: 70,
-              width: 4,
-              isOnlyCorner: true,
-              strokeAlign: BorderSide.strokeAlignInside,
-              strokeCap: StrokeCap.round,
             ),
+
             color: Colors.white, // Example color
             borderRadius: BorderRadius.circular(8.0),
           ),
@@ -86,11 +117,6 @@ class FilestypesCard extends StatelessWidget {
             image: AssetImage(Home_Controller.files_types_photos[index]),
             width: 70,
             height: 70,
-            color: index == 0
-                ? is_Dark!.getString('is_dark') == 'true'
-                    ? Colors.blue
-                    : Colors.green
-                : null,
           ),
         ),
         // Files Types names :
@@ -104,15 +130,19 @@ class FilestypesCard extends StatelessWidget {
         ),
         // Files Types Button Navigate to Files Screen :
         Positioned(
-          left: 110,
-          top: 120,
-          child: GetBuilder<HomeController>(
+            left: 110,
+            top: 120,
+            child: GetBuilder<HomeController>(
               id: 'go_to_files',
               init: HomeController(),
               builder: (context) {
                 return Container(
-                  padding: Home_Controller.circle_for_files != null &&
-                          Home_Controller.ctrl_type == type
+                  padding: (appData!.getBool("is_my_subjects") == false
+                              ? Home_Controller.circle_for_files != null
+                              : student_controller!.circle_for_files != null) &&
+                          (appData!.getBool("is_my_subjects") == false
+                              ? Home_Controller.ctrl_type == type
+                              : student_controller!.ctrl_type == type)
                       ? const EdgeInsets.all(10)
                       : const EdgeInsets.all(0),
                   decoration: BoxDecoration(
@@ -136,12 +166,17 @@ class FilestypesCard extends StatelessWidget {
                   width: width / 8,
                   height: height / 19,
                   //! update every subject :
-                  child: Home_Controller.ctrl_type == type
-                      ? Home_Controller.circle_for_files ?? go_to_file_screen
+                  child: (appData!.getBool("is_my_subjects") == false
+                          ? Home_Controller.ctrl_type == type
+                          : student_controller!.ctrl_type == type)
+                      ? (appData!.getBool("is_my_subjects") == false
+                              ? Home_Controller.circle_for_files
+                              : student_controller!.circle_for_files) ??
+                          go_to_file_screen
                       : go_to_file_screen,
                 );
-              }),
-        ),
+              },
+            )),
       ],
     );
   }

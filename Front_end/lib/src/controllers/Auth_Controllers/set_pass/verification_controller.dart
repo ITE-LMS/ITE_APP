@@ -166,7 +166,7 @@ class VerificationController extends GetxController {
               Uri.parse('http://10.0.2.2:8000/api/log_in_student_by_code');
           var response = await http.post(url, body: {
             'email': Auth!.getString('email'),
-            'VerificationCode': code.text,
+            'verificationCode': code.text,
           });
 
           // decoded response :

@@ -1,14 +1,15 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:public_testing_app/main.dart';
 import 'package:public_testing_app/src/controllers/Home_Controllers/Home_Controller.dart';
+import 'package:public_testing_app/src/controllers/My_Subjects_Controllers/Student_Subjects_Controller.dart';
 import 'package:public_testing_app/src/models/Themes.dart';
 import 'package:marquee_text/marquee_text.dart';
-import 'package:public_testing_app/src/views/src/Home/fifth_Page/Adds.dart';
+import 'package:public_testing_app/src/views/src/Home/fifth_Page/AddsCard.dart';
 import 'package:public_testing_app/src/views/src/Home/fifth_Page/Files_Card.dart';
-import 'package:public_testing_app/src/views/src/Home/fifth_Page/Images.dart';
+import 'package:public_testing_app/src/views/src/Home/fifth_Page/ImagesCard.dart';
 import 'package:public_testing_app/src/views/src/Home/fourth_Page/FilesTypes.dart';
+import 'package:public_testing_app/src/views/src/MySubject/My_Subjects_Other_Users/UploadButton.dart';
 
 class Files extends StatelessWidget {
   Files({
@@ -17,18 +18,25 @@ class Files extends StatelessWidget {
     required this.subject_name,
     required this.year,
     required this.type,
+    this.subject_id,
   });
 
   String subject_type;
   final String subject_name;
   final int year;
   final Files_Types type;
+  int? subject_id;
 
   @override
   Widget build(BuildContext context) {
     final width = Themes.getWidth(context);
     final height = Themes.getHeight(context);
-    final Home_Controller = Get.put(HomeController());
+    final HomeController Home_Controller = Get.find();
+    StudentSubjectsController? student_controller;
+
+    if (Auth!.getString("user") == "active_student") {
+      student_controller = Get.find();
+    }
     int index = -1;
 
     return Scaffold(
@@ -80,84 +88,126 @@ class Files extends StatelessWidget {
                     ),
                   ),
       ),
-      body: Column(
-        children: [
-          Container(
-            width: width,
-            height: width / 7,
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
+      body: GetBuilder<HomeController>(
+        id: 'doctor_upload',
+        builder: (controller) {
+          return Column(
+            children: [
+              Container(
+                width: width,
+                height: Auth!.getString("user") == "active_doctor" ||
+                        Auth!.getString("user") == "active_teacher"
+                    ? width / 5
+                    : width / 6,
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: is_Dark!.getString('is_dark') == 'true'
+                          ? Colors.green.withGreen(255)
+                          : Colors.blue.withBlue(255),
+                      blurStyle: BlurStyle.outer,
+                      offset: const Offset(0, 1),
+                      blurRadius: 7,
+                    )
+                  ],
                   color: is_Dark!.getString('is_dark') == 'true'
-                      ? Colors.green.withGreen(255)
-                      : Colors.blue.withBlue(255),
-                  blurStyle: BlurStyle.outer,
-                  offset: const Offset(0, 1),
-                  blurRadius: 7,
-                )
-              ],
-              color: is_Dark!.getString('is_dark') == 'true'
-                  ? Themes.darkColorScheme.background
-                  : Themes.colorScheme.primaryContainer,
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(30),
-                bottomRight: Radius.circular(30),
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20, top: 10),
-              child: Text(
-                '${type.name} :',
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontSize: width / 15,
-                    color: is_Dark!.getString('is_dark') == 'true'
-                        ? Themes.darkColorScheme.primary
-                        : Themes.colorScheme.primary),
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          Home_Controller.files_names.isEmpty
-              ? Center(
-                  child: Padding(
-                    padding: EdgeInsets.only(top: Get.size.height / 3),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Image(
-                          width: 100,
-                          height: 100,
-                          image: AssetImage('assets/images/error-404.png'),
-                        ),
-                        Text(
-                          'No items added yet',
-                          style: Get.textTheme.titleMedium,
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              : Expanded(
-                  child: ListView.builder(
-                    itemCount: Home_Controller.files_ids.length,
-                    itemBuilder: (ctx, index) {
-                      return type.name == 'pdf' ||
-                              type.name == 'word' ||
-                              type.name == 'powerpoint'
-                          ? FilesCard(index: index , type: type.name)
-                          : type.name == 'image'
-                              ? Images(
-                                  year: year,
-                                  index: index,
-                                  subject_name: subject_name,
-                                  subject_type: subject_type,
-                                )
-                              : Adds(index: index);
-                    },
+                      ? Themes.darkColorScheme.background
+                      : Themes.colorScheme.primaryContainer,
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(30),
                   ),
                 ),
-        ],
+                child: Auth!.getString("user") == "active_doctor" ||
+                        Auth!.getString("user") == "active_teacher"
+                    ? Stack(
+                        children: [
+                          Positioned(
+                            top: 30,
+                            left: 15,
+                            child: Text(
+                              '${type.name} :',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge!
+                                  .copyWith(
+                                      fontSize: width / 15,
+                                      color: is_Dark!.getString('is_dark') ==
+                                              'true'
+                                          ? Themes.darkColorScheme.primary
+                                          : Themes.colorScheme.primary),
+                            ),
+                          ),
+                          Positioned(
+                            right: 20,
+                            top: 22,
+                            child: UploadButton(
+                              subject_id: subject_id!,
+                              type: type.toString().substring(12),
+                              year: year,
+                              subject_type: subject_type,
+                              subject_name: subject_name,
+                            ),
+                          ),
+                        ],
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.only(left: 10.0, top: 10),
+                        child: Text(
+                          '${type.name} :',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge!
+                              .copyWith(
+                                  fontSize: width / 15,
+                                  color: is_Dark!.getString('is_dark') == 'true'
+                                      ? Themes.darkColorScheme.primary
+                                      : Themes.colorScheme.primary),
+                        ),
+                      ),
+              ),
+              const SizedBox(height: 10),
+              Home_Controller.files_names.isEmpty
+                  ? Center(
+                      child: Padding(
+                        padding: EdgeInsets.only(top: Get.size.height / 3),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Image(
+                              width: 100,
+                              height: 100,
+                              image: AssetImage('assets/images/error-404.png'),
+                            ),
+                            Text(
+                              'No items added yet',
+                              style: Get.textTheme.titleMedium,
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  : Expanded(
+                      child: ListView.builder(
+                        itemCount: Home_Controller.files_ids.length,
+                        itemBuilder: (ctx, index) {
+                          return type.name == 'pdf'
+                              ? FilesCard(index: index, type: type.name)
+                              : type.name == 'image'
+                                  ? ImagesCard(
+                                      year: year,
+                                      index: index,
+                                      subject_name: subject_name,
+                                      subject_type: subject_type,
+                                    )
+                                  : AddsCard(index: index);
+                        },
+                      ),
+                    ),
+            ],
+          );
+        },
       ),
     );
   }

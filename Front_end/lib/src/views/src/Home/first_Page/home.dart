@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:public_testing_app/main.dart';
 import 'package:public_testing_app/src/controllers/Home_Controllers/Home_Controller.dart';
 import 'package:public_testing_app/src/views/src/Home/first_Page/HomeCard.dart';
-import 'package:public_testing_app/src/views/src/Home/first_Page/Recent_Files.dart';
+import 'package:public_testing_app/src/views/src/Home/first_Page/Recent_Files/Recent_Files.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 class Home extends StatelessWidget {
@@ -64,17 +64,19 @@ class Home extends StatelessWidget {
                   curve: Curves.easeInOut,
                   duration: Durations.extralong1,
                 ),
-            RecentFiles(
-              onTap: () {
-                if (appData!.getBool('isSeeAll') == false) {
-                  appData!.setBool('isSeeAll', true);
-                } else {
-                  appData!.setBool('isSeeAll', false);
-                }
-                controller.update(['seeAll']);
-              },
-            ).animate(
-              effects: appData!.getBool('isSeeAll')! ? animate2 : animate1,
+            Expanded(
+              child: RecentFiles(
+                onTap: () {
+                  if (appData!.getBool('isSeeAll') == false) {
+                    appData!.setBool('isSeeAll', true);
+                  } else {
+                    appData!.setBool('isSeeAll', false);
+                  }
+                  controller.update(['seeAll']);
+                },
+              ).animate(
+                effects: appData!.getBool('isSeeAll')! ? animate2 : animate1,
+              ),
             )
           ],
         );

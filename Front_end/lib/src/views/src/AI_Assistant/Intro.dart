@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:public_testing_app/main.dart';
@@ -15,32 +16,29 @@ class IntroAI extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Column(
-            children: [
-              Text(
-                'Your AI Assistant',
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'Using this software , you can ask him questions and recieve articals using artificial intelligence assistant',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      fontSize: 14,
-                      fontWeight: FontWeight.normal,
-                    ),
-              ),
-            ],
+          Text(
+            'Your AI Assistant',
+            style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+          Text(
+            'Using this software , you can ask him questions and recieve articals using artificial intelligence assistant',
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                  fontSize: 14,
+                  fontWeight: FontWeight.normal,
+                ),
           ),
           const SizedBox(height: 32),
           Image.asset(
             'assets/images/assistant.png',
             width: Themes.getWidth(context) / 1.2,
             height: Themes.getWidth(context) / 1.2,
-          ),
+          ).animate(effects: [
+            const FadeEffect(),
+          ]),
           const SizedBox(height: 32),
           ElevatedButton(
             onPressed: () {

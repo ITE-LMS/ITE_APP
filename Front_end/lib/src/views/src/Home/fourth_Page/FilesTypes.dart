@@ -10,28 +10,29 @@ enum Files_Types {
   adds,
   image,
   pdf,
-  word,
-  powerpoint,
 }
 
 class Filestypes extends StatelessWidget {
-  const Filestypes({
-    super.key,
-    required this.subject_type,
-    required this.subject_name,
-    required this.year,
-  });
+  Filestypes(
+      {super.key,
+      required this.subject_type,
+      required this.subject_name,
+      required this.year,
+      this.subject_id,
+      this.index});
 
   final String subject_type;
   final String subject_name;
   final int year;
+  int? subject_id;
+  int? index;
 
   @override
   Widget build(BuildContext context) {
     final width = Themes.getWidth(context);
     final height = Themes.getHeight(context);
     final Home_Controller = Get.put(HomeController());
-    int index = -1;
+    int i = -1;
 
     return Scaffold(
       backgroundColor: is_Dark!.getString('is_dark') == 'true'
@@ -47,7 +48,7 @@ class Filestypes extends StatelessWidget {
                 speed: 20,
                 text: TextSpan(
                     text:
-                        '1. ${Home_Controller.years[0]} / $subject_name / $subject_type '),
+                        '1. ${Home_Controller.years[0]} / $subject_name / $subject_type :'),
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
                     fontSize: width / 20,
                     color: is_Dark!.getString('is_dark') == 'true'
@@ -60,7 +61,7 @@ class Filestypes extends StatelessWidget {
                     speed: 15,
                     text: TextSpan(
                       text:
-                          '2. ${Home_Controller.years[1]} / $subject_name / $subject_type',
+                          '2. ${Home_Controller.years[1]} / $subject_name / $subject_type :',
                       style: Theme.of(context).textTheme.titleLarge!.copyWith(
                           fontSize: width / 20,
                           color: is_Dark!.getString('is_dark') == 'true'
@@ -73,7 +74,7 @@ class Filestypes extends StatelessWidget {
                     speed: 15,
                     text: TextSpan(
                       text:
-                          '3. ${Home_Controller.years[2]} / $subject_name / $subject_type',
+                          '3. ${Home_Controller.years[2]} / $subject_name / $subject_type :',
                       style: Theme.of(context).textTheme.titleLarge!.copyWith(
                           fontSize: width / 20,
                           color: is_Dark!.getString('is_dark') == 'true'
@@ -129,13 +130,15 @@ class Filestypes extends StatelessWidget {
               ),
               children: Files_Types.values.map(
                 (type) {
-                  index++;
+                  i++;
                   return FilestypesCard(
+                    index_for_student: index,
                     type: type,
-                    index: index,
+                    index:  i,
                     subject_type: subject_type,
                     year: year,
                     subject_name: subject_name,
+                    subject_id: subject_id,
                   );
                 },
               ).toList(),

@@ -17,15 +17,11 @@ class SavedFilesCard extends StatelessWidget {
     final height = Themes.getHeight(context);
     final HomeController controller = Get.find();
 
-    Widget added_to_saved_files = const Icon(
-      Icons.check,
-      size: 30,
-      color: Colors.green,
-    );
     Widget remove_from_saved_files = InkWell(
       onTap: () {
-        controller.remove_from_saved_files(
-            controller.savedFiles_information[index]["id"], index);
+        int id = controller.savedFiles_information[index]["id"];
+        controller.remove_saved_file(context, id);
+        controller.update_timer(id, index);
       },
       child: const Icon(
         Iconsax.trash,
@@ -37,11 +33,15 @@ class SavedFilesCard extends StatelessWidget {
     Widget open = controller.download_circle ??
         InkWell(
           onTap: () {
+            String path = appData!.getString(
+                "file[${controller.savedFiles_information[index]["type"].toLowerCase()}][${controller.saved_files_ids[index]}]")!;
+            String name = controller.savedFiles_information[index]["name"];
             Get.to(
               () => Openfile(
-                  file_path: appData!.getString(
-                      "file[${controller.savedFiles_information[index]["type"].toLowerCase()}][${controller.saved_files_ids[index]}]")!),
+                file_path: path,
+              ),
             );
+            controller.add_to_recent_files(name, path);
           },
           child: const Icon(
             Iconsax.folder_open,
@@ -159,25 +159,25 @@ class SavedFilesCard extends StatelessWidget {
                             ],
                           ),
                           child: appData!.getString(
-                                          "file[${controller.savedFiles_information[index]["type"].toLowerCase()}][${controller.saved_files_ids[index]}]") ==
-                                      null
-                                  ? controller.download_circle ??
-                                      InkWell(
-                                        onTap: () {
-                                          controller.download_saved_file(
-                                              index,
-                                              controller
-                                                  .savedFiles_information[index]
-                                                      ["type"]
-                                                  .toLowerCase());
-                                        },
-                                        child: const Icon(
-                                          Iconsax.document_download,
-                                          size: 30,
-                                          color: Colors.white,
-                                        ),
-                                      )
-                                  : open,
+                                      "file[${controller.savedFiles_information[index]["type"].toLowerCase()}][${controller.saved_files_ids[index]}]") ==
+                                  null
+                              ? controller.download_circle ??
+                                  InkWell(
+                                    onTap: () {
+                                      controller.download_saved_file(
+                                          index,
+                                          controller
+                                              .savedFiles_information[index]
+                                                  ["type"]
+                                              .toLowerCase());
+                                    },
+                                    child: const Icon(
+                                      Iconsax.document_download,
+                                      size: 30,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                              : open,
                         );
                       }),
                 ),
@@ -207,9 +207,7 @@ class SavedFilesCard extends StatelessWidget {
                             )
                           ],
                         ),
-                        child: controller.isStudentSavedFiles[index]
-                            ? remove_from_saved_files
-                            : added_to_saved_files,
+                        child: remove_from_saved_files,
                       );
                     },
                   ),

@@ -24,7 +24,7 @@ class LogoutController extends GetxController {
         if (decodedResposne["status"] == 200) {
           Auth!.setString('user', 'non_active_doctor');
           Get.offNamed('EmailPageScreen');
-          Auth!.setString('token' , 'logged out');
+          Auth!.setString('token', 'logged out');
           Auth!.setString('login', '400');
         } else {
           snackBar sb = snackBar(
@@ -72,7 +72,7 @@ class LogoutController extends GetxController {
         if (decodedResposne["status"] == 200) {
           Auth!.setString('user', 'non_active_teacher');
           Get.offNamed('EmailPageScreen');
-          Auth!.setString('token' , 'logged out');
+          Auth!.setString('token', 'logged out');
           Auth!.setString('login', '400');
         } else {
           snackBar sb = snackBar(
@@ -120,7 +120,7 @@ class LogoutController extends GetxController {
         if (decodedResposne["status"] == 200) {
           Auth!.setString('user', 'non_active_student');
           Get.offNamed('EmailPageScreen');
-          Auth!.setString('token' , 'logged out');
+          Auth!.setString('token', 'logged out');
           Auth!.setString('login', '400');
         } else {
           snackBar sb = snackBar(
@@ -153,5 +153,6 @@ class LogoutController extends GetxController {
         log(e.toString());
       }
     }
+    appData!.setString('user_photo', '');
   }
 }

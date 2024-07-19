@@ -150,14 +150,13 @@ class AIController extends GetxController {
       );
       update();
     } catch (e) {
-      log(connectivityResult.toString());
       messages.removeAt(messages.length - 1);
       checkState(connectivityResult);
       if (isConnect == false) {
         messages.add(Message(
             text: 'Connect to the internet then try again', isUser: false));
       } else {
-        messages.add(Message(text: 'Something went wrong !', isUser: false));
+        messages.add(Message(text: 'Something went wrong try changing vpn to japan!', isUser: false));
       }
       update();
     }

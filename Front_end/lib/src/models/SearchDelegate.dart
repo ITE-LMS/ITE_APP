@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -167,7 +166,6 @@ class CustomSearchDelegate extends SearchDelegate {
       Filternames.addAll(cs_controller.name
           .where((element) => element.toUpperCase().startsWith(query))
           .toList());
-      log(Filternames.toString());
 
       for (int i = 0; i < cs_controller.name.length; i++) {
         if (Filternames.contains(cs_controller.name[i])) {

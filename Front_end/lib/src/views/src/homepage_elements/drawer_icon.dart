@@ -22,12 +22,13 @@ class drawerIcon extends StatelessWidget {
               builder: (drawer_controller) {
                 return IconButton(
                   onPressed: () {
+    
                     if (Auth!.getString("user") == "active_student") {
-                      drawer_controller.getStudentPhoto();
+                      drawer_controller.getUserPhoto("get-student-photo");
                     } else if (Auth!.getString("user") == "active_doctor") {
-                      drawer_controller.getDoctorPhoto();
+                      drawer_controller.getUserPhoto("get-doctor-photo");
                     } else if (Auth!.getString("user") == "active_teacher") {
-                      drawer_controller.getTeacherPhoto();
+                      drawer_controller.getUserPhoto("get-teacher-photo");
                     }
                     Scaffold.of(context).openDrawer();
                   },

@@ -11,19 +11,21 @@ import '../../../../controllers/Dark_mode_Controller.dart';
 import '../../../../models/Themes.dart';
 
 class SubjectTypeCard extends StatelessWidget {
-  const SubjectTypeCard({
+  SubjectTypeCard({
     super.key,
     required this.Doctors_Names,
     required this.Type,
     required this.path,
     required this.subject_name,
     required this.year,
+    this.index,
   });
   final dynamic Doctors_Names;
   final String Type;
   final String path;
   final String subject_name;
   final int year;
+  int? index;
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +33,7 @@ class SubjectTypeCard extends StatelessWidget {
     final height = Themes.getHeight(context);
 
     String doctors_names = '';
-
-    if (Type == "Theoritical :") {
+    if (Type == "Theoritical") {
       for (int i = 0; i < Doctors_Names.length; i++) {
         if (Doctors_Names.length != 1) {
           doctors_names = '$doctors_names , ' + Doctors_Names[i];
@@ -100,7 +101,7 @@ class SubjectTypeCard extends StatelessWidget {
                           ),
                     ),
                     Text(
-                      Type == "Practical" ? Doctors_Names : doctors_names,
+                      Type == "Practical" ? Doctors_Names ?? '' : doctors_names,
                       style: Theme.of(context).textTheme.titleLarge!.copyWith(
                             fontSize: width / 25,
                           ),
@@ -165,7 +166,7 @@ class SubjectTypeCard extends StatelessWidget {
                             return InkWell(
                               onTap: () {
                                 hController.viewFilesTypes(
-                                    Type, subject_name, year);
+                                    Type, subject_name, year, index);
                               },
                               child: hController.circleViewFilesTypes ??
                                   viewFilesTypes,

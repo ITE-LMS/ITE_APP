@@ -39,13 +39,7 @@ class Subjectcard extends StatelessWidget {
     // remove from my subjects :
     final removeSubject = InkWell(
       onTap: () {
-        if (h_controller.isAdded_practical[index]) {
-          h_controller.removeFromMySubjects(subject_id, index);
-          h_controller.removeFromMySubjects(
-              h_controller.subjects_practical_ids[index], index);
-        } else {
-          h_controller.removeFromMySubjects(subject_id, index);
-        }
+        h_controller.removeFromMySubjects(subject_id, index);
       },
       child: const Icon(
         size: 30,

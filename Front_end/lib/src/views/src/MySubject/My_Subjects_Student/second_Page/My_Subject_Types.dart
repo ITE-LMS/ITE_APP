@@ -18,15 +18,79 @@ class MySubjectstypes extends StatelessWidget {
     final width = Themes.getWidth(context);
     final height = Themes.getHeight(context);
 
-    List<Widget> thP = [
-      SubjectTypeCard(
-        year: student_subject_controller.year_id[index],
-        subject_name: student_subject_controller.student_subjects[index],
-        Type: 'Theoritical :',
-        Doctors_Names: '',
-        path: 'assets/images/design.png',
-      ),
-    ];
+    String year = student_subject_controller.student_subjects[index]["year"];
+    String name = student_subject_controller.student_subjects[index]["name"];
+    String type = student_subject_controller.student_subjects[index]["type"];
+    List<dynamic>? doctors;
+    List<dynamic>? doctors_pra =
+        student_subject_controller.student_subjects[index]["doctors_pra"];
+    List<dynamic>? teachers =
+        student_subject_controller.student_subjects[index]["teacher"];
+
+    String? teacher;
+    if (type == "theoretical and practical") {
+      doctors =
+          student_subject_controller.student_subjects[index]["doctors_th"];
+
+      if (doctors_pra!.isNotEmpty) {
+        teacher = student_subject_controller.student_subjects[index]
+            ["doctors_pra"][0];
+      } else if (teachers!.isNotEmpty) {
+        teacher =
+            student_subject_controller.student_subjects[index]["teacher"][0];
+      }
+    } else if (type == "theoretical") {
+      doctors = student_subject_controller.student_subjects[index]["doctors"];
+    } else {
+      doctors = null;
+    }
+
+    List<Widget> thP;
+
+    if (type == "theoretical and practical") {
+      thP = [
+        SubjectTypeCard(
+          index: index,
+          year: year == "First year"
+              ? 1
+              : year == "Second year"
+                  ? 2
+                  : 3,
+          subject_name: name,
+          Type: 'Theoritical',
+          Doctors_Names: doctors,
+          path: 'assets/images/design.png',
+        ),
+        const SizedBox(height: 15),
+        SubjectTypeCard(
+          index: index,
+          year: year == "First year"
+              ? 1
+              : year == "Second year"
+                  ? 2
+                  : 3,
+          subject_name: name,
+          Type: 'Practical',
+          Doctors_Names: teacher,
+          path: 'assets/images/responsibility.png',
+        ),
+      ];
+    } else {
+      thP = [
+        SubjectTypeCard(
+          index: index,
+          year: year == "First year"
+              ? 1
+              : year == "Second year"
+                  ? 2
+                  : 3,
+          subject_name: name,
+          Type: 'Theoritical',
+          Doctors_Names: doctors,
+          path: 'assets/images/design.png',
+        )
+      ];
+    }
 
     return SafeArea(
       child: Scaffold(
@@ -39,7 +103,7 @@ class MySubjectstypes extends StatelessWidget {
               ? Themes.darkColorScheme.background
               : Themes.colorScheme.primaryContainer,
           title: Text(
-            '${index + 1} . ${student_subject_controller.student_subjects[index]}',
+            student_subject_controller.student_subjects[index]["name"],
             style: Theme.of(context).textTheme.bodySmall!.copyWith(
                   fontSize: width / 20,
                   color: is_Dark!.getString('is_dark') == 'true'

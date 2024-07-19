@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -64,7 +63,6 @@ class AddQuizController extends GetxController {
     answers = List<String?>.filled(numQuestion, null, growable: true);
     answerFieldCounts = List<int>.filled(numQuestion, 1, growable: true);
     correctAnswers = List<int>.filled(numQuestion, -1, growable: true);
-    log('here');
   }
 
   // تعيين الموضوع المحدد للاختبار

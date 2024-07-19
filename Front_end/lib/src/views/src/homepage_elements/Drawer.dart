@@ -1,5 +1,7 @@
 // ignore_for_file: file_names, non_constant_identifier_names, unused_local_variable
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:public_testing_app/src/controllers/Home_Controllers/Home_Controller.dart';
@@ -9,7 +11,6 @@ import 'package:public_testing_app/src/models/Themes.dart';
 import 'package:public_testing_app/src/controllers/Auth_Controllers/change_pass/change_pass_controller.dart';
 import 'package:public_testing_app/src/controllers/Auth_Controllers/logout_Controller.dart';
 import 'package:public_testing_app/main.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 final class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
@@ -19,10 +20,10 @@ final class MyDrawer extends StatelessWidget {
     final logout_controller = Get.put(LogoutController());
     final changePass_controller = Get.put(ChangePassController());
     final drawer_controller = Get.put(DrawersController());
-    final HomeController h_controller = Get.find();
 
     List<Widget> content = [];
     if (Auth!.getString("user") == "active_student") {
+      final HomeController h_controller = Get.find();
       content = [
         MyListTile(
           label: 'Saved Files',
@@ -167,8 +168,8 @@ final class MyDrawer extends StatelessWidget {
                                   (appData!.getString('user_photo') != null)
                               ? CircleAvatar(
                                   radius: Themes.getWidth(context) / 9.5,
-                                  backgroundImage: CachedNetworkImageProvider(
-                                    appData!.getString('user_photo')!,
+                                  backgroundImage: FileImage(
+                                    File(appData!.getString('user_photo')!),
                                   ),
                                 )
                               : CircleAvatar(

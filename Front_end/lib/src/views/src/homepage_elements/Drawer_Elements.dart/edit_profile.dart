@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -61,15 +60,19 @@ class EditProfile extends StatelessWidget {
                               return appData!.getString('user_photo') != '' &&
                                       appData!.getString('user_photo_localy') ==
                                           ''
-                                  ? CircleAvatar(
+                                  ?
+                                  // user photo from backend :
+                                  CircleAvatar(
                                       radius: Themes.getWidth(context) / 4.1,
-                                      backgroundImage:
-                                          CachedNetworkImageProvider(
-                                        appData!.getString('user_photo')!,
+                                      backgroundImage: FileImage(
+                                        File(
+                                          appData!.getString('user_photo')!,
+                                        ),
                                       ),
                                     )
                                   : appData!.getString('user_photo_localy') !=
                                           ''
+                                      // picked image from storage :
                                       ? CircleAvatar(
                                           radius:
                                               Themes.getWidth(context) / 4.1,
@@ -80,6 +83,7 @@ class EditProfile extends StatelessWidget {
                                             ),
                                           ),
                                         )
+                                      // default photo :
                                       : CircleAvatar(
                                           radius:
                                               Themes.getWidth(context) / 4.1,
