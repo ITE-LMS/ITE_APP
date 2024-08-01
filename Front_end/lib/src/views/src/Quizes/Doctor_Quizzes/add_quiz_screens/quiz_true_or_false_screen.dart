@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:public_testing_app/src/controllers/Quizzes_Controllers/add_quiz_controller.dart';
-import 'package:public_testing_app/src/controllers/Quizzes_Controllers/doctor_quiz_controller.dart';
+import 'package:public_testing_app/src/controllers/Quizzes_Controllers/quiz_controller.dart';
 import 'package:public_testing_app/src/models/Themes.dart';
 
 class QuizTrueOrFalseScreen extends StatelessWidget {
@@ -12,10 +11,108 @@ class QuizTrueOrFalseScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AddQuizController addQuizController = Get.find();
-    final DoctorQuizController quizController = Get.find();
+    final QuizController quizController = Get.find();
     final width = Themes.getWidth(context);
     final hieght = Themes.getHeight(context);
+    final List<Widget> TF = [];
+
+    for (int index = 0; index < quizController.numQuestion; index++) {
+      TF.add(
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            padding: const EdgeInsets.all(15),
+            decoration: BoxDecoration(
+              color: Themes.getColor(
+                Themes.darkColorScheme.onPrimary.withOpacity(.3),
+                Themes.colorScheme.primaryContainer,
+              ),
+              border: Border.all(
+                color: Themes.getColor(
+                  Themes.darkColorScheme.primary,
+                  Themes.colorScheme.primary,
+                ),
+                width: 5,
+                strokeAlign: BorderSide.strokeAlignInside,
+              ),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      width: 2,
+                      color: Themes.getColor(
+                        Colors.white,
+                        Colors.blue,
+                      ),
+                    ),
+                  ),
+                  child: Form(
+                    key: quizController.form_key_for_true_or_false[index],
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please Enter Question";
+                        }
+                        if (int.tryParse(value) != null ||
+                            double.tryParse(value) != null) {
+                          return "Enter a valid Question";
+                        }
+                      },
+                      onSaved: (newValue) {
+                        quizController.questionControllers[index].text =
+                            newValue!;
+                      },
+                      decoration: InputDecoration(
+                        hintText: 'Question',
+                        hintStyle: Theme.of(context).textTheme.titleMedium,
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                GetBuilder<QuizController>(
+                  init: QuizController(),
+                  builder: (controller) {
+                    return Column(
+                      children: [
+                        RadioListTile<String>(
+                          title: const Text('True'),
+                          value: 'true',
+                          groupValue: controller.answers[index],
+                          onChanged: (String? value) {
+                            if (value != null) {
+                              controller.setAnswer(index, value);
+                            }
+                          },
+                        ),
+                        RadioListTile<String>(
+                          title: const Text('False'),
+                          value: 'false',
+                          groupValue: controller.answers[index],
+                          onChanged: (String? value) {
+                            if (value != null) {
+                              controller.setAnswer(index, value);
+                            }
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
 
     return Scaffold(
       backgroundColor: Themes.getColor(
@@ -57,7 +154,7 @@ class QuizTrueOrFalseScreen extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 15.0, right: 5),
                         child: InkWell(
                           onTap: () {
-                            addQuizController
+                            quizController
                                 .publishQuiz_TrueORFalse(numQuestions);
                           },
                           child: Container(
@@ -110,105 +207,12 @@ class QuizTrueOrFalseScreen extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 50),
+            const SizedBox(height: 30),
             Expanded(
-              child: ListView.builder(
-                itemCount: numQuestions,
-                itemBuilder: (ctx, index) => Column(
+              child: SingleChildScrollView(
+                child: Column(
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(15),
-                      decoration: BoxDecoration(
-                        color: Themes.getColor(
-                          Themes.darkColorScheme.onPrimary.withOpacity(.3),
-                          Themes.colorScheme.primaryContainer,
-                        ),
-                        border: Border.all(
-                          color: Themes.getColor(
-                            Themes.darkColorScheme.primary,
-                            Themes.colorScheme.primary,
-                          ),
-                          width: 5,
-                          strokeAlign: BorderSide.strokeAlignInside,
-                        ),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 10),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(
-                                width: 2,
-                                color: Themes.getColor(
-                                  Colors.white,
-                                  Colors.blue,
-                                ),
-                              ),
-                            ),
-                            child: Form(
-                              key: addQuizController
-                                  .form_key_for_true_or_false[index],
-                              child: TextFormField(
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return "Please Enter Question";
-                                  }
-                                  if (int.tryParse(value) != null ||
-                                      double.tryParse(value) != null) {
-                                    return "Enter a valid Question";
-                                  }
-                                },
-                                onSaved: (newValue) {
-                                  addQuizController.questionControllers[index]
-                                      .text = newValue!;
-                                },
-                                decoration: InputDecoration(
-                                  hintText: 'Question',
-                                  hintStyle:
-                                      Theme.of(context).textTheme.titleMedium,
-                                  border: InputBorder.none,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          GetBuilder<AddQuizController>(
-                            init: AddQuizController(),
-                            builder: (controller) {
-                              return Column(
-                                children: [
-                                  RadioListTile<String>(
-                                    title: const Text('True'),
-                                    value: 'true',
-                                    groupValue: controller.answers[index],
-                                    onChanged: (String? value) {
-                                      if (value != null) {
-                                        controller.setAnswer(index, value);
-                                      }
-                                    },
-                                  ),
-                                  RadioListTile<String>(
-                                    title: const Text('False'),
-                                    value: 'false',
-                                    groupValue: controller.answers[index],
-                                    onChanged: (String? value) {
-                                      if (value != null) {
-                                        controller.setAnswer(index, value);
-                                      }
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 10),
+                    ...TF,
                   ],
                 ),
               ),

@@ -114,7 +114,8 @@ class ChangePassScreen extends StatelessWidget {
                             },
                             keyboard: TextInputType.text,
                             Pass_Security: ch_controller.isSecurePassword,
-                            suffixIcon: ch_controller.togglePassWord(),
+                            suffixIcon: ch_controller.togglePassWord(
+                                ch_controller.isSecurePassword, 'pass'),
                             prefixIcon: Icon(
                               Icons.lock_rounded,
                               color: Theme.of(context).colorScheme.primary,
@@ -143,7 +144,8 @@ class ChangePassScreen extends StatelessWidget {
                             },
                             keyboard: TextInputType.text,
                             Pass_Security: ch_controller.isSecureNewPassword,
-                            suffixIcon: ch_controller.toggleNewPassWord(),
+                            suffixIcon: ch_controller.togglePassWord(
+                                ch_controller.isSecureNewPassword, 'new_pass'),
                             prefixIcon: Icon(
                               Icons.lock_rounded,
                               color: Theme.of(context).colorScheme.primary,
@@ -173,8 +175,9 @@ class ChangePassScreen extends StatelessWidget {
                             Pass_Security:
                                 ch_controller.isSecureConfirmNewPassword,
                             keyboard: TextInputType.text,
-                            suffixIcon:
-                                ch_controller.toggleConfirmNewPassWord(),
+                            suffixIcon: ch_controller.togglePassWord(
+                                ch_controller.isSecureConfirmNewPassword,
+                                'confirm_new_pass'),
                             prefixIcon: Icon(
                               Icons.lock,
                               color: Theme.of(context).colorScheme.primary,

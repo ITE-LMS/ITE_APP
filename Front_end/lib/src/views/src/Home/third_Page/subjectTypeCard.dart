@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:mobkit_dashed_border/mobkit_dashed_border.dart';
+import 'package:public_testing_app/main.dart';
+import 'package:public_testing_app/src/controllers/Dark_mode_Controller.dart';
+import 'package:public_testing_app/src/controllers/Home_Controllers/Home_Controller.dart';
+import 'package:public_testing_app/src/models/Themes.dart';
 
-import '../../../../../main.dart';
-import '../../../../controllers/Home_Controllers/Home_Controller.dart';
-import '../../../../controllers/Dark_mode_Controller.dart';
-import '../../../../models/Themes.dart';
 
 class SubjectTypeCard extends StatelessWidget {
   SubjectTypeCard({

@@ -77,58 +77,10 @@ class DrawersController extends GetxController {
         circleImage = null;
         update(['circle_image']);
         Get.back();
-        snackBar sb = snackBar(
-          path: 'assets/images/check.png',
-          BorderColor: Colors.greenAccent,
-          message: Padding(
-            padding: const EdgeInsets.only(left: 10.0),
-            child: Text(
-              'Successfully!',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: Get.mediaQuery.size.width / 25,
-              ),
-            ),
-          ),
-          title: Padding(
-            padding: const EdgeInsets.only(left: 10.0),
-            child: Text(
-              'Changes Saved',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: Get.mediaQuery.size.width / 25,
-              ),
-            ),
-          ),
-        );
-        sb.snackbar();
+        Themes.get_notification_info('check', 'Changes Saved', 'Successfully!');
       } else {
         //? Handle error (e.g., display an error message to the user)
-        snackBar sb = snackBar(
-          path: 'assets/images/cross.png',
-          BorderColor: Colors.greenAccent,
-          message: Padding(
-            padding: const EdgeInsets.only(left: 10.0),
-            child: Text(
-              'went wrong!',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: Get.mediaQuery.size.width / 25,
-              ),
-            ),
-          ),
-          title: Padding(
-            padding: const EdgeInsets.only(left: 10.0),
-            child: Text(
-              'Something',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: Get.mediaQuery.size.width / 25,
-              ),
-            ),
-          ),
-        );
-        sb.snackbar();
+        Themes.get_notification_info('cross', 'SomeThing Went', 'Wrong !');
       }
     } catch (e) {
       log(e.toString());
@@ -296,25 +248,7 @@ class DrawersController extends GetxController {
                 log('FILE DOWNLOADED TO PATH: $path');
               },
               onDownloadError: (String error) {
-                snackBar sb = snackBar(
-                  path: "assets/images/cross.png",
-                  BorderColor: Colors.red,
-                  title: Padding(
-                    padding: const EdgeInsets.only(left: 30.0),
-                    child: Text(
-                      "Your Connection",
-                      style: Get.theme.textTheme.titleMedium,
-                    ),
-                  ),
-                  message: Padding(
-                    padding: const EdgeInsets.only(left: 30.0),
-                    child: Text(
-                      "is weak !",
-                      style: Get.theme.textTheme.titleMedium,
-                    ),
-                  ),
-                );
-                sb.snackbar();
+                Themes.no_internet_connection();
               },
             );
           } catch (e) {

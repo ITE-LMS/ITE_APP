@@ -21,6 +21,39 @@ class LoginPassController extends GetxController {
   final pass_word = TextEditingController();
   bool isSecurePassword = true;
 
+  void login_for_user(String user_url) async {
+    try {
+      var url = Uri.parse('http://10.0.2.2:8000/api/$user_url');
+      final response = await http.post(
+        url,
+        body: {
+          "email": Auth!.getString('email'),
+          "password": pass_word.text,
+        },
+      );
+      final decodedResposne = json.decode(response.body);
+      // successfull go to homePageDoctor :
+      if (decodedResposne["status"] == 200) {
+        Auth!.setString('token', "${decodedResposne["data"]["token"]}");
+        Auth!.setString('login', '200');
+        if (user_url != 'log_in_student_by_password') {
+          OtherusersSubjectsController().onInit();
+        }
+
+        Get.offAllNamed('StudentHomePageScreen');
+      }
+      // 201
+      else if (decodedResposne["status"] == 201) {
+        Themes.get_notification_info("cross", "Error!", "Wrong Password.");
+
+        circle = null;
+        update(["CILPass"]);
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
   void onSave() async {
     if (Form_Key.currentState!.validate()) {
       Form_Key.currentState!.save();
@@ -36,160 +69,15 @@ class LoginPassController extends GetxController {
 
       // check password doctor :
       if (Auth!.getString('user') == 'active_doctor') {
-        try {
-          var url =
-              Uri.parse('http://10.0.2.2:8000/api/log_in_doctor_by_password');
-          final response = await http.post(
-            url,
-            body: {
-              "email": Auth!.getString('email'),
-              "password": pass_word.text,
-            },
-          );
-          final decodedResposne = json.decode(response.body);
-          // successfull go to homePageDoctor :
-          if (decodedResposne["status"] == 200) {
-            Auth!.setString('token', "${decodedResposne["data"]["token"]}");
-            Auth!.setString('login', '200');
-            OtherusersSubjectsController().onInit();
-            Get.offAllNamed('StudentHomePageScreen');
-          }
-          // 201
-          else if (decodedResposne["status"] == 201) {
-            snackBar sb = snackBar(
-              path: 'assets/images/cross.png',
-              BorderColor: Colors.redAccent,
-              message: Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Text(
-                  'Wrong Password.',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: Get.mediaQuery.size.width / 25,
-                  ),
-                ),
-              ),
-              title: Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Text(
-                  'Error!',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: Get.mediaQuery.size.width / 25,
-                  ),
-                ),
-              ),
-            );
-            sb.snackbar();
-            circle = null;
-            update(["CILPass"]);
-          }
-        } catch (e) {
-          log(e.toString());
-        }
+        login_for_user('log_in_doctor_by_password');
       }
       // check password teacher :
       else if (Auth!.getString('user') == 'active_teacher') {
-        try {
-          var url =
-              Uri.parse('http://10.0.2.2:8000/api/log_in_teacher_by_password');
-          final response = await http.post(
-            url,
-            body: {
-              "email": Auth!.getString('email'),
-              "password": pass_word.text,
-            },
-          );
-          final decodedResposne = json.decode(response.body);
-          // successfull go to homePageDoctor :
-          if (decodedResposne["status"] == 200) {
-            Auth!.setString('token', "${decodedResposne["data"]["token"]}");
-            Auth!.setString('login', '200');
-            OtherusersSubjectsController().onInit();
-            Get.offAllNamed('StudentHomePageScreen');
-          } else if (decodedResposne["status"] == 201) {
-            snackBar sb = snackBar(
-              path: 'assets/images/cross.png',
-              BorderColor: Colors.redAccent,
-              message: Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Text(
-                  'Wrong Password.',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: Get.mediaQuery.size.width / 25,
-                  ),
-                ),
-              ),
-              title: Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Text(
-                  'Error!',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: Get.mediaQuery.size.width / 25,
-                  ),
-                ),
-              ),
-            );
-            sb.snackbar();
-            circle = null;
-            update(["CILPass"]);
-          }
-        } catch (e) {
-          log(e.toString());
-        }
+        login_for_user('log_in_teacher_by_password');
       }
       // check password student :
       else if (Auth!.getString('user') == 'active_student') {
-        try {
-          var url =
-              Uri.parse('http://10.0.2.2:8000/api/log_in_student_by_password');
-          final response = await http.post(
-            url,
-            body: {
-              "email": Auth!.getString('email'),
-              "password": pass_word.text,
-            },
-          );
-          final decodedResposne = json.decode(response.body);
-          // successfull go to homePageDoctor :
-          if (decodedResposne["status"] == 200) {
-            Auth!.setString('token', "${decodedResposne["data"]["token"]}");
-            Auth!.setString('login', '200');
-            Get.offAllNamed('StudentHomePageScreen');
-          } else if (decodedResposne["status"] == 201) {
-            snackBar sb = snackBar(
-              path: 'assets/images/cross.png',
-              BorderColor: Colors.redAccent,
-              message: Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Text(
-                  'Wrong Password.',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: Get.mediaQuery.size.width / 25,
-                  ),
-                ),
-              ),
-              title: Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Text(
-                  'Error!',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: Get.mediaQuery.size.width / 25,
-                  ),
-                ),
-              ),
-            );
-            sb.snackbar();
-            circle = null;
-            update(["CILPass"]);
-          }
-        } catch (e) {
-          log(e.toString());
-        }
+        login_for_user('log_in_student_by_password');
       }
     } else {
       return;

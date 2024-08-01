@@ -22,6 +22,48 @@ class RegisterPassController extends GetxController {
   bool isSecurePassword = true;
   bool isSecurePasswordConfirm = true;
 
+  void set_user_password(String user_type, String user_url) async {
+    try {
+      var url = Uri.parse('http://10.0.2.2:8000/api/$user_url');
+      final response = await http.post(
+        url,
+        headers: {
+          "Authorization": "Bearer ${Auth!.getString('token')}",
+        },
+        body: {
+          "password": pass_word.text,
+          "confirm_password": confirm_pass_word.text,
+        },
+      );
+
+      final decodedResposne = json.decode(response.body);
+      // successfull go to homePageDoctor :
+      if (decodedResposne["status"] == 200) {
+        Auth!.setString('login', '200');
+        if (Auth!.getString('user') == 'non_active_$user_type') {
+          Auth!.setString('user', 'active_$user_type');
+        }
+        Get.offAllNamed('StudentHomePageScreen');
+      }
+      // wrong confirm pass :
+      else if (decodedResposne["status"] == 401) {
+        Themes.get_notification_info(
+            "cross", "Error!", "Confirm password and password isn`t the same.");
+        circle = null;
+        update(["CIRPass"]);
+      }
+      // some thing went wrong :
+      else {
+        Themes.get_notification_info(
+            "cross", "Error!", "Something Went Wrong.");
+        circle = null;
+        update(["CIRPass"]);
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
   void onSave() async {
     if (Form_Key.currentState!.validate()) {
       Form_Key.currentState!.save();
@@ -35,305 +77,28 @@ class RegisterPassController extends GetxController {
       Auth!.setString('user_name', user_name.text);
       // set password doctor :
       if (Auth!.getString('user') == 'non_active_doctor') {
-        try {
-          var url = Uri.parse('http://10.0.2.2:8000/api/set-password-doctor');
-          final response = await http.post(
-            url,
-            headers: {
-              "Authorization": "Bearer ${Auth!.getString('token')}",
-            },
-            body: {
-              "password": pass_word.text,
-              "confirm_password": confirm_pass_word.text,
-            },
-          );
-
-          final decodedResposne = json.decode(response.body);
-          // successfull go to homePageDoctor :
-          if (decodedResposne["status"] == 200) {
-            Auth!.setString('login', '200');
-            if (Auth!.getString('user') == 'non_active_doctor') {
-              Auth!.setString('user', 'active_doctor');
-            }
-            Get.offAllNamed('StudentHomePageScreen');
-          }
-          // wrong confirm pass :
-          else if (decodedResposne["status"] == 401) {
-            snackBar sb = snackBar(
-              path: 'assets/images/cross.png',
-              BorderColor: Colors.redAccent,
-              message: Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Text(
-                  'Confirm password and password isn`t the same.',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: Get.mediaQuery.size.width / 35,
-                  ),
-                ),
-              ),
-              title: Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Text(
-                  'Error!',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: Get.mediaQuery.size.width / 25,
-                  ),
-                ),
-              ),
-            );
-            sb.snackbar();
-            circle = null;
-            update(["CIRPass"]);
-          }
-          // some thing went wrong :
-          else {
-            snackBar sb = snackBar(
-              path: 'assets/images/cross.png',
-              BorderColor: Colors.redAccent,
-              message: Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Text(
-                  'Something Went Wrong.',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: Get.mediaQuery.size.width / 25,
-                  ),
-                ),
-              ),
-              title: Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Text(
-                  'Error!',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: Get.mediaQuery.size.width / 25,
-                  ),
-                ),
-              ),
-            );
-            sb.snackbar();
-            circle = null;
-            update(["CIRPass"]);
-          }
-        } catch (e) {
-          log(e.toString());
-        }
+        set_user_password('doctor', 'set-password-doctor');
       }
       // set password student :
       else if (Auth!.getString('user') == 'non_active_student') {
-        try {
-          var url = Uri.parse('http://10.0.2.2:8000/api/set-password-student');
-          final response = await http.post(
-            url,
-            headers: {
-              "Authorization": "Bearer ${Auth!.getString('token')}",
-            },
-            body: {
-              "password": pass_word.text,
-              "confirm_password": confirm_pass_word.text,
-            },
-          );
-          final decodedResposne = json.decode(response.body);
-          // successfull go to homePageDoctor :
-          if (decodedResposne["status"] == 200) {
-            Auth!.setString('login', '200');
-            if (Auth!.getString('user') == 'non_active_student') {
-              Auth!.setString('user', 'active_student');
-            }
-            Get.offAllNamed('StudentHomePageScreen');
-          } // wrong confirm pass :
-          else if (decodedResposne["status"] == 401) {
-            snackBar sb = snackBar(
-              path: 'assets/images/cross.png',
-              BorderColor: Colors.redAccent,
-              message: Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Text(
-                  'Confirm password and password isn`t the same.',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: Get.mediaQuery.size.width / 35,
-                  ),
-                ),
-              ),
-              title: Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Text(
-                  'Error!',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: Get.mediaQuery.size.width / 25,
-                  ),
-                ),
-              ),
-            );
-            sb.snackbar();
-            circle = null;
-            update(["CIRPass"]);
-          }
-          // some thing went wrong :
-          else {
-            snackBar sb = snackBar(
-              path: 'assets/images/cross.png',
-              BorderColor: Colors.redAccent,
-              message: Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Text(
-                  'Something Went Wrong.',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: Get.mediaQuery.size.width / 25,
-                  ),
-                ),
-              ),
-              title: Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Text(
-                  'Error!',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: Get.mediaQuery.size.width / 25,
-                  ),
-                ),
-              ),
-            );
-            sb.snackbar();
-            circle = null;
-            update(["CIRPass"]);
-          }
-        } catch (e) {
-          log(e.toString());
-        }
+        set_user_password('student', 'set-password-student');
       }
       // set password teacher :
       else if (Auth!.getString('user') == 'non_active_teacher') {
-        try {
-          var url = Uri.parse('http://10.0.2.2:8000/api/set-password-teacher');
-          final response = await http.post(
-            url,
-            headers: {
-              "Authorization": "Bearer ${Auth!.getString('token')}",
-            },
-            body: {
-              "password": pass_word.text,
-              "confirm_password": confirm_pass_word.text,
-            },
-          );
-          final decodedResposne = json.decode(response.body);
-          // successfull go to homePageDoctor :
-          if (decodedResposne["status"] == 200) {
-            Auth!.setString('login', '200');
-            if (Auth!.getString('user') == 'non_active_teacher') {
-              Auth!.setString('user', 'active_teacher');
-            }
-            Get.offAllNamed('StudentHomePageScreen');
-          }
-          // wrong confirm pass :
-          else if (decodedResposne["status"] == 401) {
-            snackBar sb = snackBar(
-              path: 'assets/images/cross.png',
-              BorderColor: Colors.redAccent,
-              message: Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Text(
-                  'Confirm password and password isn`t the same.',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: Get.mediaQuery.size.width / 35,
-                  ),
-                ),
-              ),
-              title: Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Text(
-                  'Error!',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: Get.mediaQuery.size.width / 25,
-                  ),
-                ),
-              ),
-            );
-            sb.snackbar();
-            circle = null;
-            update(["CIRPass"]);
-          }
-          // some thing went wrong :
-          else {
-            snackBar sb = snackBar(
-              path: 'assets/images/cross.png',
-              BorderColor: Colors.redAccent,
-              message: Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Text(
-                  'Something Went Wrong.',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: Get.mediaQuery.size.width / 25,
-                  ),
-                ),
-              ),
-              title: Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Text(
-                  'Error!',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: Get.mediaQuery.size.width / 25,
-                  ),
-                ),
-              ),
-            );
-            sb.snackbar();
-            circle = null;
-            update(["CIRPass"]);
-          }
-        } catch (e) {
-          log(e.toString());
-        }
+        set_user_password('teacher', 'set-password-teacher');
       }
     } else {
       return;
     }
   }
 
-  Widget togglePassWord() {
+  Widget togglePassWord(bool isSecurePassword) {
     return IconButton(
       onPressed: () {
         isSecurePassword = !isSecurePassword;
         update();
       },
       icon: isSecurePassword
-          ? Image(
-              image: const AssetImage('assets/images/eye.png'),
-              width: 28,
-              height: 28,
-              color: Themes.getColor(
-                Themes.darkColorScheme.primary,
-                Themes.colorScheme.primary,
-              ),
-            )
-          : Image(
-              image: const AssetImage('assets/images/show.png'),
-              width: 28,
-              height: 28,
-              color: Themes.getColor(
-                Themes.darkColorScheme.primary,
-                Themes.colorScheme.primary,
-              ),
-            ),
-    );
-  }
-
-  Widget togglePassWordConfirm() {
-    return IconButton(
-      onPressed: () {
-        isSecurePasswordConfirm = !isSecurePasswordConfirm;
-        update();
-      },
-      icon: isSecurePasswordConfirm
           ? Image(
               image: const AssetImage('assets/images/eye.png'),
               width: 28,

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:public_testing_app/main.dart';
+import 'package:public_testing_app/src/models/Themes.dart';
 import 'package:public_testing_app/src/views/src/Home/second_Page/SubjectCard.dart';
 
-import '../../../../../main.dart';
-import '../../../../models/Themes.dart';
+
 
 class Subjects extends StatelessWidget {
   // Contructers :

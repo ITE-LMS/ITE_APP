@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:public_testing_app/main.dart';
+import 'package:public_testing_app/src/models/Themes.dart';
 
 class MyTextFormField extends StatelessWidget {
   const MyTextFormField({
@@ -52,9 +53,7 @@ class MyTextFormField extends StatelessWidget {
                 )
               : null,
           filled: true,
-          fillColor: is_Dark!.getString('is_dark') == 'true'
-              ? Colors.black54
-              : Colors.grey.shade400,
+          fillColor: Themes.getColor(Colors.black54, Colors.grey.shade400),
           prefixIcon: prefixIcon,
           suffixIcon: suffixIcon,
         ),

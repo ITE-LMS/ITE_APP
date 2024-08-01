@@ -3,11 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:marquee_text/marquee_text.dart';
+import 'package:public_testing_app/main.dart';
 import 'package:public_testing_app/src/controllers/Home_Controllers/Home_Controller.dart';
+import 'package:public_testing_app/src/models/Themes.dart';
 import 'package:public_testing_app/src/views/src/Home/third_Page/subjectTypeCard.dart';
 
-import '../../../../../main.dart';
-import '../../../../models/Themes.dart';
 
 class Subjecttype extends StatelessWidget {
   const Subjecttype(
@@ -153,14 +153,3 @@ class Subjecttype extends StatelessWidget {
     );
   }
 }
-
-
-// Text(
-//             '$index. $subjectName :',
-//             style: Theme.of(context).textTheme.bodySmall!.copyWith(
-//                   fontSize: width / 20,
-//                   color: is_Dark!.getString('is_dark') == 'true'
-//                       ? Themes.darkColorScheme.primary
-//                       : Themes.colorScheme.primary,
-//                 ),
-//           ),

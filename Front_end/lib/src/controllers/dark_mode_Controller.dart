@@ -8,7 +8,7 @@ import 'package:public_testing_app/main.dart';
 import 'package:public_testing_app/src/models/Themes.dart';
 
 class DarkModeController extends GetxController {
-  bool is_dark_mode = is_Dark!.getString('is_dark') == 'true';
+  bool is_dark_mode = Themes.isDarkMode();
 
   @override
   void onInit() {
@@ -38,10 +38,10 @@ class DarkModeController extends GetxController {
     }
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        statusBarColor: is_Dark!.getString('is_dark') == 'true'
+        statusBarColor: Themes.isDarkMode()
             ? Themes.darkColorScheme.primary
             : Themes.colorScheme.primary,
-        systemNavigationBarColor: is_Dark!.getString('is_dark') == 'true'
+        systemNavigationBarColor: Themes.isDarkMode()
             ? Themes.darkColorScheme.primary
             : Themes.colorScheme.primary,
       ),

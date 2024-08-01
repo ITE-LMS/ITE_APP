@@ -9,6 +9,7 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:lottie/lottie.dart';
 import 'package:public_testing_app/main.dart';
 import 'package:public_testing_app/src/models/SnackBar.dart';
+import 'package:public_testing_app/src/models/Themes.dart';
 import '../../views/src/AI_Assistant/Message.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
@@ -29,24 +30,7 @@ class AIController extends GetxController {
     if (connectivityResult.contains(ConnectivityResult.none)) {
       state = "offline";
       update(["state"]);
-      snackBar sb = snackBar(
-        BorderColor: Colors.red,
-        title: Padding(
-          padding: const EdgeInsets.only(left: 30.0),
-          child: Text(
-            "No Internet",
-            style: Get.theme.textTheme.titleMedium,
-          ),
-        ),
-        message: Padding(
-          padding: const EdgeInsets.only(left: 30.0),
-          child: Text(
-            "Connection !",
-            style: Get.theme.textTheme.titleMedium,
-          ),
-        ),
-      );
-      sb.snackbar();
+      Themes.no_internet_connection();
     } else {
       state = "online";
       update(["state"]);
@@ -156,7 +140,9 @@ class AIController extends GetxController {
         messages.add(Message(
             text: 'Connect to the internet then try again', isUser: false));
       } else {
-        messages.add(Message(text: 'Something went wrong try changing vpn to japan!', isUser: false));
+        messages.add(Message(
+            text: 'Something went wrong try changing vpn to japan!',
+            isUser: false));
       }
       update();
     }

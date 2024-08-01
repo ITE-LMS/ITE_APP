@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:public_testing_app/src/controllers/Quizzes_Controllers/add_quiz_controller.dart';
+import 'package:public_testing_app/src/controllers/Quizzes_Controllers/quiz_controller.dart';
 import 'package:public_testing_app/src/models/Themes.dart';
 import 'package:public_testing_app/src/widgets/TextFormField.dart';
 
@@ -10,7 +10,7 @@ class AddQuizScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AddQuizController controller = Get.put(AddQuizController());
+    final QuizController controller = Get.put(QuizController());
     final width = Themes.getWidth(context);
     final hieght = Themes.getHeight(context);
 
@@ -26,7 +26,7 @@ class AddQuizScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Container(
           width: width,
-          height: width + 250,
+          height: width + 300,
           decoration: BoxDecoration(
             color: Themes.getColor(
               Themes.darkColorScheme.onPrimary.withOpacity(.3),
@@ -61,59 +61,76 @@ class AddQuizScreen extends StatelessWidget {
                         .copyWith(fontSize: 18),
                   ),
                 ),
-                // subjects drop down button :
                 Positioned(
                   right: 5,
-                  child: GetBuilder<AddQuizController>(
-                    init: AddQuizController(),
+                  child: GetBuilder<QuizController>(
+                    init: QuizController(),
                     builder: (controller) {
                       return Container(
-                        padding: const EdgeInsets.only(left: 10),
-                        width: width / 2.8,
-                        height: width / 8,
-                        decoration: BoxDecoration(
-                          color: Themes.colorScheme.onPrimaryContainer,
-                          border: Border.all(
-                            width: 3,
-                            color: Colors.white,
+                          padding: const EdgeInsets.only(left: 10),
+                          width: width / 2.8,
+                          height: width / 8,
+                          decoration: BoxDecoration(
+                            color: Themes.colorScheme.onPrimaryContainer,
+                            border: Border.all(
+                              width: 3,
+                              color: Colors.white,
+                            ),
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color:
+                                    Themes.getColor(Colors.green, Colors.blue),
+                                blurStyle: BlurStyle.outer,
+                                blurRadius: 5,
+                                offset: const Offset(0, 1),
+                              )
+                            ],
                           ),
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Themes.getColor(Colors.green, Colors.blue),
-                              blurStyle: BlurStyle.outer,
-                              blurRadius: 5,
-                              offset: const Offset(0, 1),
-                            )
-                          ],
-                        ),
-                        child: DropdownButton<String>(
-                          iconEnabledColor: Colors.white,
-                          borderRadius: BorderRadius.circular(25),
-                          style:
-                              Theme.of(context).textTheme.titleLarge!.copyWith(
-                                    fontSize: 18,
-                                    color: Colors.white,
-                                  ),
-                          underline: Container(
-                            color: Colors.white,
-                          ),
-                          isDense: false,
-                          dropdownColor: Themes.colorScheme.onPrimaryContainer,
-                          value: controller.selectedSubject,
-                          items: controller.subjects.map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                          onChanged: (newValue) {
-                            if (newValue != null) {
-                              controller.setSelectedSubject(newValue);
-                            }
-                          },
-                        ),
-                      );
+                          child: Row(
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  controller
+                                      .dialog_for_choosing_subject_from_MySubjects(
+                                          context);
+                                },
+                                child: const Icon(
+                                  Iconsax.sidebar_top,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              GetBuilder<QuizController>(
+                                  id: 'choose_subject',
+                                  builder: (add_controller) {
+                                    return Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          controller.selectedSubject,
+                                          style: Get.textTheme.titleLarge!
+                                              .copyWith(
+                                            fontSize: 12,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        Text(
+                                          controller.Selected_Type_Subject,
+                                          style: Get.textTheme.titleLarge!
+                                              .copyWith(
+                                            fontSize: 12,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }),
+                            ],
+                          ));
                     },
                   ),
                 ),
@@ -132,7 +149,7 @@ class AddQuizScreen extends StatelessWidget {
                 Positioned(
                   top: 110,
                   child: Text(
-                    'and at most 50:',
+                    'and at most 15:',
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge!
@@ -160,7 +177,7 @@ class AddQuizScreen extends StatelessWidget {
                             return "Invalid Input";
                           }
                           int num = int.parse(value);
-                          if (num < 3 || num > 50) {
+                          if (num < 3 || num > 15) {
                             return "Invalid number";
                           }
                         },
@@ -207,8 +224,8 @@ class AddQuizScreen extends StatelessWidget {
                             )
                           ],
                         ),
-                        child: GetBuilder<AddQuizController>(
-                          init: AddQuizController(),
+                        child: GetBuilder<QuizController>(
+                          init: QuizController(),
                           builder: (controller) {
                             return DropdownButton<String>(
                               iconEnabledColor: Colors.white,
@@ -245,9 +262,51 @@ class AddQuizScreen extends StatelessWidget {
                     ],
                   ),
                 ),
+                //Set Timer :
                 Positioned(
-                  top: 340,
-                  left: 10,
+                  top: 330,
+                  child: Text(
+                    "Set Timer from 3 to 15 minutes :",
+                    style: Get.textTheme.titleLarge!.copyWith(fontSize: 16),
+                  ),
+                ),
+                Positioned(
+                  top: 360,
+                  child: SizedBox(
+                    width: width - 80,
+                    height: 85,
+                    child: Form(
+                      key: controller.timer_form_key,
+                      child: MyTextFormField(
+                        keyboard: TextInputType.number,
+                        initValue: "3",
+                        label: 'Enter Time here ...',
+                        validate: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return "number required";
+                          }
+                          if (int.tryParse(value) == null ||
+                              double.tryParse(value) == null) {
+                            return "Invalid Input";
+                          }
+                          int num = int.parse(value);
+                          if (num < 3 || num > 15) {
+                            return "Invalid number";
+                          }
+                        },
+                        save: (value) {
+                          controller.setSelectedTimer(int.parse(value!));
+                        },
+                        prefixIcon:
+                            const Icon(Icons.format_list_numbered_rtl_rounded),
+                      ),
+                    ),
+                  ),
+                ),
+                // types of questions :
+                Positioned(
+                  top: 450,
+                  left: 0,
                   child: Text(
                     'Enter the Types of Questions :',
                     style: Theme.of(context)
@@ -256,15 +315,14 @@ class AddQuizScreen extends StatelessWidget {
                         .copyWith(fontSize: 16),
                   ),
                 ),
-
                 Positioned(
-                  top: 370,
+                  top: 480,
                   right: 100,
                   child: SizedBox(
                     width: 250,
                     height: 150,
-                    child: GetBuilder<AddQuizController>(
-                      init: AddQuizController(),
+                    child: GetBuilder<QuizController>(
+                      init: QuizController(),
                       builder: (controller) {
                         return Column(
                           children: [
@@ -294,6 +352,7 @@ class AddQuizScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+                // Next page button :
                 Positioned(
                   right: 10,
                   bottom: 10,
@@ -329,7 +388,11 @@ class AddQuizScreen extends StatelessWidget {
                         ),
                         const SizedBox(width: 10),
                         InkWell(
-                          onTap: () => controller.onSave(),
+                          onTap: () {
+                            controller.onSave();
+                            controller
+                                .init_num_question(controller.numQuestion);
+                          },
                           child: const Icon(
                             size: 35,
                             Iconsax.arrow_right,

@@ -3,10 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-
 import 'package:get/get.dart';
 import 'package:public_testing_app/Bindings.dart';
-
 import 'package:public_testing_app/src/models/Themes.dart';
 import 'package:public_testing_app/firebase_options.dart';
 import 'package:public_testing_app/App_Routes.dart';
@@ -41,7 +39,7 @@ Future<void> main() async {
       debugShowCheckedModeBanner: false,
       theme: Themes.lightTheme,
       darkTheme: Themes.darkTheme,
-      themeMode: is_Dark!.getString('is_dark') == 'true'
+      themeMode: Themes.isDarkMode()
           ? ThemeMode.dark
           : ThemeMode.light,
       initialRoute: AppNavigation.getInitRoute,

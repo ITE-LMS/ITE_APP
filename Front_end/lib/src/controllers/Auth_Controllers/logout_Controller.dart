@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:public_testing_app/src/models/Themes.dart';
 import '../../../main.dart';
 import '../../models/SnackBar.dart';
 
@@ -27,31 +28,7 @@ class LogoutController extends GetxController {
           Auth!.setString('token', 'logged out');
           Auth!.setString('login', '400');
         } else {
-          snackBar sb = snackBar(
-            path: 'assets/images/cross.png',
-            BorderColor: Colors.redAccent,
-            message: Padding(
-              padding: const EdgeInsets.only(left: 10.0),
-              child: Text(
-                'Something Went Wrong.',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: Get.mediaQuery.size.width / 25,
-                ),
-              ),
-            ),
-            title: Padding(
-              padding: const EdgeInsets.only(left: 10.0),
-              child: Text(
-                'Error!',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: Get.mediaQuery.size.width / 25,
-                ),
-              ),
-            ),
-          );
-          sb.snackbar();
+          Themes.get_notification_info("cross", "SomeThing Went", "Wrong!");
         }
       } catch (e) {
         log(e.toString());
@@ -75,31 +52,7 @@ class LogoutController extends GetxController {
           Auth!.setString('token', 'logged out');
           Auth!.setString('login', '400');
         } else {
-          snackBar sb = snackBar(
-            path: 'assets/images/cross.png',
-            BorderColor: Colors.redAccent,
-            message: Padding(
-              padding: const EdgeInsets.only(left: 10.0),
-              child: Text(
-                'Something Went Wrong.',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: Get.mediaQuery.size.width / 25,
-                ),
-              ),
-            ),
-            title: Padding(
-              padding: const EdgeInsets.only(left: 10.0),
-              child: Text(
-                'Error!',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: Get.mediaQuery.size.width / 25,
-                ),
-              ),
-            ),
-          );
-          sb.snackbar();
+          Themes.get_notification_info("cross", "SomeThing Went", "Wrong!");
         }
       } catch (e) {
         log(e.toString());
@@ -123,31 +76,7 @@ class LogoutController extends GetxController {
           Auth!.setString('token', 'logged out');
           Auth!.setString('login', '400');
         } else {
-          snackBar sb = snackBar(
-            path: 'assets/images/cross.png',
-            BorderColor: Colors.redAccent,
-            message: Padding(
-              padding: const EdgeInsets.only(left: 10.0),
-              child: Text(
-                'Something Went Wrong.',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: Get.mediaQuery.size.width / 25,
-                ),
-              ),
-            ),
-            title: Padding(
-              padding: const EdgeInsets.only(left: 10.0),
-              child: Text(
-                'Error!',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: Get.mediaQuery.size.width / 25,
-                ),
-              ),
-            ),
-          );
-          sb.snackbar();
+          Themes.get_notification_info("cross", "SomeThing Went", "Wrong!");
         }
       } catch (e) {
         log(e.toString());

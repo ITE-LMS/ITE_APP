@@ -58,4 +58,6 @@ class snackBar {
         forwardAnimationCurve: Curves.bounceInOut,
         reverseAnimationCurve: Curves.decelerate,
       );
+
+ 
 }

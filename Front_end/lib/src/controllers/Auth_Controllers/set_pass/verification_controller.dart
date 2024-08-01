@@ -27,6 +27,39 @@ class VerificationController extends GetxController {
   final code = TextEditingController();
   String verificationID = '';
 
+  void verify_user_code(String user_type, String user_url) async {
+    try {
+      // email url :
+      var url = Uri.parse('http://10.0.2.2:8000/api/$user_url');
+      var response = await http.post(url, body: {
+        'email': Auth!.getString('email'),
+        'verificationCode': code.text,
+      });
+
+      // decoded response :
+      final decodedResponse = json.decode(response.body);
+
+      // verfication code is true :
+      if (decodedResponse["status"] == 200) {
+        if (Auth!.getString('user') == 'active_$user_type') {
+          Auth!.setString('user', 'non_active_$user_type');
+        }
+        Auth!.setString("token", "${decodedResponse["data"]["token"]}");
+        circle = null;
+        update(["circleIndicater"]);
+        Get.offNamed('RegisterPassPageScreen');
+      }
+      //verfication code is false :
+      else if (decodedResponse["status"] == 201) {
+        Themes.get_notification_info('cross', 'You entered a wrong', 'code!');
+        circle = null;
+        update(["circleIndicater"]);
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
   void onSave() async {
     if (Form_Key.currentState!.validate()) {
       Form_Key.currentState!.save();
@@ -41,182 +74,17 @@ class VerificationController extends GetxController {
       // teacher verification code :
       if (Auth!.getString('user') == 'non_active_teacher' ||
           Auth!.getString('user') == 'active_teacher') {
-        try {
-          // email url :
-          var url =
-              Uri.parse('http://10.0.2.2:8000/api/log_in_teacher_by_code');
-          var response = await http.post(url, body: {
-            'email': Auth!.getString('email'),
-            'verificationCode': code.text,
-          });
-
-          // decoded response :
-          final decodedResponse = json.decode(response.body);
-
-          // verfication code is true :
-          if (decodedResponse["status"] == 200) {
-            if (Auth!.getString('user') == 'active_teacher') {
-              Auth!.setString('user', 'non_active_teacher');
-            }
-            Auth!.setString("token", "${decodedResponse["data"]["token"]}");
-            circle = null;
-            update(["circleIndicater"]);
-            Get.offNamed('RegisterPassPageScreen');
-          }
-          //verfication code is false :
-          else if (decodedResponse["status"] == 201) {
-            snackBar sb = snackBar(
-              path: 'assets/images/cross.png',
-              BorderColor: Colors.redAccent,
-              message: Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Text(
-                  'code!',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: Get.mediaQuery.size.width / 25,
-                  ),
-                ),
-              ),
-              title: Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Text(
-                  'You entered a wrong',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: Get.mediaQuery.size.width / 25,
-                  ),
-                ),
-              ),
-            );
-            sb.snackbar();
-            circle = null;
-            update(["circleIndicater"]);
-          }
-        } catch (e) {
-          log(
-            e.toString(),
-          );
-        }
+        verify_user_code('teacher', 'log_in_teacher_by_code');
       }
       // doctor verification code :
       else if (Auth!.getString('user') == 'non_active_doctor' ||
           Auth!.getString('user') == 'active_doctor') {
-        try {
-          // email url :
-          var url = Uri.parse('http://10.0.2.2:8000/api/log_in_doctor_by_code');
-          var response = await http.post(url, body: {
-            'email': Auth!.getString('email'),
-            'verificationCode': code.text,
-          });
-          // decoded response :
-          final decodedResponse = json.decode(response.body);
-          // verfication code is true :
-          if (decodedResponse["status"] == 200) {
-            if (Auth!.getString('user') == 'active_doctor') {
-              Auth!.setString('user', 'non_active_doctor');
-            }
-            Auth!.setString("token", "${decodedResponse["data"]["token"]}");
-            circle = null;
-            update(["circleIndicater"]);
-            Get.offNamed('RegisterPassPageScreen');
-          }
-          //verfication code is false :
-          else if (decodedResponse["status"] == 201) {
-            snackBar sb = snackBar(
-              path: 'assets/images/cross.png',
-              BorderColor: Colors.redAccent,
-              message: Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Text(
-                  'code!',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: Get.mediaQuery.size.width / 25,
-                  ),
-                ),
-              ),
-              title: Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Text(
-                  'You entered a wrong',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: Get.mediaQuery.size.width / 25,
-                  ),
-                ),
-              ),
-            );
-            sb.snackbar();
-            circle = null;
-            update(["circleIndicater"]);
-          }
-        } catch (e) {
-          log(
-            e.toString(),
-          );
-        }
+        verify_user_code('doctor', 'log_in_doctor_by_code');
       }
       // student verification code :
       else if (Auth!.getString('user') == 'non_active_student' ||
           Auth!.getString('user') == 'active_student') {
-        try {
-          // email url :
-          var url =
-              Uri.parse('http://10.0.2.2:8000/api/log_in_student_by_code');
-          var response = await http.post(url, body: {
-            'email': Auth!.getString('email'),
-            'verificationCode': code.text,
-          });
-
-          // decoded response :
-          final decodedResponse = json.decode(response.body);
-
-          // verfication code is true :
-          if (decodedResponse["status"] == 200) {
-            if (Auth!.getString('user') == 'active_student') {
-              Auth!.setString('user', 'non_active_student');
-            }
-            Auth!.setString("token", "${decodedResponse["data"]["token"]}");
-            circle = null;
-            update(["circleIndicater"]);
-            Get.offNamed('RegisterPassPageScreen');
-          }
-          //verfication code is false :
-          else if (decodedResponse["status"] == 201) {
-            snackBar sb = snackBar(
-              path: 'assets/images/cross.png',
-              BorderColor: Colors.redAccent,
-              message: Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Text(
-                  'code!',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: Get.mediaQuery.size.width / 25,
-                  ),
-                ),
-              ),
-              title: Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Text(
-                  'You entered a wrong',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: Get.mediaQuery.size.width / 25,
-                  ),
-                ),
-              ),
-            );
-            sb.snackbar();
-            circle = null;
-            update(["circleIndicater"]);
-          }
-        } catch (e) {
-          log(
-            e.toString(),
-          );
-        }
+        verify_user_code('student', 'log_in_student_by_code');
       }
     } else {
       return;

@@ -3,14 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:public_testing_app/src/controllers/Home_Controllers/Home_Controller.dart';
-
 import 'package:public_testing_app/src/controllers/Home_Page_Controllers/Bottom_Navigation_Controller.dart';
 import 'package:public_testing_app/src/controllers/Home_Page_Controllers/Drawer_Controller.dart';
+import 'package:public_testing_app/src/controllers/My_Subjects_Controllers/OtherUsers_Subjects_Controller.dart';
 import 'package:public_testing_app/src/controllers/My_Subjects_Controllers/Student_Subjects_Controller.dart';
+import 'package:public_testing_app/src/controllers/Quizzes_Controllers/quiz_controller.dart';
 import 'package:public_testing_app/src/views/src/homepage_elements/Drawer.dart';
 import 'package:public_testing_app/src/models/Themes.dart';
 import 'package:public_testing_app/main.dart';
-
 import 'homepage_elements/Animated_darkMode_button.dart';
 import 'homepage_elements/drawer_icon.dart';
 
@@ -145,13 +145,32 @@ class HomePage extends StatelessWidget {
                     appData!.setBool("is_my_subjects", false);
                   }
                 }
-                final controllerHome = HomeController();
-                if (appData!.getBool('isSeeAll') == true && index == 0) {
-                  appData!.setBool('isSeeAll', false);
-                  controllerHome.update(['seeAll']);
+                if (Auth!.getString("user") == "active_student") {
+                  final HomeController controllerHome = Get.find();
+                  if (appData!.getBool('isSeeAll') == true && index == 0) {
+                    appData!.setBool('isSeeAll', false);
+                    controllerHome.update(['seeAll']);
+                  }
                 }
+
                 nav_controller.selectedIndex = index;
                 nav_controller.update();
+
+                if (Auth!.getString("user") != "active_student") {
+                  if (index == 1) {
+                    final OtherusersSubjectsController
+                        other_user_subjects_controller =
+                        Get.put(OtherusersSubjectsController());
+                    final QuizController quizController =
+                        Get.put(QuizController());
+                    String type = other_user_subjects_controller
+                        .other_user_subjects_information[0]["subject_type"];
+                    String name = other_user_subjects_controller
+                        .other_user_subjects_information[0]["name_subject"];
+                    quizController.selectedSubject = name;
+                    quizController.Selected_Type_Subject = type;
+                  }
+                }
               },
               backgroundColor: is_Dark!.getString('is_dark') == 'true'
                   ? Themes.darkColorScheme.background
@@ -281,7 +300,11 @@ class HomePage extends StatelessWidget {
             if (Auth!.getString('user') == 'active_student') {
               return controller.StudentSCreens[controller.selectedIndex];
             }
-            return controller.OtherUsersScreens[controller.selectedIndex];
+            if (Auth!.getString('user') == 'active_teacher' ||
+                Auth!.getString('user') == 'active_doctor') {
+              return controller.OtherUsersScreens[controller.selectedIndex];
+            }
+            return const Placeholder();
           },
         ),
       ),

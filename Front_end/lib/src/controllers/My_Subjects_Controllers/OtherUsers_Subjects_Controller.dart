@@ -9,6 +9,7 @@ import 'package:public_testing_app/main.dart';
 import 'package:http/http.dart' as http;
 import 'package:public_testing_app/src/controllers/Home_Controllers/Home_Controller.dart';
 import 'package:public_testing_app/src/models/SnackBar.dart';
+import 'package:public_testing_app/src/models/Themes.dart';
 import 'package:public_testing_app/src/views/src/Home/fourth_Page/FilesTypes.dart';
 
 class OtherusersSubjectsController extends GetxController {
@@ -176,57 +177,10 @@ class OtherusersSubjectsController extends GetxController {
           file,
           null,
         );
-        snackBar sb = snackBar(
-          path: 'assets/images/check.png',
-          BorderColor: Colors.greenAccent,
-          message: Padding(
-            padding: const EdgeInsets.only(left: 10.0),
-            child: Text(
-              'Successfully!',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: Get.mediaQuery.size.width / 25,
-              ),
-            ),
-          ),
-          title: Padding(
-            padding: const EdgeInsets.only(left: 10.0),
-            child: Text(
-              '${type.toUpperCase()} Uploaded',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: Get.mediaQuery.size.width / 25,
-              ),
-            ),
-          ),
-        );
-        sb.snackbar();
+        Themes.get_notification_info(
+            'check', '${type.toUpperCase()} Uploaded', 'Successfully!');
       } else {
-        snackBar sb = snackBar(
-          path: 'assets/images/cross.png',
-          BorderColor: Colors.greenAccent,
-          message: Padding(
-            padding: const EdgeInsets.only(left: 10.0),
-            child: Text(
-              'Wrong !',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: Get.mediaQuery.size.width / 25,
-              ),
-            ),
-          ),
-          title: Padding(
-            padding: const EdgeInsets.only(left: 10.0),
-            child: Text(
-              'SomeThing Went',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: Get.mediaQuery.size.width / 25,
-              ),
-            ),
-          ),
-        );
-        sb.snackbar();
+        Themes.get_notification_info('cross', 'SomeThing Went', 'Wrong !');
       }
     } catch (e) {
       log(e.toString());

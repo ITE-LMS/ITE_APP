@@ -733,25 +733,7 @@ class HomeController extends GetxController {
             download_circle = null;
             FileDownloader.cancelDownload;
             update(["download[$index]"]);
-            snackBar sb = snackBar(
-              path: "assets/images/cross.png",
-              BorderColor: Colors.red,
-              title: Padding(
-                padding: const EdgeInsets.only(left: 30.0),
-                child: Text(
-                  "SomeThing Went",
-                  style: Get.theme.textTheme.titleMedium,
-                ),
-              ),
-              message: Padding(
-                padding: const EdgeInsets.only(left: 30.0),
-                child: Text(
-                  "Wrong !",
-                  style: Get.theme.textTheme.titleMedium,
-                ),
-              ),
-            );
-            sb.snackbar();
+            Themes.get_notification_info('cross', 'SomeThing Went', 'Wrong !');
           },
         ).timeout(const Duration(minutes: 5));
       } else {
@@ -760,24 +742,7 @@ class HomeController extends GetxController {
         if (Get.isSnackbarOpen) {
           Get.closeCurrentSnackbar();
         }
-        snackBar sb = snackBar(
-          BorderColor: Colors.red,
-          title: Padding(
-            padding: const EdgeInsets.only(left: 30.0),
-            child: Text(
-              "No Internet",
-              style: Get.theme.textTheme.titleMedium,
-            ),
-          ),
-          message: Padding(
-            padding: const EdgeInsets.only(left: 30.0),
-            child: Text(
-              "Connection !",
-              style: Get.theme.textTheme.titleMedium,
-            ),
-          ),
-        );
-        sb.snackbar();
+        Themes.no_internet_connection();
         return;
       }
 
@@ -789,48 +754,14 @@ class HomeController extends GetxController {
       }
       update(["download[$index]"]);
     } on PlatformException catch (e) {
-      snackBar sb = snackBar(
-        path: "assets/images/cross.png",
-        BorderColor: Colors.red,
-        title: Padding(
-          padding: const EdgeInsets.only(left: 30.0),
-          child: Text(
-            "weak Internet",
-            style: Get.theme.textTheme.titleMedium,
-          ),
-        ),
-        message: Padding(
-          padding: const EdgeInsets.only(left: 30.0),
-          child: Text(
-            "Connection !",
-            style: Get.theme.textTheme.titleMedium,
-          ),
-        ),
-      );
-      sb.snackbar();
+      Themes.get_notification_info('cross', 'weak Internet', 'Connection !');
+
       download_circle = null;
       update(["download[$index]"]);
       FileDownloader.cancelDownload;
     } catch (e) {
-      snackBar sb = snackBar(
-        path: "assets/images/cross.png",
-        BorderColor: Colors.red,
-        title: Padding(
-          padding: const EdgeInsets.only(left: 30.0),
-          child: Text(
-            "SomeThing Went",
-            style: Get.theme.textTheme.titleMedium,
-          ),
-        ),
-        message: Padding(
-          padding: const EdgeInsets.only(left: 30.0),
-          child: Text(
-            "Wrong !",
-            style: Get.theme.textTheme.titleMedium,
-          ),
-        ),
-      );
-      sb.snackbar();
+      Themes.get_notification_info('cross', 'SomeThing Went', 'Wrong !');
+
       download_circle = null;
       update(["download[$index]"]);
       FileDownloader.cancelDownload;
@@ -869,25 +800,7 @@ class HomeController extends GetxController {
           onDownloadError: (String error) {
             download_circle = null;
             update(["download_image[$index]"]);
-            snackBar sb = snackBar(
-              path: "assets/images/cross.png",
-              BorderColor: Colors.red,
-              title: Padding(
-                padding: const EdgeInsets.only(left: 30.0),
-                child: Text(
-                  "SomeThing Went",
-                  style: Get.theme.textTheme.titleMedium,
-                ),
-              ),
-              message: Padding(
-                padding: const EdgeInsets.only(left: 30.0),
-                child: Text(
-                  "Wrong !",
-                  style: Get.theme.textTheme.titleMedium,
-                ),
-              ),
-            );
-            sb.snackbar();
+            Themes.get_notification_info('cross', 'SomeThing Went', 'Wrong !');
           },
         ).timeout(const Duration(minutes: 2));
       } else {
@@ -896,24 +809,7 @@ class HomeController extends GetxController {
         if (Get.isSnackbarOpen) {
           Get.closeCurrentSnackbar();
         }
-        snackBar sb = snackBar(
-          BorderColor: Colors.red,
-          title: Padding(
-            padding: const EdgeInsets.only(left: 30.0),
-            child: Text(
-              "No Internet",
-              style: Get.theme.textTheme.titleMedium,
-            ),
-          ),
-          message: Padding(
-            padding: const EdgeInsets.only(left: 30.0),
-            child: Text(
-              "Connection !",
-              style: Get.theme.textTheme.titleMedium,
-            ),
-          ),
-        );
-        sb.snackbar();
+        Themes.no_internet_connection();
         return;
       }
       download_circle = null;
@@ -962,25 +858,7 @@ class HomeController extends GetxController {
             download_circle = null;
             FileDownloader.cancelDownload;
             update(["saved_files_download[$index]"]);
-            snackBar sb = snackBar(
-              path: "assets/images/cross.png",
-              BorderColor: Colors.red,
-              title: Padding(
-                padding: const EdgeInsets.only(left: 30.0),
-                child: Text(
-                  "SomeThing Went",
-                  style: Get.theme.textTheme.titleMedium,
-                ),
-              ),
-              message: Padding(
-                padding: const EdgeInsets.only(left: 30.0),
-                child: Text(
-                  "Wrong !",
-                  style: Get.theme.textTheme.titleMedium,
-                ),
-              ),
-            );
-            sb.snackbar();
+            Themes.get_notification_info('cross', 'SomeThing Went', 'Wrong !');
           },
         ).timeout(const Duration(minutes: 5));
       } else {
@@ -989,24 +867,7 @@ class HomeController extends GetxController {
         if (Get.isSnackbarOpen) {
           Get.closeCurrentSnackbar();
         }
-        snackBar sb = snackBar(
-          BorderColor: Colors.red,
-          title: Padding(
-            padding: const EdgeInsets.only(left: 30.0),
-            child: Text(
-              "No Internet",
-              style: Get.theme.textTheme.titleMedium,
-            ),
-          ),
-          message: Padding(
-            padding: const EdgeInsets.only(left: 30.0),
-            child: Text(
-              "Connection !",
-              style: Get.theme.textTheme.titleMedium,
-            ),
-          ),
-        );
-        sb.snackbar();
+        Themes.no_internet_connection();
         return;
       }
 
@@ -1018,48 +879,13 @@ class HomeController extends GetxController {
       }
       update(["saved_files_download[$index]"]);
     } on PlatformException catch (e) {
-      snackBar sb = snackBar(
-        path: "assets/images/cross.png",
-        BorderColor: Colors.red,
-        title: Padding(
-          padding: const EdgeInsets.only(left: 30.0),
-          child: Text(
-            "weak Internet",
-            style: Get.theme.textTheme.titleMedium,
-          ),
-        ),
-        message: Padding(
-          padding: const EdgeInsets.only(left: 30.0),
-          child: Text(
-            "Connection !",
-            style: Get.theme.textTheme.titleMedium,
-          ),
-        ),
-      );
-      sb.snackbar();
+      Themes.no_internet_connection();
+
       download_circle = null;
       update(["saved_files_download[$index]"]);
       FileDownloader.cancelDownload;
     } catch (e) {
-      snackBar sb = snackBar(
-        path: "assets/images/cross.png",
-        BorderColor: Colors.red,
-        title: Padding(
-          padding: const EdgeInsets.only(left: 30.0),
-          child: Text(
-            "SomeThing Went",
-            style: Get.theme.textTheme.titleMedium,
-          ),
-        ),
-        message: Padding(
-          padding: const EdgeInsets.only(left: 30.0),
-          child: Text(
-            "Wrong !",
-            style: Get.theme.textTheme.titleMedium,
-          ),
-        ),
-      );
-      sb.snackbar();
+      Themes.get_notification_info('cross', 'SomeThing Went', 'Wrong !');
       download_circle = null;
       update(["saved_files_download[$index]"]);
       FileDownloader.cancelDownload;
@@ -1157,31 +983,7 @@ class HomeController extends GetxController {
         ),
       );
     } catch (e) {
-      snackBar sb = snackBar(
-        path: 'assets/images/cross.png',
-        BorderColor: Colors.greenAccent,
-        message: Padding(
-          padding: const EdgeInsets.only(left: 10.0),
-          child: Text(
-            'Wrong !',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: Get.mediaQuery.size.width / 25,
-            ),
-          ),
-        ),
-        title: Padding(
-          padding: const EdgeInsets.only(left: 10.0),
-          child: Text(
-            'SomeThing Went',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: Get.mediaQuery.size.width / 25,
-            ),
-          ),
-        ),
-      );
-      sb.snackbar();
+      Themes.get_notification_info('cross', 'SomeThing Went', 'Wrong !');
     }
 
     //sending http request to server to remove the subject :

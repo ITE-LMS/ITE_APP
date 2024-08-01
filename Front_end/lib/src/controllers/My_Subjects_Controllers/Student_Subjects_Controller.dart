@@ -33,62 +33,14 @@ class StudentSubjectsController extends GetxController {
         },
       );
       final decodedResponse = json.decode(response.body);
-      log(decodedResponse.toString());
       //? subject added successfully :
       if (decodedResponse["status"] == 200) {
-        snackBar sb = snackBar(
-          path: 'assets/images/check.png',
-          BorderColor: Colors.greenAccent,
-          message: Padding(
-            padding: const EdgeInsets.only(left: 10.0),
-            child: Text(
-              'Successfully!',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: Get.mediaQuery.size.width / 25,
-              ),
-            ),
-          ),
-          title: Padding(
-            padding: const EdgeInsets.only(left: 10.0),
-            child: Text(
-              'Subject Deleted',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: Get.mediaQuery.size.width / 25,
-              ),
-            ),
-          ),
-        );
-        sb.snackbar();
+        Themes.get_notification_info(
+            'check', 'Subject Deleted', 'Successfully!');
       }
       //? SOMETHING went wrong :
       else {
-        snackBar sb = snackBar(
-          path: 'assets/images/cross.png',
-          BorderColor: Colors.redAccent,
-          message: Padding(
-            padding: const EdgeInsets.only(left: 10.0),
-            child: Text(
-              'Wrong!',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: Get.mediaQuery.size.width / 25,
-              ),
-            ),
-          ),
-          title: Padding(
-            padding: const EdgeInsets.only(left: 10.0),
-            child: Text(
-              'Something went',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: Get.mediaQuery.size.width / 25,
-              ),
-            ),
-          ),
-        );
-        sb.snackbar();
+        Themes.get_notification_info('cross', 'SomeThing Went', 'Wrong !');
       }
     } catch (e) {
       log(e.toString());
@@ -145,8 +97,6 @@ class StudentSubjectsController extends GetxController {
             child: GetBuilder<StudentSubjectsController>(
               id: 'add_TP_or_T',
               builder: (controller) {
-                log(subject_th_id.toString());
-                log(subject_pr_id.toString());
                 return Stack(
                   children: [
                     // title :

@@ -70,31 +70,8 @@ class EmailController extends GetxController {
         }
         // user doesn`t exist : 404
         else if (decodedResponse["status"] == 404) {
-          snackBar sb = snackBar(
-            path: 'assets/images/cross.png',
-            BorderColor: Colors.redAccent,
-            message: Padding(
-              padding: const EdgeInsets.only(left: 10.0),
-              child: Text(
-                'Sorry Email Not Found.',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: Get.mediaQuery.size.width / 25,
-                ),
-              ),
-            ),
-            title: Padding(
-              padding: const EdgeInsets.only(left: 10.0),
-              child: Text(
-                'Error!',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: Get.mediaQuery.size.width / 25,
-                ),
-              ),
-            ),
-          );
-          sb.snackbar();
+          Themes.get_notification_info(
+              "cross", "Error!", "Sorry Email Not Found.");
         }
         // save the user email :
         Auth!.setString('email', email.text);
@@ -103,6 +80,9 @@ class EmailController extends GetxController {
       }
       // catch the error :
       catch (e) {
+        Themes.get_notification_info(
+            "cross", "Connect to the internet", "then try again.");
+
         log('error is : $e');
         circle = false;
         update();

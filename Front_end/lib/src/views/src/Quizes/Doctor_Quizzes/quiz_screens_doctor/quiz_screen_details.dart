@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:public_testing_app/src/models/Themes.dart';
 
@@ -22,11 +24,9 @@ class QuizDetailScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView.builder(
-          itemCount: quiz['questions'].length,
+          itemCount: int.parse(quiz['num_question']),
           itemBuilder: (context, index) {
-            var question = quiz['questions'][index];
-            var answers = question['answers'];
-            var correctAnswer = question['correctAnswer'];
+            var questions = quiz['questions'][index];
             return Column(
               children: [
                 Container(
@@ -49,26 +49,27 @@ class QuizDetailScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Question: ${question['question']}',
+                        '${questions["qeustion"]}',
                         style: Theme.of(context)
                             .textTheme
                             .titleLarge!
-                            .copyWith(fontSize: 15),
+                            .copyWith(fontSize: 18),
                       ),
                       const SizedBox(height: 8),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: List.generate(
-                          answers.length,
+                          questions["answers"].length,
                           (i) {
                             return Text(
-                              '${i + 1}. ${answers[i]}',
+                              "${i + 1}. ${questions["answers"][i]}",
                               style: Theme.of(context)
                                   .textTheme
                                   .titleLarge!
                                   .copyWith(
-                                    fontSize: 15,
-                                    color: i == correctAnswer
+                                    fontSize: 16,
+                                    color: questions["answers"][i] ==
+                                            questions["correct_answer"]
                                         ? Colors.green
                                         : Themes.getColor(
                                             Colors.white,
