@@ -193,7 +193,7 @@ class Files extends StatelessWidget {
                         itemCount: Home_Controller.files_ids.length,
                         itemBuilder: (ctx, index) {
                           return type.name == 'pdf'
-                              ? FilesCard(index: index, type: type.name)
+                              ? FilesCard(index: index, type: type.name , subject: subject_name)
                               : type.name == 'image'
                                   ? ImagesCard(
                                       year: year,

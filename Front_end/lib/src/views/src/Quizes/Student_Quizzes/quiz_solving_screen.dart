@@ -6,20 +6,20 @@ import 'package:public_testing_app/src/controllers/Quizzes_Controllers/quiz_cont
 import 'package:public_testing_app/src/models/Themes.dart';
 
 class QuizStudentDetailScreen extends StatelessWidget {
-  final Map<String, dynamic> quiz;
-  final int quizIndex; // جديد: الفهرس لتحديد الاختبار
+  final Map<String, dynamic>? quiz;
+  final int? quizIndex; // جديد: الفهرس لتحديد الاختبار
 
   const QuizStudentDetailScreen(
-      {super.key, required this.quiz, required this.quizIndex});
+      {super.key, @required this.quiz, @required this.quizIndex});
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     final QuizController controller = Get.find();
-    controller.completed_quizzes[quizIndex] = true;
-    final time = int.parse(controller.quizzes[quizIndex]["time"]);
-    controller.startTimer(time * 60, quiz);
+    controller.completed_quizzes[quizIndex!] = true;
+    final time = int.parse(controller.quizzes[quizIndex!]["time"]);
+    controller.startTimer(time * 60, quiz!);
     log(controller.selected_answers.toString());
     return WillPopScope(
       onWillPop: () async {
@@ -86,7 +86,7 @@ class QuizStudentDetailScreen extends StatelessWidget {
                               ),
                               child: InkWell(
                                 onTap: () {
-                                  controller.submitAnswers(quiz, quizIndex);
+                                  controller.submitAnswers(quiz!, quizIndex!);
                                 },
                                 child: Center(
                                   child: Text(
@@ -107,9 +107,9 @@ class QuizStudentDetailScreen extends StatelessWidget {
                   const SizedBox(height: 50),
                   Expanded(
                     child: ListView.builder(
-                      itemCount: int.parse(quiz['num_question']),
+                      itemCount: int.parse(quiz!['num_question']),
                       itemBuilder: (context, index) {
-                        var question = quiz['questions'][index];
+                        var question = quiz!['questions'][index];
                         var answers = question['answers'];
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 5.0),

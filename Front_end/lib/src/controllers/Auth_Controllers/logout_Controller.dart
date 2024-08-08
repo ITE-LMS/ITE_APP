@@ -10,78 +10,42 @@ import '../../../main.dart';
 import '../../models/SnackBar.dart';
 
 class LogoutController extends GetxController {
+  void logout_user_on_authorization(String user_url, String type) async {
+    try {
+      var url = Uri.parse('http://10.0.2.2:8000/api/$user_url');
+      final response = await http.get(
+        url,
+        headers: {
+          "Authorization": "Bearer ${Auth!.getString('token')}",
+        },
+      );
+      final decodedResposne = json.decode(response.body);
+      // successfull logout :
+      if (decodedResposne["status"] == 200) {
+        Auth!.setString('user', 'non_active_$type');
+        Get.offNamed('EmailPageScreen');
+        Auth!.setString('token', 'logged out');
+        Auth!.setString('login', '400');
+        appData!.setString('user_photo', '');
+      } else {
+        Themes.get_notification_info("cross", "SomeThing Went", "Wrong!");
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
   void onLogOut() async {
     if (Auth!.getString('user') == 'active_doctor') {
-      try {
-        var url = Uri.parse('http://10.0.2.2:8000/api/logout-doctor');
-        final response = await http.get(
-          url,
-          headers: {
-            "Authorization": "Bearer ${Auth!.getString('token')}",
-          },
-        );
-        final decodedResposne = json.decode(response.body);
-        // successfull logout :
-        if (decodedResposne["status"] == 200) {
-          Auth!.setString('user', 'non_active_doctor');
-          Get.offNamed('EmailPageScreen');
-          Auth!.setString('token', 'logged out');
-          Auth!.setString('login', '400');
-        } else {
-          Themes.get_notification_info("cross", "SomeThing Went", "Wrong!");
-        }
-      } catch (e) {
-        log(e.toString());
-      }
+      logout_user_on_authorization("logout-doctor", "doctor");
     }
     // teacher logout :
     else if (Auth!.getString('user') == 'active_teacher') {
-      try {
-        var url = Uri.parse('http://10.0.2.2:8000/api/logout-teacher');
-        final response = await http.get(
-          url,
-          headers: {
-            "Authorization": "Bearer ${Auth!.getString('token')}",
-          },
-        );
-        final decodedResposne = json.decode(response.body);
-        // successfull logout :
-        if (decodedResposne["status"] == 200) {
-          Auth!.setString('user', 'non_active_teacher');
-          Get.offNamed('EmailPageScreen');
-          Auth!.setString('token', 'logged out');
-          Auth!.setString('login', '400');
-        } else {
-          Themes.get_notification_info("cross", "SomeThing Went", "Wrong!");
-        }
-      } catch (e) {
-        log(e.toString());
-      }
+      logout_user_on_authorization("logout-teacher", "teacher");
     }
     // student logout :
     else if (Auth!.getString('user') == 'active_student') {
-      try {
-        var url = Uri.parse('http://10.0.2.2:8000/api/logout-student');
-        final response = await http.get(
-          url,
-          headers: {
-            "Authorization": "Bearer ${Auth!.getString('token')}",
-          },
-        );
-        final decodedResposne = json.decode(response.body);
-        // successfull logout :
-        if (decodedResposne["status"] == 200) {
-          Auth!.setString('user', 'non_active_student');
-          Get.offNamed('EmailPageScreen');
-          Auth!.setString('token', 'logged out');
-          Auth!.setString('login', '400');
-        } else {
-          Themes.get_notification_info("cross", "SomeThing Went", "Wrong!");
-        }
-      } catch (e) {
-        log(e.toString());
-      }
+      logout_user_on_authorization("logout-student", "student");
     }
-    appData!.setString('user_photo', '');
   }
 }

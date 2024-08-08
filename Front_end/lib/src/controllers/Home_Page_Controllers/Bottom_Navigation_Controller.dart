@@ -13,7 +13,7 @@ import 'package:public_testing_app/src/views/src/Quizes/Student_Quizzes/quiz_stu
 class BottomNavigationController extends GetxController {
   int selectedIndex = 0;
 
-  final List<StatelessWidget> StudentSCreens = [
+  final List<dynamic> StudentSCreens = [
     const Home(),
     const AllCourses(),
     const MySubjects(),

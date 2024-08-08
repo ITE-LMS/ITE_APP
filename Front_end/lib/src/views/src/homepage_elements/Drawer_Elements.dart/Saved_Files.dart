@@ -26,42 +26,43 @@ class SavedFiles extends StatelessWidget {
         ),
       ),
       body: GetBuilder<HomeController>(
-          id: "student_saved_files",
-          builder: (controller) {
-            return h_controller.savedFiles_information.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Image(
-                          width: 100,
-                          height: 100,
-                          image: AssetImage('assets/images/error-404.png'),
-                        ),
-                        Text(
-                          'No files added yet',
-                          style: Get.textTheme.titleMedium,
-                        ),
-                      ],
-                    ),
-                  )
-                : Column(
+        id: "student_saved_files",
+        builder: (controller) {
+          return h_controller.savedFiles_information.isEmpty
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const SizedBox(height: 20),
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: h_controller.savedFiles_information.length,
-                          itemBuilder: (ctx, index) {
-                            return SavedFilesCard(
-                              index: index,
-                            );
-                          },
-                        ),
+                      const Image(
+                        width: 100,
+                        height: 100,
+                        image: AssetImage('assets/images/error-404.png'),
+                      ),
+                      Text(
+                        'No files added yet',
+                        style: Get.textTheme.titleMedium,
                       ),
                     ],
-                  );
-          }),
+                  ),
+                )
+              : Column(
+                  children: [
+                    const SizedBox(height: 20),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: h_controller.savedFiles_information.length,
+                        itemBuilder: (ctx, index) {
+                          return SavedFilesCard(
+                            index: index,
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                );
+        },
+      ),
     );
   }
 }

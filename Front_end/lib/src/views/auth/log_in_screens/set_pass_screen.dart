@@ -118,7 +118,7 @@ class RegisterScreen extends StatelessWidget {
                             },
                             Pass_Security: ctr.isSecurePassword,
                             keyboard: TextInputType.text,
-                            suffixIcon: ctr.togglePassWord(ctr.isSecurePassword),
+                            suffixIcon: ctr.togglePassWord(),
                             prefixIcon: Icon(
                               Icons.lock,
                               color: Theme.of(context).colorScheme.primary,
@@ -146,7 +146,7 @@ class RegisterScreen extends StatelessWidget {
                             },
                             Pass_Security: ctr.isSecurePasswordConfirm,
                             keyboard: TextInputType.text,
-                            suffixIcon: ctr.togglePassWord(ctr.isSecurePasswordConfirm),
+                            suffixIcon: ctr.toggleConfirmPassWord(),
                             prefixIcon: Icon(
                               Icons.lock,
                               color: Theme.of(context).colorScheme.primary,

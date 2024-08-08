@@ -9,7 +9,6 @@ import 'package:public_testing_app/src/controllers/Home_Controllers/Home_Control
 import 'package:public_testing_app/src/controllers/Dark_mode_Controller.dart';
 import 'package:public_testing_app/src/models/Themes.dart';
 
-
 class HomeCard extends StatelessWidget {
   const HomeCard({
     super.key,
@@ -45,15 +44,11 @@ class HomeCard extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              border: DashedBorder.all(
+              border: Border.all(
                 color: is_Dark!.getString('is_dark') == 'true'
                     ? Colors.green
                     : Colors.blue,
-                dashLength: 120,
-                width: 7,
-                isOnlyCorner: true,
-                strokeAlign: BorderSide.strokeAlignInside,
-                strokeCap: StrokeCap.round,
+                width: 5,
               ),
               borderRadius: BorderRadius.circular(15),
               gradient: LinearGradient(

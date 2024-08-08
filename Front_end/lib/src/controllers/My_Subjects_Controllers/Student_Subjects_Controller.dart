@@ -49,22 +49,28 @@ class StudentSubjectsController extends GetxController {
 
   // Fetch student subjects :
   void getStudentSubjects() async {
-    student_subjects = [];
-    var url = Uri.parse('http://10.0.2.2:8000/api/student-subjects');
-    var response = await http.get(
-      url,
-      headers: {
-        "Authorization": "Bearer ${Auth!.getString('token')}",
-      },
-    );
-    final decodedResponse = json.decode(response.body);
-    if (decodedResponse["status"] == 200) {
-      for (int i = 0; i < decodedResponse["data"].length; i++) {
-        student_subjects.add(decodedResponse["data"][i]);
+    try {
+      student_subjects = [];
+      var url = Uri.parse('http://10.0.2.2:8000/api/student-subjects');
+      var response = await http.get(
+        url,
+        headers: {
+          "Authorization": "Bearer ${Auth!.getString('token')}",
+        },
+      );
+      final decodedResponse = json.decode(response.body);
+      if (decodedResponse["status"] == 200) {
+        for (int i = 0; i < decodedResponse["data"].length; i++) {
+          student_subjects.add(decodedResponse["data"][i]);
+        }
+      }
+      update(["subjects"]);
+      controller.update(['doctor_upload']);
+    } catch (e) {
+      if (!Get.isSnackbarOpen) {
+        Themes.no_internet_connection();
       }
     }
-    update(["subjects"]);
-    controller.update(['doctor_upload']);
   }
 
   Future dialog_for_adding_subject_to_MySubjects(BuildContext context,

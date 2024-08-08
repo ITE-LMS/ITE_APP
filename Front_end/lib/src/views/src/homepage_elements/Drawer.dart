@@ -42,6 +42,21 @@ final class MyDrawer extends StatelessWidget {
           ),
         ),
         MyListTile(
+          label: 'Downloaded Files',
+          onTap: () {
+            Get.toNamed('downloaded_files');
+            Scaffold.of(context).closeDrawer();
+          },
+          prefix: Image(
+            height: Themes.getWidth(context) / 12,
+            width: Themes.getWidth(context) / 10,
+            color: is_Dark!.getString('is_dark') == 'true'
+                ? Colors.white
+                : Colors.black,
+            image: const AssetImage('assets/images/save.png'),
+          ),
+        ),
+        MyListTile(
           label: 'Change Password',
           onTap: () {
             Get.toNamed('ChangePassPageScreen');

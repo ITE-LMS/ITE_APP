@@ -4,14 +4,13 @@ import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:public_testing_app/main.dart';
 import 'package:public_testing_app/src/controllers/My_Subjects_Controllers/OtherUsers_Subjects_Controller.dart';
 import 'package:public_testing_app/src/models/SnackBar.dart';
 import 'package:public_testing_app/src/models/Themes.dart';
 import 'package:public_testing_app/src/views/src/Quizes/Doctor_Quizzes/add_quiz_screens/multiple_answers_screen.dart';
 import 'package:public_testing_app/src/views/src/Quizes/Doctor_Quizzes/add_quiz_screens/quiz_true_or_false_screen.dart';
 import 'package:public_testing_app/src/views/src/Quizes/Student_Quizzes/quiz_result_screen.dart';
-
-import '../../../main.dart';
 
 class QuizController extends GetxController {
   List<Map<String, dynamic>> quizzes = [];
@@ -125,6 +124,7 @@ class QuizController extends GetxController {
       final decodedResponse = json.decode(response.body);
       if (decodedResponse["status"] == 200) {
         Themes.get_notification_info('check', 'Quiz Deleted', 'Successfully !');
+        update(["quiz_deleted"]);
       }
     } catch (e) {
       e.toString();
@@ -200,8 +200,6 @@ class QuizController extends GetxController {
     time = "00:00".obs;
     My_timer = null;
     completed_quizzes[quizIndex] = true; // جديد: تعيين حالة الاختبار كمكتمل
-    Get.off(
-        () => QuizResultScreen(studentAnswers: selected_answers, quiz: quiz));
 
     for (int i = 0; i < selected_answers.length; i++) {
       var question_answer =
@@ -216,7 +214,6 @@ class QuizController extends GetxController {
       'answers': student_answers,
     };
     final jsonData = json.encode(data);
-    log(jsonData);
     var response = await http.post(
       url,
       headers: {
@@ -228,6 +225,8 @@ class QuizController extends GetxController {
     final decodedResponse = json.decode(response.body);
     if (decodedResponse["status"] == 200) {
       Themes.get_notification_info("check", "Quiz Solved", "Successfuly.");
+      Get.off(
+          () => QuizResultScreen(studentAnswers: selected_answers, quiz: quiz));
     } else {
       Themes.get_notification_info("cross", "SomeThing Went", "Wrong!");
     }
@@ -251,31 +250,34 @@ class QuizController extends GetxController {
   }
 
   void get_other_users_quizes() async {
-    log(Auth!.getString("token").toString());
-    var url = Uri.parse('http://10.0.2.2:8000/api/show-quizzes');
-    var response = await http.get(
-      url,
-      headers: {
-        "Authorization": "Bearer ${Auth!.getString("token")}",
-      },
-    );
+    try {
+      var url = Uri.parse('http://10.0.2.2:8000/api/show-quizzes');
+      var response = await http.get(
+        url,
+        headers: {
+          "Authorization": "Bearer ${Auth!.getString("token")}",
+        },
+      );
 
-    final decodedResponse = json.decode(response.body);
-    if (decodedResponse["status"] == 200) {
-      final quizzes = decodedResponse["data"];
-      for (int i = 0; i < quizzes.length; i++) {
-        completed_quizzes.add(false);
-        quizzes_ids.add(quizzes[i]["id"]);
-        final quiz = quizzes[i];
-        addQuiz({
-          'subject': quiz["subject"],
-          'type': quiz["type"],
-          'questions': quiz["questions"],
-          'level': quiz["level"],
-          'time': quiz["time"],
-          'num_question': quiz["num_question"],
-        });
+      final decodedResponse = json.decode(response.body);
+      if (decodedResponse["status"] == 200) {
+        final quizzes = decodedResponse["data"];
+        for (int i = 0; i < quizzes.length; i++) {
+          completed_quizzes.add(false);
+          quizzes_ids.add(quizzes[i]["id"]);
+          final quiz = quizzes[i];
+          addQuiz({
+            'subject': quiz["subject"],
+            'type': quiz["type"],
+            'questions': quiz["questions"],
+            'level': quiz["level"],
+            'time': quiz["time"],
+            'num_question': quiz["num_question"],
+          });
+        }
       }
+    } catch (e) {
+      Themes.no_internet_connection();
     }
   }
 
@@ -326,6 +328,9 @@ class QuizController extends GetxController {
       );
       final decodedResponse = json.decode(response.body);
       if (decodedResponse["status"] == 200) {
+        quizzes = [];
+        quizzes_ids = [];
+        get_other_users_quizes();
         Get.back();
         Get.back();
         Themes.get_notification_info(
@@ -475,6 +480,9 @@ class QuizController extends GetxController {
         body: jsonData,
       );
       if (response.statusCode == 200) {
+        quizzes = [];
+        quizzes_ids = [];
+        get_other_users_quizes();
         Get.back();
         Get.back();
         Themes.get_notification_info(
@@ -667,39 +675,44 @@ class QuizController extends GetxController {
 
   // get student quizzes :
   void get_student_quizes() async {
-    var url =
-        Uri.parse('http://10.0.2.2:8000/api/get-quizzes-for-student-subjects');
-    var response = await http.get(
-      url,
-      headers: {
-        "Authorization": "Bearer ${Auth!.getString("token")}",
-      },
-    );
+    try {
+      var url = Uri.parse(
+          'http://10.0.2.2:8000/api/get-quizzes-for-student-subjects');
+      var response = await http.get(
+        url,
+        headers: {
+          "Authorization": "Bearer ${Auth!.getString("token")}",
+        },
+      );
 
-    final decodedResponse = json.decode(response.body);
-    if (decodedResponse["status"] == 200) {
-      final quizzes = decodedResponse["data"];
-      for (int i = 0; i < quizzes.length; i++) {
-        final quiz = quizzes[i];
-        if (quiz["is_solved"] == 0) {
-          completed_quizzes.add(false);
-        } else {
-          completed_quizzes.add(true);
+      final decodedResponse = json.decode(response.body);
+      if (decodedResponse["status"] == 200) {
+        final quizzes = decodedResponse["data"];
+        for (int i = 0; i < quizzes.length; i++) {
+          final quiz = quizzes[i];
+          if (quiz["is_solved"] == 0) {
+            completed_quizzes.add(false);
+          } else {
+            completed_quizzes.add(true);
+          }
+          quizzes_ids.add(quiz["id"]);
+          log(quiz["student_answers"].toString());
+          addQuiz({
+            'student_answers': quiz["student_answers"],
+            'subject': quiz["subject"],
+            'type': quiz["type"],
+            'questions': quiz["questions"],
+            'level': quiz["level"],
+            'time': quiz["time"],
+            'num_question': quiz["num_question"],
+          });
         }
-
-        quizzes_ids.add(quiz["id"]);
-        addQuiz({
-          'student_answers': quiz["student_answers"],
-          'subject': quiz["subject"],
-          'type': quiz["type"],
-          'questions': quiz["questions"],
-          'level': quiz["level"],
-          'time': quiz["time"],
-          'num_question': quiz["num_question"],
-        });
+        log(completed_quizzes.toString());
+      } else {
+        Themes.get_notification_info("cross", "SomeThing Went", "Wrong!");
       }
-    } else {
-      Themes.get_notification_info("cross", "SomeThing Went", "Wrong!");
+    } catch (e) {
+      Themes.no_internet_connection();
     }
   }
 
@@ -707,9 +720,14 @@ class QuizController extends GetxController {
   void onInit() {
     if (Auth!.getString("user") != "active_student") {
       init_num_question(3);
+      quizzes = [];
+      quizzes_ids = [];
       get_other_users_quizes();
     }
     if (Auth!.getString("user") == "active_student") {
+      quizzes = [];
+      quizzes_ids = [];
+      completed_quizzes = [];
       get_student_quizes();
     }
 

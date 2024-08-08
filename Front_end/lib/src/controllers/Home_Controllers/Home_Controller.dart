@@ -311,16 +311,19 @@ class HomeController extends GetxController {
 
   // this function for auto scrolling for years cards in home :
   void listenToScrollMoment() {
-    Future.delayed(
-      const Duration(milliseconds: 500),
-      () {
-        scrollController.animateTo(
-          scrollController.position.maxScrollExtent,
-          duration: const Duration(seconds: 3 * 10),
-          curve: Curves.linear,
-        );
-      },
-    );
+    if (appData!.getString("connection_result") !=
+        "[ConnectivityResult.none]") {
+      Future.delayed(
+        const Duration(milliseconds: 500),
+        () {
+          scrollController.animateTo(
+            scrollController.position.maxScrollExtent,
+            duration: const Duration(seconds: 3 * 10),
+            curve: Curves.linear,
+          );
+        },
+      );
+    }
   }
 
   // fetch student subjects :
@@ -699,7 +702,8 @@ class HomeController extends GetxController {
   }
 
   // finally doneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee :
-  void download_file(int index, String type) async {
+  void download_file(
+      int index, String type, String subject, String name) async {
     try {
       download_circle = GetBuilder<HomeController>(
         id: 'download_file',
@@ -712,7 +716,6 @@ class HomeController extends GetxController {
         },
       );
       update(['download[$index]']);
-      int downloadid;
 
       if (appData!.getString("connection_result") !=
           "[ConnectivityResult.none]") {
@@ -728,6 +731,7 @@ class HomeController extends GetxController {
           onDownloadCompleted: (String path) {
             _progress = 0;
             log('FILE DOWNLOADED TO PATH: $path');
+            FileDownloader.cancelDownload;
           },
           onDownloadError: (String error) {
             download_circle = null;
@@ -739,22 +743,49 @@ class HomeController extends GetxController {
       } else {
         download_circle = null;
         update(["download[$index]"]);
-        if (Get.isSnackbarOpen) {
-          Get.closeCurrentSnackbar();
+        if (!Get.isSnackbarOpen) {
+          Themes.no_internet_connection();
         }
-        Themes.no_internet_connection();
         return;
       }
 
       download_circle = null;
       if (files_content != null) {
+        final subjects = appData!.getStringList("subjects");
+        if (!subjects!.contains(subject)) {
+          subjects.add(subject);
+          appData!.setStringList("subjects", subjects);
+          appData!.setStringList("files[$subject]", []);
+          appData!.setStringList("names[$subject]", []);
+
+          final files_paths_of_subject =
+              appData!.getStringList("files[$subject]");
+          files_paths_of_subject!.add(files_content!.path);
+          appData!.setStringList("files[$subject]", files_paths_of_subject);
+
+          final names_paths_of_subject =
+              appData!.getStringList("names[$subject]");
+          names_paths_of_subject!.add(name);
+          appData!.setStringList("names[$subject]", names_paths_of_subject);
+        } else {
+          final files_paths_of_subject =
+              appData!.getStringList("files[$subject]");
+          files_paths_of_subject!.add(files_content!.path);
+          appData!.setStringList("files[$subject]", files_paths_of_subject);
+
+          final names_paths_of_subject =
+              appData!.getStringList("names[$subject]");
+          names_paths_of_subject!.add(name);
+          appData!.setStringList("names[$subject]", names_paths_of_subject);
+        }
+
         appData!
             .setString("file[$type][${files_ids[index]}]", files_content!.path);
         FileDownloader.cancelDownload;
       }
       update(["download[$index]"]);
     } on PlatformException catch (e) {
-      Themes.get_notification_info('cross', 'weak Internet', 'Connection !');
+      Themes.no_internet_connection();
 
       download_circle = null;
       update(["download[$index]"]);
@@ -796,20 +827,23 @@ class HomeController extends GetxController {
           onDownloadCompleted: (String path) {
             _progress = 0;
             log('FILE DOWNLOADED TO PATH: $path');
+            FileDownloader.cancelDownload;
           },
           onDownloadError: (String error) {
+            FileDownloader.cancelDownload;
             download_circle = null;
             update(["download_image[$index]"]);
-            Themes.get_notification_info('cross', 'SomeThing Went', 'Wrong !');
+            Themes.no_internet_connection();
           },
         ).timeout(const Duration(minutes: 2));
       } else {
         download_circle = null;
+        FileDownloader.cancelDownload;
         update(["download_image[$index]"]);
-        if (Get.isSnackbarOpen) {
-          Get.closeCurrentSnackbar();
+        if (!Get.isSnackbarOpen) {
+          Themes.no_internet_connection();
         }
-        Themes.no_internet_connection();
+
         return;
       }
       download_circle = null;
@@ -820,6 +854,7 @@ class HomeController extends GetxController {
       files_content = null;
     } catch (e) {
       log(e.toString());
+      FileDownloader.cancelDownload;
     }
   }
 
@@ -853,6 +888,7 @@ class HomeController extends GetxController {
           onDownloadCompleted: (String path) {
             _progress = 0;
             log('FILE DOWNLOADED TO PATH: $path');
+            FileDownloader.cancelDownload;
           },
           onDownloadError: (String error) {
             download_circle = null;
@@ -863,11 +899,11 @@ class HomeController extends GetxController {
         ).timeout(const Duration(minutes: 5));
       } else {
         download_circle = null;
+        FileDownloader.cancelDownload;
         update(["saved_files_download[$index]"]);
-        if (Get.isSnackbarOpen) {
-          Get.closeCurrentSnackbar();
+        if (!Get.isSnackbarOpen) {
+          Themes.no_internet_connection();
         }
-        Themes.no_internet_connection();
         return;
       }
 
@@ -1009,12 +1045,12 @@ class HomeController extends GetxController {
     appData!.setBool("not_empty_recent_files", true);
     // set file name to recent file :
     List<String> file_names = appData!.getStringList("recent_files_names")!;
-    file_names.add(name);
+    file_names.addIf(!file_names.contains(name), name);
     appData!.setStringList("recent_files_names", file_names);
 
     // set file path to recent file :
     List<String> file_paths = appData!.getStringList("recent_files_paths")!;
-    file_paths.add(path);
+    file_paths.addIf(!file_paths.contains(path), path);
     appData!.setStringList("recent_files_paths", file_paths);
 
     update(['recent_files']);
@@ -1049,6 +1085,7 @@ class HomeController extends GetxController {
         appData!.setStringList("recent_files_names", []);
         appData!.setBool("not_empty_recent_files", false);
       }
+      appData!.setStringList("subjects", []);
     }
     log(Auth!.getString("token").toString());
 

@@ -92,13 +92,41 @@ class RegisterPassController extends GetxController {
     }
   }
 
-  Widget togglePassWord(bool isSecurePassword) {
+  Widget togglePassWord() {
     return IconButton(
       onPressed: () {
         isSecurePassword = !isSecurePassword;
         update();
       },
       icon: isSecurePassword
+          ? Image(
+              image: const AssetImage('assets/images/eye.png'),
+              width: 28,
+              height: 28,
+              color: Themes.getColor(
+                Themes.darkColorScheme.primary,
+                Themes.colorScheme.primary,
+              ),
+            )
+          : Image(
+              image: const AssetImage('assets/images/show.png'),
+              width: 28,
+              height: 28,
+              color: Themes.getColor(
+                Themes.darkColorScheme.primary,
+                Themes.colorScheme.primary,
+              ),
+            ),
+    );
+  }
+
+  Widget toggleConfirmPassWord() {
+    return IconButton(
+      onPressed: () {
+        isSecurePasswordConfirm = !isSecurePasswordConfirm;
+        update();
+      },
+      icon: isSecurePasswordConfirm
           ? Image(
               image: const AssetImage('assets/images/eye.png'),
               width: 28,

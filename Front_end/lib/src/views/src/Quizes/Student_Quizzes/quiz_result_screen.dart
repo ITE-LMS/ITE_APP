@@ -21,11 +21,16 @@ class QuizResultScreen extends StatelessWidget {
     for (int i = 0; i < int.parse(quiz['num_question']); i++) {
       final questions = quiz['questions'][i];
       final correctAnswer = questions['correct_answer'];
+      String studentAnswer = '';
 
-      final studentAnswer = quiz["student_answers"][i];
-      log(studentAnswer.toString());
+      if (Get.previousRoute == "/QuizStudentDetailScreen") {
+        studentAnswer = controller.student_answers[i];
+      } else {
+        studentAnswer = quiz["student_answers"][i];
+      }
+
       String answer = '';
-      if (studentAnswer == null) {
+      if (studentAnswer == '') {
         answer = "Not Answering";
       } else {
         answer = studentAnswer;
@@ -111,6 +116,10 @@ class QuizResultScreen extends StatelessWidget {
 
     return WillPopScope(
       onWillPop: () async {
+        controller.quizzes = [];
+        controller.completed_quizzes = [];
+        controller.quizzes_ids = [];
+        controller.get_student_quizes();
         return true;
       },
       child: Scaffold(

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -9,10 +8,11 @@ import 'package:public_testing_app/src/models/Themes.dart';
 import 'package:public_testing_app/src/views/src/Home/fifth_Page/OpenFile.dart';
 
 class FilesCard extends StatelessWidget {
-  const FilesCard({super.key, required this.index, required this.type});
+  const FilesCard({super.key, required this.index, required this.type, required this.subject});
 
   final int index;
   final String type;
+  final String subject;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,6 @@ class FilesCard extends StatelessWidget {
         String path;
         if (Auth!.getString("user") == "active_student") {
           int i = controller.files_ids[index];
-
           path = appData!.getString("file[$type][$i]")!;
         } else {
           path = appData!
@@ -105,7 +104,7 @@ class FilesCard extends StatelessWidget {
                   top: 25,
                   left: 30,
                   child: SizedBox(
-                    width: 260,
+                    width: 230,
                     child: SingleChildScrollView(
                       child: Text(
                         controller.files_names[index],
@@ -149,7 +148,7 @@ class FilesCard extends StatelessWidget {
                             ? controller.download_circle ??
                                 InkWell(
                                   onTap: () {
-                                    controller.download_file(index, type);
+                                    controller.download_file(index, type , subject , controller.files_names[index]);
                                   },
                                   child: const Icon(
                                     Iconsax.document_download,

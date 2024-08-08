@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, missing_required_param
 
 import 'package:get/get.dart';
 import 'package:public_testing_app/src/views/src/AI_Assistant/AI.dart';
@@ -6,8 +6,11 @@ import 'package:public_testing_app/src/views/src/Quizes/Doctor_Quizzes/add_quiz_
 import 'package:public_testing_app/src/views/src/Quizes/Doctor_Quizzes/add_quiz_screens/multiple_answers_screen.dart';
 import 'package:public_testing_app/src/views/src/Quizes/Doctor_Quizzes/add_quiz_screens/quiz_true_or_false_screen.dart';
 import 'package:public_testing_app/src/views/src/Quizes/Doctor_Quizzes/quiz_screens_doctor/quiz_screen.dart';
+import 'package:public_testing_app/src/views/src/Quizes/Student_Quizzes/quiz_solving_screen.dart';
 import 'package:public_testing_app/src/views/src/Quizes/Student_Quizzes/quiz_student_screen.dart';
 import 'package:public_testing_app/src/views/src/homepage_elements/Drawer_Elements.dart/Saved_Files.dart';
+import 'package:public_testing_app/src/views/src/homepage_elements/Drawer_Elements.dart/downloaded_files.dart';
+import 'package:public_testing_app/src/views/src/homepage_elements/Drawer_Elements.dart/subject_downloaded_files.dart';
 import 'src/middlewares/is_userLogedIn_Middleware.dart';
 
 import 'package:public_testing_app/src/views/auth/change_pass_screens/change_pass_screen.dart';
@@ -41,6 +44,7 @@ class AppNavigation {
   static String quiz_multi_answers = '/multipleAnswers';
   static String saved_files = '/saved_files';
   static String quiz_student = '/quizStudent';
+  static String student_download = "/downloaded_files";
 
   static String get getInitRoute => intro;
 
@@ -140,6 +144,12 @@ class AppNavigation {
       transitionDuration: const Duration(milliseconds: 400),
       name: saved_files,
       page: () => const SavedFiles(),
+    ),
+    GetPage(
+      transition: Transition.cupertino,
+      transitionDuration: const Duration(milliseconds: 400),
+      name: student_download,
+      page: () => const DownloadedFiles(),
     ),
   ];
 }
