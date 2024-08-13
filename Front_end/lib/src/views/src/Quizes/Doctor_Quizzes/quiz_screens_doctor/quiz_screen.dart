@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:public_testing_app/main.dart';
 import 'package:public_testing_app/src/controllers/Quizzes_Controllers/quiz_controller.dart';
 import 'package:mobkit_dashed_border/mobkit_dashed_border.dart';
 import 'package:public_testing_app/src/models/Themes.dart';
@@ -15,7 +16,7 @@ class QuizScreen extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     final content = Container(
-      width: width / 2.8,
+      width: width / 6,
       height: width / 7.5,
       decoration: BoxDecoration(
         color: Themes.colorScheme.onPrimaryContainer,
@@ -28,31 +29,18 @@ class QuizScreen extends StatelessWidget {
           BoxShadow(
             color: Themes.getColor(Colors.green, Colors.blue),
             blurStyle: BlurStyle.outer,
-            blurRadius: 5,
+            blurRadius: Themes.isDarkMode() ? 2 : 5,
             offset: const Offset(0, 1),
           )
         ],
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'add quiz',
-            style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                  fontSize: 18,
-                  color: Colors.white,
-                ),
-          ),
-          const SizedBox(width: 10),
-          InkWell(
-            onTap: () => Get.to(() => const AddQuizScreen()),
-            child: const Icon(
-              size: 35,
-              Iconsax.add_square,
-              color: Colors.white,
-            ),
-          ),
-        ],
+      child: InkWell(
+        onTap: () => Get.to(() => const AddQuizScreen()),
+        child: const Icon(
+          size: 35,
+          Iconsax.add_square,
+          color: Colors.white,
+        ),
       ),
     );
 
@@ -120,21 +108,24 @@ class QuizScreen extends StatelessWidget {
                                       return Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Container(
-                                          height: 250,
+                                          height: 320,
                                           padding: const EdgeInsets.all(10),
                                           decoration: BoxDecoration(
-                                            border: DashedBorder.all(
-                                              color: Themes.getColor(
-                                                  Colors.green, Colors.blue),
-                                              dashLength: 120,
-                                              width: 5,
-                                              isOnlyCorner: true,
-                                              strokeAlign:
-                                                  BorderSide.strokeAlignInside,
-                                              strokeCap: StrokeCap.round,
+                                            border: Border.all(
+                                              color: Colors.white,
+                                              width: 1,
                                             ),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                blurRadius: 2,
+                                                color: Themes.getColor(
+                                                    Colors.white, Colors.black),
+                                                blurStyle: BlurStyle.outer,
+                                                spreadRadius: 1,
+                                              )
+                                            ],
                                             borderRadius:
-                                                BorderRadius.circular(15),
+                                                BorderRadius.circular(25),
                                             gradient: LinearGradient(
                                               colors: Themes.isDarkMode()
                                                   ? [
@@ -156,64 +147,128 @@ class QuizScreen extends StatelessWidget {
                                             children: [
                                               Positioned(
                                                 top: 10,
-                                                child: Text(
-                                                  'Subject: ${quiz['subject']}',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .titleLarge!
-                                                      .copyWith(fontSize: 20),
-                                                ),
-                                              ),
-                                              Positioned(
-                                                top: 40,
-                                                child: Text(
-                                                  'Quiz Type: ${quiz['type']}',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .titleLarge!
-                                                      .copyWith(fontSize: 20),
-                                                ),
-                                              ),
-                                              Positioned(
-                                                top: 70,
-                                                child: Text(
-                                                  'Questions: ${quiz['questions'].length}',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .titleLarge!
-                                                      .copyWith(fontSize: 20),
-                                                ),
-                                              ),
-                                              Positioned(
-                                                top: 100,
-                                                child: Text(
-                                                  'Level: ${quiz['level']}',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .titleLarge!
-                                                      .copyWith(fontSize: 20),
-                                                ),
-                                              ),
-                                              Positioned(
-                                                top: 130,
-                                                child: Text(
-                                                  'Time : ${quiz['time']} min',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .titleLarge!
-                                                      .copyWith(fontSize: 20),
+                                                right: 10,
+                                                left: 10,
+                                                child: Container(
+                                                  height: 200,
+                                                  padding:
+                                                      const EdgeInsets.all(20),
+                                                  decoration: BoxDecoration(
+                                                    boxShadow: const [
+                                                      BoxShadow(
+                                                        blurRadius: 2,
+                                                        color: Colors.black,
+                                                        blurStyle:
+                                                            BlurStyle.outer,
+                                                        spreadRadius: 1,
+                                                      )
+                                                    ],
+                                                    border: Border.all(
+                                                      color: Colors.white,
+                                                      width: 3,
+                                                    ),
+                                                    color: is_Dark!.getString(
+                                                                'is_dark') ==
+                                                            'true'
+                                                        ? Themes.darkColorScheme
+                                                            .primaryContainer
+                                                            .withOpacity(.7)
+                                                        : Colors.blue
+                                                            .withOpacity(.5),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25),
+                                                  ),
+                                                  child: Column(
+                                                    children: [
+                                                      Align(
+                                                        alignment: Alignment
+                                                            .centerLeft,
+                                                        child: Text(
+                                                          'Subject : ${quiz['subject']}',
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .titleLarge!
+                                                                  .copyWith(
+                                                                      fontSize:
+                                                                          18),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(height: 5),
+                                                      Align(
+                                                        alignment: Alignment
+                                                            .centerLeft,
+                                                        child: Text(
+                                                          'Quiz Type : ${quiz['type']}',
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .titleLarge!
+                                                                  .copyWith(
+                                                                      fontSize:
+                                                                          18),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(height: 5),
+                                                      Align(
+                                                        alignment: Alignment
+                                                            .centerLeft,
+                                                        child: Text(
+                                                          'Questions : ${quiz['questions'].length}',
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .titleLarge!
+                                                                  .copyWith(
+                                                                      fontSize:
+                                                                          18),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(height: 5),
+                                                      Align(
+                                                        alignment: Alignment
+                                                            .centerLeft,
+                                                        child: Text(
+                                                          'Level : ${quiz['level']}',
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .titleLarge!
+                                                                  .copyWith(
+                                                                      fontSize:
+                                                                          18),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(height: 5),
+                                                      Align(
+                                                        alignment: Alignment
+                                                            .centerLeft,
+                                                        child: Text(
+                                                          'Time : ${quiz['time']} min',
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .titleLarge!
+                                                                  .copyWith(
+                                                                      fontSize:
+                                                                          18),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                               Positioned(
                                                 bottom: 5,
-                                                right: 5,
+                                                right: 10,
                                                 child: InkWell(
                                                   onTap: () => Get.to(
                                                     () => QuizDetailScreen(
                                                         quiz: quiz),
                                                   ),
                                                   child: Container(
-                                                    width: width / 3.8,
+                                                    width: width / 6,
                                                     height: width / 8,
                                                     decoration: BoxDecoration(
                                                       color: Themes.colorScheme
@@ -241,32 +296,10 @@ class QuizScreen extends StatelessWidget {
                                                         )
                                                       ],
                                                     ),
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Text(
-                                                          'Open',
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .titleLarge!
-                                                                  .copyWith(
-                                                                    fontSize:
-                                                                        15,
-                                                                    color: Colors
-                                                                        .white,
-                                                                  ),
-                                                        ),
-                                                        const SizedBox(
-                                                            width: 10),
-                                                        const Icon(
-                                                          size: 25,
-                                                          Iconsax.arrow_right,
-                                                          color: Colors.white,
-                                                        ),
-                                                      ],
+                                                    child: const Icon(
+                                                      size: 25,
+                                                      Iconsax.arrow_right,
+                                                      color: Colors.white,
                                                     ),
                                                   ),
                                                 ),
@@ -274,7 +307,7 @@ class QuizScreen extends StatelessWidget {
                                               const SizedBox(height: 4),
                                               Positioned(
                                                 bottom: 5,
-                                                right: 120,
+                                                right: 90,
                                                 child: InkWell(
                                                   onTap: () {
                                                     int id = controller
@@ -285,7 +318,7 @@ class QuizScreen extends StatelessWidget {
                                                         id, index);
                                                   },
                                                   child: Container(
-                                                    width: width / 3.8,
+                                                    width: width / 6,
                                                     height: width / 8,
                                                     decoration: BoxDecoration(
                                                       color: Themes.colorScheme
@@ -313,32 +346,10 @@ class QuizScreen extends StatelessWidget {
                                                         )
                                                       ],
                                                     ),
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Text(
-                                                          'Delete',
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .titleLarge!
-                                                                  .copyWith(
-                                                                    fontSize:
-                                                                        15,
-                                                                    color: Colors
-                                                                        .white,
-                                                                  ),
-                                                        ),
-                                                        const SizedBox(
-                                                            width: 10),
-                                                        const Icon(
-                                                          size: 25,
-                                                          Iconsax.trash,
-                                                          color: Colors.white,
-                                                        ),
-                                                      ],
+                                                    child: const Icon(
+                                                      size: 25,
+                                                      Iconsax.trash,
+                                                      color: Colors.red,
                                                     ),
                                                   ),
                                                 ),

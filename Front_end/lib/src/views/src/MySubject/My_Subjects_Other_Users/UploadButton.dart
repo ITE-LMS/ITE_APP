@@ -24,7 +24,7 @@ class UploadButton extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     final OtherusersSubjectsController other_users_controller = Get.find();
     final content = Container(
-      width: type == "adds" ? width / 3 : width / 2.5,
+      width: width / 6,
       height: width / 8,
       decoration: BoxDecoration(
         color: Themes.colorScheme.onPrimaryContainer,
@@ -42,27 +42,14 @@ class UploadButton extends StatelessWidget {
           )
         ],
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            type == "adds" ? "send add" : 'upload $type',
-            style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                  fontSize: 18,
-                  color: Colors.white,
-                ),
-          ),
-          const SizedBox(width: 5),
-          InkWell(
-            onTap: () => other_users_controller.upload_files(
-                type, subject_id, subject_name, subject_type, year),
-            child: const Icon(
-              size: 35,
-              Icons.arrow_circle_up_rounded,
-              color: Colors.white,
-            ),
-          ),
-        ],
+      child: InkWell(
+        onTap: () => other_users_controller.upload_files(
+            type, subject_id, subject_name, subject_type, year),
+        child: const Icon(
+          size: 35,
+          Icons.arrow_circle_up_rounded,
+          color: Colors.white,
+        ),
       ),
     );
     return content;

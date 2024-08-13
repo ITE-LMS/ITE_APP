@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -10,6 +11,7 @@ import 'package:public_testing_app/src/models/Themes.dart';
 import 'package:public_testing_app/src/models/SnackBar.dart';
 import 'package:public_testing_app/main.dart';
 import 'package:http/http.dart' as http;
+import 'package:public_testing_app/src/models/api.dart';
 
 class RegisterPassController extends GetxController {
   final Form_Key = GlobalKey<FormState>();
@@ -24,19 +26,12 @@ class RegisterPassController extends GetxController {
 
   void set_user_password(String user_type, String user_url) async {
     try {
-      var url = Uri.parse('http://10.0.2.2:8000/api/$user_url');
-      final response = await http.post(
-        url,
-        headers: {
-          "Authorization": "Bearer ${Auth!.getString('token')}",
-        },
-        body: {
-          "password": pass_word.text,
-          "confirm_password": confirm_pass_word.text,
-        },
-      );
+      final data = {
+        "password": pass_word.text,
+        "confirm_password": confirm_pass_word.text,
+      };
 
-      final decodedResposne = json.decode(response.body);
+      final decodedResposne = await Api.post_request_with_token(user_url, data);
       // successfull go to homePageDoctor :
       if (decodedResposne["status"] == 200) {
         Auth!.setString('login', '200');

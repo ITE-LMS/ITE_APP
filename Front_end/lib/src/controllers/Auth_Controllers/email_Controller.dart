@@ -10,6 +10,7 @@ import 'package:public_testing_app/src/models/Themes.dart';
 import 'package:http/http.dart' as http;
 import 'package:public_testing_app/src/models/SnackBar.dart';
 import 'package:public_testing_app/main.dart';
+import 'package:public_testing_app/src/models/api.dart';
 
 class EmailController extends GetxController {
   final Form_Key = GlobalKey<FormState>();
@@ -27,13 +28,12 @@ class EmailController extends GetxController {
       update();
       try {
         // email url :
-        var url = Uri.parse('http://10.0.2.2:8000/api/log_in_by_email');
-        var response = await http.post(url, body: {
+        final data = {
           'email': email.text,
-        });
-
+        };
         // decoded response :
-        final decodedResponse = json.decode(response.body);
+        final decodedResponse =
+            await Api.post_request_without_token("log_in_by_email", data);
 
         //active user :
         if (decodedResponse["status"] == 200) {

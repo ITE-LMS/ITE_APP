@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
@@ -9,7 +10,6 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:lottie/lottie.dart';
 import 'package:public_testing_app/main.dart';
 import 'package:public_testing_app/src/controllers/Home_Controllers/Home_Controller.dart';
-import 'package:public_testing_app/src/models/SnackBar.dart';
 import 'package:public_testing_app/src/models/Themes.dart';
 import '../../views/src/AI_Assistant/Message.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -29,7 +29,8 @@ class AIController extends GetxController {
     log(connectivityResult.toString());
     appData!.setString("connection_result", connectivityResult.toString());
     update(["is_connected"]);
-    if (Get.isSnackbarOpen && !connectivityResult.contains(ConnectivityResult.none)) {
+    if (Get.isSnackbarOpen &&
+        !connectivityResult.contains(ConnectivityResult.none)) {
       Get.closeAllSnackbars();
     }
     final controller = Get.put(HomeController());
@@ -41,9 +42,9 @@ class AIController extends GetxController {
     } else {
       state = "online";
       update(["state"]);
-      if (Get.isSnackbarOpen) {
-        Get.closeCurrentSnackbar();
-      }
+      // if (Get.isSnackbarOpen) {
+      //   Get.closeAllSnackbars();
+      // }
     }
   }
 

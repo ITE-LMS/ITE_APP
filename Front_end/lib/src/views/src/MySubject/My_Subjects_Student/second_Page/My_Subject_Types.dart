@@ -103,9 +103,9 @@ class MySubjectstypes extends StatelessWidget {
               ? Themes.darkColorScheme.background
               : Themes.colorScheme.primaryContainer,
           title: Text(
-            student_subject_controller.student_subjects[index]["name"],
+            "${student_subject_controller.student_subjects[index]["name"]} :",
             style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                  fontSize: width / 20,
+                  fontSize: 25,
                   color: is_Dark!.getString('is_dark') == 'true'
                       ? Themes.darkColorScheme.primary
                       : Themes.colorScheme.primary,

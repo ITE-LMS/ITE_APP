@@ -138,7 +138,7 @@ class AddQuizScreen extends StatelessWidget {
                 Positioned(
                   top: 80,
                   child: Text(
-                    'Enter the number of Questions at least 3',
+                    'Enter the number of Questions at',
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge!
@@ -149,7 +149,7 @@ class AddQuizScreen extends StatelessWidget {
                 Positioned(
                   top: 110,
                   child: Text(
-                    'and at most 15:',
+                    'least 3 and at most 15:',
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge!

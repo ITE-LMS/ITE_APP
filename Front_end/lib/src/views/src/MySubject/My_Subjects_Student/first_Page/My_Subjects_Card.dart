@@ -63,11 +63,9 @@ class MySubjectsCard extends StatelessWidget {
           children: [
             Container(
               width: width - 30,
-              height: width - 250,
+              height: width - 190,
               decoration: BoxDecoration(
-                border: DashedBorder.all(
-                  dashLength: 100,
-                  isOnlyCorner: true,
+                border: Border.all(
                   color: is_Dark!.getString('is_dark') == 'true'
                       ? Themes.darkColorScheme.primary
                       : Themes.colorScheme.primary,
@@ -76,41 +74,65 @@ class MySubjectsCard extends StatelessWidget {
                 color: is_Dark!.getString('is_dark') == 'true'
                     ? Themes.darkColorScheme.primaryContainer.withOpacity(.7)
                     : Colors.blue.withOpacity(.5),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(25),
               ),
               child: Stack(
                 children: [
                   Positioned(
                     top: 10,
                     left: 10,
-                    child: Text(
-                      name,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge!
-                          .copyWith(fontSize: 21),
-                    ),
-                  ),
-                  Positioned(
-                    top: 40,
-                    left: 10,
-                    child: Text(
-                      type,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge!
-                          .copyWith(fontSize: 21),
-                    ),
-                  ),
-                  Positioned(
-                    top: 70,
-                    left: 10,
-                    child: Text(
-                      year,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge!
-                          .copyWith(fontSize: 21),
+                    right: 10,
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      width: 100,
+                      height: 120,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.white,
+                          width: 3,
+                        ),
+                        boxShadow: const [
+                          BoxShadow(
+                            blurRadius: 5,
+                            color: Colors.black,
+                            blurStyle: BlurStyle.outer,
+                            spreadRadius: 1,
+                          )
+                        ],
+                        color: is_Dark!.getString('is_dark') == 'true'
+                            ? Themes.darkColorScheme.primaryContainer
+                                .withOpacity(.7)
+                            : Colors.blue.withOpacity(.5),
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            name,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge!
+                                .copyWith(fontSize: 18),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            type,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge!
+                                .copyWith(fontSize: 18),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            year,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge!
+                                .copyWith(fontSize: 18),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   Positioned(

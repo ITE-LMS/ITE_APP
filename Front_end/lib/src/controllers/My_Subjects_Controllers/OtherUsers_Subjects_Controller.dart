@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:public_testing_app/src/controllers/Home_Controllers/Home_Controller.dart';
 import 'package:public_testing_app/src/models/SnackBar.dart';
 import 'package:public_testing_app/src/models/Themes.dart';
+import 'package:public_testing_app/src/models/api.dart';
 import 'package:public_testing_app/src/views/src/Home/fourth_Page/FilesTypes.dart';
 
 class OtherusersSubjectsController extends GetxController {
@@ -35,14 +36,7 @@ class OtherusersSubjectsController extends GetxController {
   // fetching doctor or teacher subjects who is responsible for :
   void get_Other_User_Subjects(String subjects_type, bool done) async {
     try {
-      var url = Uri.parse('http://10.0.2.2:8000/api/$subjects_type');
-      var response = await http.get(
-        url,
-        headers: {
-          "Authorization": "Bearer ${Auth!.getString('token')}",
-        },
-      );
-      final decodedResponse = json.decode(response.body);
+      final decodedResponse = await Api.get_request(subjects_type);
       if (decodedResponse["status"] == 200) {
         for (int i = 0; i < decodedResponse["data"].length; i++) {
           final Map<String, dynamic> other_user_subject =
@@ -145,24 +139,13 @@ class OtherusersSubjectsController extends GetxController {
   void upload_file(File file, String type, String subject_id, String file_name,
       String subject_type, String subject_name, int year, String url) async {
     try {
-      var apiUrl = Uri.parse('http://10.0.2.2:8000/api/$url');
-      var request = http.MultipartRequest('POST', apiUrl);
-
-      // Send the file data correctly
-      request.files.add(await http.MultipartFile.fromPath(
-        'file', // This key should match Laravel code
-        file.path,
-      ));
-
-      // Add the remaining data as form fields
-      request.fields['file_name'] = file_name;
-      request.fields['file_type'] = type.toUpperCase();
-      request.fields['subject_id'] = subject_id;
-
-      // Add Authorization header
-      request.headers['Authorization'] = "Bearer ${Auth!.getString('token')}";
-
-      var response = await request.send();
+      final data = {
+        "file_name": file_name,
+        "file_type": type.toUpperCase(),
+        "subject_id": subject_id,
+      };
+      var response =
+          await Api.post_request_with_files(url, data, "file", file.path);
 
       // Handle the response (check for success or errors)
       if (response.statusCode == 200) {

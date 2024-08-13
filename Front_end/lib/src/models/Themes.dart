@@ -137,7 +137,6 @@ class Themes {
     return is_Dark!.getString('is_dark') == 'true' ? true : false;
   }
 
-
   static get_notification_info(String Image, String title, String message) {
     snackBar sb = snackBar(
       path: 'assets/images/$Image.png',
@@ -166,24 +165,28 @@ class Themes {
     sb.snackbar();
   }
 
-  static no_internet_connection(){
-      snackBar sb = snackBar(
-          BorderColor: Colors.red,
-          title: Padding(
-            padding: const EdgeInsets.only(left: 30.0),
-            child: Text(
-              "No Internet",
-              style: Get.theme.textTheme.titleMedium,
-            ),
-          ),
-          message: Padding(
-            padding: const EdgeInsets.only(left: 30.0),
-            child: Text(
-              "Connection !",
-              style: Get.theme.textTheme.titleMedium,
-            ),
-          ),
-        );
-        sb.snackbar();
+  static no_internet_connection() {
+    snackBar sb = snackBar(
+      BorderColor: Colors.red,
+      title: Padding(
+        padding: const EdgeInsets.only(left: 30.0),
+        child: Text(
+          "No Internet",
+          style: Get.theme.textTheme.titleMedium,
+        ),
+      ),
+      message: Padding(
+        padding: const EdgeInsets.only(left: 30.0),
+        child: Text(
+          "Connection !",
+          style: Get.theme.textTheme.titleMedium,
+        ),
+      ),
+    );
+    sb.snackbar();
+  }
+
+  static String? getUserToken() {
+    return Auth!.getString("token")!;
   }
 }

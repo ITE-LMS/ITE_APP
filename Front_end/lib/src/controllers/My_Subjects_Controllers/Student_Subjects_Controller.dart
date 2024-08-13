@@ -9,6 +9,7 @@ import 'package:public_testing_app/src/controllers/Home_Controllers/Home_Control
 import 'package:public_testing_app/src/models/SnackBar.dart';
 import 'package:http/http.dart' as http;
 import 'package:public_testing_app/src/models/Themes.dart';
+import 'package:public_testing_app/src/models/api.dart';
 import 'package:public_testing_app/src/views/src/Home/fourth_Page/FilesTypes.dart';
 
 class StudentSubjectsController extends GetxController {
@@ -22,17 +23,11 @@ class StudentSubjectsController extends GetxController {
   // this function for removing the subjects choosed from student to be hisSubjects :
   void removeFromMySubjects(int subject_id) async {
     try {
-      var url = Uri.parse('http://10.0.2.2:8000/api/remove-from-my-subjects');
-      var response = await http.post(
-        url,
-        body: {
-          "subject_id": '$subject_id',
-        },
-        headers: {
-          "Authorization": "Bearer ${Auth!.getString('token')}",
-        },
-      );
-      final decodedResponse = json.decode(response.body);
+      final data = {
+        "subject_id": '$subject_id',
+      };
+      final decodedResponse =
+          await Api.post_request_with_token("remove-from-my-subjects", data);
       //? subject added successfully :
       if (decodedResponse["status"] == 200) {
         Themes.get_notification_info(
@@ -51,14 +46,8 @@ class StudentSubjectsController extends GetxController {
   void getStudentSubjects() async {
     try {
       student_subjects = [];
-      var url = Uri.parse('http://10.0.2.2:8000/api/student-subjects');
-      var response = await http.get(
-        url,
-        headers: {
-          "Authorization": "Bearer ${Auth!.getString('token')}",
-        },
-      );
-      final decodedResponse = json.decode(response.body);
+
+      final decodedResponse = await Api.get_request("student-subjects");
       if (decodedResponse["status"] == 200) {
         for (int i = 0; i < decodedResponse["data"].length; i++) {
           student_subjects.add(decodedResponse["data"][i]);

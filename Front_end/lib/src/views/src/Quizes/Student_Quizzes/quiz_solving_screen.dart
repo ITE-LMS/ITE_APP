@@ -20,7 +20,6 @@ class QuizStudentDetailScreen extends StatelessWidget {
     controller.completed_quizzes[quizIndex!] = true;
     final time = int.parse(controller.quizzes[quizIndex!]["time"]);
     controller.startTimer(time * 60, quiz!);
-    log(controller.selected_answers.toString());
     return WillPopScope(
       onWillPop: () async {
         return false;

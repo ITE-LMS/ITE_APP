@@ -1,13 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:public_testing_app/main.dart';
 import 'package:public_testing_app/src/controllers/My_Subjects_Controllers/OtherUsers_Subjects_Controller.dart';
-import 'package:public_testing_app/src/models/SnackBar.dart';
 import 'package:public_testing_app/src/models/Themes.dart';
+import 'package:public_testing_app/src/models/api.dart';
 import 'package:public_testing_app/src/views/src/Quizes/Doctor_Quizzes/add_quiz_screens/multiple_answers_screen.dart';
 import 'package:public_testing_app/src/views/src/Quizes/Doctor_Quizzes/add_quiz_screens/quiz_true_or_false_screen.dart';
 import 'package:public_testing_app/src/views/src/Quizes/Student_Quizzes/quiz_result_screen.dart';
@@ -45,6 +43,8 @@ class QuizController extends GetxController {
   String Selected_Type_Subject = '';
   List<int> quizzes_ids = [];
   List<String> student_answers = [];
+
+  Widget? circle;
 
   void updateSelectedAnswer(int questionIndex, dynamic value) {
     selected_answers[questionIndex] = value;
@@ -114,14 +114,7 @@ class QuizController extends GetxController {
 
   void remove_quiz_from_DB(int quiz_id, int index) async {
     try {
-      var url = Uri.parse('http://10.0.2.2:8000/api/delete-quiz/$quiz_id');
-      var response = await http.get(
-        url,
-        headers: {
-          "Authorization": "Bearer ${Auth!.getString('token')}",
-        },
-      );
-      final decodedResponse = json.decode(response.body);
+      final decodedResponse = await Api.get_request("delete-quiz/$quiz_id");
       if (decodedResponse["status"] == 200) {
         Themes.get_notification_info('check', 'Quiz Deleted', 'Successfully !');
         update(["quiz_deleted"]);
@@ -208,21 +201,14 @@ class QuizController extends GetxController {
       student_answers.add(question_answer);
     }
     selected_answers = {};
-    var url = Uri.parse('http://10.0.2.2:8000/api/quizzes-solved-by-student');
     final data = {
       'quiz_id': '${quizzes_ids[quizIndex]}',
       'answers': student_answers,
     };
-    final jsonData = json.encode(data);
-    var response = await http.post(
-      url,
-      headers: {
-        "Authorization": "Bearer ${Auth!.getString("token")}",
-      },
-      body: jsonData,
-    );
 
-    final decodedResponse = json.decode(response.body);
+    final decodedResponse = await Api.post_request_with_token_using_json(
+        "quizzes-solved-by-student", data);
+
     if (decodedResponse["status"] == 200) {
       Themes.get_notification_info("check", "Quiz Solved", "Successfuly.");
       Get.off(
@@ -251,15 +237,7 @@ class QuizController extends GetxController {
 
   void get_other_users_quizes() async {
     try {
-      var url = Uri.parse('http://10.0.2.2:8000/api/show-quizzes');
-      var response = await http.get(
-        url,
-        headers: {
-          "Authorization": "Bearer ${Auth!.getString("token")}",
-        },
-      );
-
-      final decodedResponse = json.decode(response.body);
+      final decodedResponse = await Api.get_request("show-quizzes");
       if (decodedResponse["status"] == 200) {
         final quizzes = decodedResponse["data"];
         for (int i = 0; i < quizzes.length; i++) {
@@ -316,17 +294,10 @@ class QuizController extends GetxController {
         'time': timer.toString(),
         'num_of_questions': numQuestions.toString(),
       };
-      final jsonData = json.encode(data);
 
-      var url = Uri.parse('http://10.0.2.2:8000/api/add-quiz');
-      var response = await http.post(
-        url,
-        headers: {
-          "Authorization": "Bearer ${Auth!.getString('token')}",
-        },
-        body: jsonData,
-      );
-      final decodedResponse = json.decode(response.body);
+      final decodedResponse =
+          await Api.post_request_with_token_using_json("add-quiz", data);
+
       if (decodedResponse["status"] == 200) {
         quizzes = [];
         quizzes_ids = [];
@@ -469,17 +440,17 @@ class QuizController extends GetxController {
         'time': timer.toString(),
         'num_of_questions': numQuestions.toString(),
       };
-      final jsonData = json.encode(data);
-
-      var url = Uri.parse('http://10.0.2.2:8000/api/add-quiz');
-      var response = await http.post(
-        url,
-        headers: {
-          "Authorization": "Bearer ${Auth!.getString('token')}",
-        },
-        body: jsonData,
+      circle = const SizedBox(
+        height: 50,
+        width: 50,
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+        ),
       );
-      if (response.statusCode == 200) {
+      update(['publish']);
+      final decodedResponse =
+          await Api.post_request_with_token_using_json("add-quiz", data);
+      if (decodedResponse["status"] == 200) {
         quizzes = [];
         quizzes_ids = [];
         get_other_users_quizes();
@@ -487,6 +458,8 @@ class QuizController extends GetxController {
         Get.back();
         Themes.get_notification_info(
             "check", "Quiz Published", "Successfully!");
+        circle = null;
+        update(['publish']);
       }
     } catch (e) {
       log(e.toString());
@@ -676,16 +649,8 @@ class QuizController extends GetxController {
   // get student quizzes :
   void get_student_quizes() async {
     try {
-      var url = Uri.parse(
-          'http://10.0.2.2:8000/api/get-quizzes-for-student-subjects');
-      var response = await http.get(
-        url,
-        headers: {
-          "Authorization": "Bearer ${Auth!.getString("token")}",
-        },
-      );
-
-      final decodedResponse = json.decode(response.body);
+      final decodedResponse =
+          await Api.get_request("get-quizzes-for-student-subjects");
       if (decodedResponse["status"] == 200) {
         final quizzes = decodedResponse["data"];
         for (int i = 0; i < quizzes.length; i++) {
@@ -696,7 +661,6 @@ class QuizController extends GetxController {
             completed_quizzes.add(true);
           }
           quizzes_ids.add(quiz["id"]);
-          log(quiz["student_answers"].toString());
           addQuiz({
             'student_answers': quiz["student_answers"],
             'subject': quiz["subject"],
@@ -707,7 +671,6 @@ class QuizController extends GetxController {
             'num_question': quiz["num_question"],
           });
         }
-        log(completed_quizzes.toString());
       } else {
         Themes.get_notification_info("cross", "SomeThing Went", "Wrong!");
       }

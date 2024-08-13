@@ -6,20 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:public_testing_app/src/models/Themes.dart';
+import 'package:public_testing_app/src/models/api.dart';
 import '../../../main.dart';
 import '../../models/SnackBar.dart';
 
 class LogoutController extends GetxController {
   void logout_user_on_authorization(String user_url, String type) async {
     try {
-      var url = Uri.parse('http://10.0.2.2:8000/api/$user_url');
-      final response = await http.get(
-        url,
-        headers: {
-          "Authorization": "Bearer ${Auth!.getString('token')}",
-        },
-      );
-      final decodedResposne = json.decode(response.body);
+      final decodedResposne = await Api.get_request(user_url);
+
       // successfull logout :
       if (decodedResposne["status"] == 200) {
         Auth!.setString('user', 'non_active_$type');

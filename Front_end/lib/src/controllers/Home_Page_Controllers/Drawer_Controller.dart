@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:public_testing_app/src/models/api.dart';
 import 'package:public_testing_app/src/widgets/ElevatedButton.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:public_testing_app/src/models/Themes.dart';
@@ -60,17 +61,9 @@ class DrawersController extends GetxController {
         Get.back();
         return;
       }
-      String apiUrl = 'http://10.0.2.2:8000/api/$user_type';
 
-      var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
-      request.files.add(
-        await http.MultipartFile.fromPath('photo', image!.path),
-      );
-
-      //? You might need to include an Authorization header with the student's token
-      request.headers['Authorization'] = "Bearer ${Auth!.getString('token')}";
-
-      var response = await request.send();
+      var response = await Api.post_request_with_files(
+          user_type, null, 'photo', image!.path);
 
       if (response.statusCode == 200) {
         //? Photo updated successfully
@@ -224,14 +217,7 @@ class DrawersController extends GetxController {
     if (appData!.getString("user_photo") == null ||
         appData!.getString("user_photo") == '') {
       try {
-        var url = Uri.parse('http://10.0.2.2:8000/api/$user_type');
-        var response = await http.get(
-          url,
-          headers: {
-            "Authorization": "Bearer ${Auth!.getString('token')}",
-          },
-        ).timeout(const Duration(seconds: 30));
-        final decodedResponse = json.decode(response.body);
+        final decodedResponse = await Api.get_request(user_type);
         if (decodedResponse["data"] != null) {
           String updatedUrl =
               decodedResponse["data"].replaceFirst("127.0.0.1", "10.0.2.2");

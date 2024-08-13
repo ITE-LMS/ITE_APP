@@ -8,7 +8,11 @@ import 'package:public_testing_app/src/models/Themes.dart';
 import 'package:public_testing_app/src/views/src/Home/fifth_Page/OpenFile.dart';
 
 class FilesCard extends StatelessWidget {
-  const FilesCard({super.key, required this.index, required this.type, required this.subject});
+  const FilesCard(
+      {super.key,
+      required this.index,
+      required this.type,
+      required this.subject});
 
   final int index;
   final String type;
@@ -148,7 +152,8 @@ class FilesCard extends StatelessWidget {
                             ? controller.download_circle ??
                                 InkWell(
                                   onTap: () {
-                                    controller.download_file(index, type , subject , controller.files_names[index]);
+                                    controller.download_file(index, type,
+                                        subject, controller.files_names[index]);
                                   },
                                   child: const Icon(
                                     Iconsax.document_download,
@@ -164,7 +169,7 @@ class FilesCard extends StatelessWidget {
                 if (Auth!.getString("user") == "active_student")
                   Positioned(
                     bottom: 10,
-                    right: controller.download_circle == null ? 70 : 85,
+                    right: controller.download_circle == null ? 70 : 95,
                     child: GetBuilder<HomeController>(
                       id: 'saved_files',
                       init: HomeController(),

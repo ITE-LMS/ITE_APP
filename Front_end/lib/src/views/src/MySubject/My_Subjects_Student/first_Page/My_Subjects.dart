@@ -72,13 +72,22 @@ class MySubjects extends StatelessWidget {
                         ],
                       ),
                     )
-                  : ListView.builder(
-                      itemCount: st_sub_controller.student_subjects.length,
-                      itemBuilder: (ctx, index) {
-                        return MySubjectsCard(
-                          index: index,
-                        );
-                      },
+                  : Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.8,
+                          crossAxisSpacing: 10,
+                        ),
+                        itemCount: st_sub_controller.student_subjects.length,
+                        itemBuilder: (ctx, index) {
+                          return MySubjectsCard(
+                            index: index,
+                          );
+                        },
+                      ),
                     );
             },
           ),

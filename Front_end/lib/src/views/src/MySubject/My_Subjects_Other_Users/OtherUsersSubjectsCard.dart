@@ -46,56 +46,76 @@ class OtherUserSubjectsCard extends StatelessWidget {
           children: [
             Container(
               width: width - 30,
-              height: Auth!.getString("user") == "active_doctor"
-                  ? width - 250
-                  : width - 280,
+              height: width - 190,
               decoration: BoxDecoration(
-                border: DashedBorder.all(
-                  dashLength: 50,
-                  isOnlyCorner: true,
-                  color: Themes.getColor(Themes.darkColorScheme.primary,
-                      Themes.colorScheme.primary),
+                border: Border.all(
+                  color: is_Dark!.getString('is_dark') == 'true'
+                      ? Themes.darkColorScheme.primary
+                      : Themes.colorScheme.primary,
                   width: 3,
                 ),
-                color: Themes.getColor(
-                    Themes.darkColorScheme.primaryContainer.withOpacity(.7),
-                    Colors.blue.withOpacity(.5)),
-                borderRadius: BorderRadius.circular(10),
+                color: is_Dark!.getString('is_dark') == 'true'
+                    ? Themes.darkColorScheme.primaryContainer.withOpacity(.7)
+                    : Colors.blue.withOpacity(.5),
+                borderRadius: BorderRadius.circular(25),
               ),
               child: Stack(
                 children: [
                   Positioned(
-                    top: 20,
+                    top: 10,
                     left: 10,
-                    child: Text(
-                      "name : $name",
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge!
-                          .copyWith(fontSize: 20),
-                    ),
-                  ),
-                  if (Auth!.getString("user") == "active_doctor")
-                    Positioned(
-                      top: 55,
-                      left: 10,
-                      child: Text(
-                        "type : $type",
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleLarge!
-                            .copyWith(fontSize: 20),
+                    right: 10,
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      width: 100,
+                      height: 130,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.white,
+                          width: 3,
+                        ),
+                        boxShadow: const [
+                          BoxShadow(
+                            blurRadius: 5,
+                            color: Colors.black,
+                            blurStyle: BlurStyle.outer,
+                            spreadRadius: 1,
+                          )
+                        ],
+                        color: is_Dark!.getString('is_dark') == 'true'
+                            ? Themes.darkColorScheme.primaryContainer
+                                .withOpacity(.7)
+                            : Colors.blue.withOpacity(.5),
+                        borderRadius: BorderRadius.circular(25),
                       ),
-                    ),
-                  Positioned(
-                    top: Auth!.getString("user") == "active_doctor" ? 90 : 55,
-                    left: 10,
-                    child: Text(
-                      "year : $year",
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge!
-                          .copyWith(fontSize: 20),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            name,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge!
+                                .copyWith(fontSize: 20),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            type,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge!
+                                .copyWith(fontSize: 20),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            year,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge!
+                                .copyWith(fontSize: 20),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   Positioned(

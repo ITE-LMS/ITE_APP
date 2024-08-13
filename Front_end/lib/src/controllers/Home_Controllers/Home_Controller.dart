@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:public_testing_app/main.dart';
 import 'package:public_testing_app/src/models/SnackBar.dart';
 import 'package:public_testing_app/src/models/Themes.dart';
+import 'package:public_testing_app/src/models/api.dart';
 import 'package:public_testing_app/src/views/src/Home/fifth_Page/Files.dart';
 import 'package:public_testing_app/src/views/src/Home/fourth_Page/FilesTypes.dart';
 import 'package:public_testing_app/src/views/src/Home/second_Page/subjects.dart';
@@ -91,61 +92,46 @@ class HomeController extends GetxController {
 
     //! send request to server for fetching Theoritical Subjects :
     try {
-      var url = Uri.parse(
-          'http://10.0.2.2:8000/api/year-subjects-theoretical/$yearNumber');
-      var response = await http.get(
-        url,
-        headers: {
-          "Authorization": "Bearer ${Auth!.getString('token')}",
-        },
-      );
-      final decodedResponse = json.decode(response.body);
+      final decodedResponse =
+          await Api.get_request("year-subjects-theoretical/$yearNumber");
       if (decodedResponse["status"] == 200) {
         List<dynamic> TheoriticalSubjects = decodedResponse["data"];
 
         // IF the response status are correct we will save the subjects names and its doctors :
-        if (decodedResponse["status"] == 200) {
-          name_of_th_subjects = [];
-          doctors_theoritical = [];
-          isAdded_theoritical = [];
-          subjects_theoritical_ids = [];
 
-          for (int i = 0; i < TheoriticalSubjects.length; i++) {
-            final Map<String, dynamic> TH_S = TheoriticalSubjects[i];
+        name_of_th_subjects = [];
+        doctors_theoritical = [];
+        isAdded_theoritical = [];
+        subjects_theoritical_ids = [];
 
-            TH_S.forEach(
-              (key, value) {
-                if (key == "name") {
-                  name_of_th_subjects.add(value);
-                  isAdded_theoritical.add(false);
-                } else if (key == "doctors") {
-                  doctors_theoritical.add(value);
-                } else if (key == "id") {
-                  subjects_theoritical_ids.add(value);
-                }
-              },
-            );
-          }
+        for (int i = 0; i < TheoriticalSubjects.length; i++) {
+          final Map<String, dynamic> TH_S = TheoriticalSubjects[i];
+
+          TH_S.forEach(
+            (key, value) {
+              if (key == "name") {
+                name_of_th_subjects.add(value);
+                isAdded_theoritical.add(false);
+              } else if (key == "doctors") {
+                doctors_theoritical.add(value);
+              } else if (key == "id") {
+                subjects_theoritical_ids.add(value);
+              }
+            },
+          );
         }
         // FETCHING student subjects :
         fetch_Student_Subjects_For_Checking();
       } else {
-        throw FileNotFoundException(response.body);
+        Themes.get_notification_info("cross", "SomeThing Went", "Wrong!");
       }
     } catch (e) {
       log(e.toString());
     }
     //! send request to server for fetching Practical Subjects :
     try {
-      var url = Uri.parse(
-          'http://10.0.2.2:8000/api/year-subjects-practical/$yearNumber');
-      var response = await http.get(
-        url,
-        headers: {
-          "Authorization": "Bearer ${Auth!.getString('token')}",
-        },
-      );
-      final decodedResponse = json.decode(response.body);
+      final decodedResponse =
+          await Api.get_request("year-subjects-practical/$yearNumber");
       List<dynamic> PracticalSubjects = decodedResponse["data"];
 
       // IF the response status are correct we will save the subjects names and its teachers :
@@ -173,7 +159,7 @@ class HomeController extends GetxController {
           );
         }
       } else {
-        throw FileNotFoundException(response.body);
+        Themes.get_notification_info("cross", "SomeThing Went", "Wrong!");
       }
     } catch (e) {
       log(e.toString());
@@ -210,17 +196,11 @@ class HomeController extends GetxController {
   void addToMySubjects(int subject_id, int index) async {
     //! sending request :
     try {
-      var url = Uri.parse('http://10.0.2.2:8000/api/add-to-my-subjects');
-      var response = await http.post(
-        url,
-        body: {
-          "subject_id": '$subject_id',
-        },
-        headers: {
-          "Authorization": "Bearer ${Auth!.getString('token')}",
-        },
-      );
-      final decodedResponse = json.decode(response.body);
+      final data = {
+        "subject_id": '$subject_id',
+      };
+      final decodedResponse =
+          await Api.post_request_with_token("add-to-my-subjects", data);
       //? subject added successfully :
       if (decodedResponse["status"] == 200) {
         isAdded_theoritical[index] = true;
@@ -234,17 +214,11 @@ class HomeController extends GetxController {
   // this function for removing the subjects choosed from student to be hisSubjects :
   void removeFromMySubjects(int subject_id, int index) async {
     try {
-      var url = Uri.parse('http://10.0.2.2:8000/api/remove-from-my-subjects');
-      var response = await http.post(
-        url,
-        body: {
-          "subject_id": '$subject_id',
-        },
-        headers: {
-          "Authorization": "Bearer ${Auth!.getString('token')}",
-        },
-      );
-      final decodedResponse = json.decode(response.body);
+      final data = {
+        "subject_id": '$subject_id',
+      };
+      final decodedResponse =
+          await Api.post_request_with_token("remove-from-my-subjects", data);
       //? subject added successfully :
       if (decodedResponse["status"] == 200) {
         isAdded_theoritical[index] = false;
@@ -329,15 +303,8 @@ class HomeController extends GetxController {
   // fetch student subjects :
   void fetch_Student_Subjects_For_Checking() async {
     try {
-      var url =
-          Uri.parse('http://10.0.2.2:8000/api/student-subjects-theoretical');
-      var response = await http.get(
-        url,
-        headers: {
-          "Authorization": "Bearer ${Auth!.getString('token')}",
-        },
-      );
-      final decodedResponse = json.decode(response.body);
+      final decodedResponse =
+          await Api.get_request("student-subjects-theoretical");
       if (decodedResponse['status'] == 200) {
         final List<dynamic> studentSubjects = decodedResponse["data"];
         for (int i = 0; i < studentSubjects.length; i++) {
@@ -592,15 +559,13 @@ class HomeController extends GetxController {
       id = subject_id;
     }
     try {
-      var url = Uri.parse('http://10.0.2.2:8000/api/get-files-names');
-      var response = await http.post(url, headers: {
-        "Authorization": "Bearer ${Auth!.getString('token')}",
-      }, body: {
+      final data = {
         "year_id": "$year",
         "subject_id": "$id",
         "file_type": "$ctrl_type".substring(12),
-      });
-      final decodedResponse = json.decode(response.body);
+      };
+      final decodedResponse =
+          await Api.post_request_with_token("get-files-names", data);
       if (decodedResponse["status"] == 200) {
         for (int i = 0; i < decodedResponse["data"].length; i++) {
           Map<String, dynamic> FN = decodedResponse["data"][i];
@@ -650,14 +615,7 @@ class HomeController extends GetxController {
   // get student saved Files :
   void getSavedFiles() async {
     try {
-      var url = Uri.parse('http://10.0.2.2:8000/api/student-files');
-      var response = await http.get(
-        url,
-        headers: {
-          "Authorization": "Bearer ${Auth!.getString('token')}",
-        },
-      );
-      final decodedResponse = json.decode(response.body);
+      final decodedResponse = await Api.get_request("student-files");
       for (int i = 0; i < decodedResponse["data"].length; i++) {
         final Map<String, dynamic> SF = decodedResponse["data"][i];
         SF.forEach(
@@ -685,17 +643,11 @@ class HomeController extends GetxController {
     update(['saved_files']);
 
     try {
-      var url = Uri.parse('http://10.0.2.2:8000/api/add-to-my-files');
-      var response = await http.post(
-        body: {
-          "file_id": "$id",
-        },
-        url,
-        headers: {
-          "Authorization": "Bearer ${Auth!.getString('token')}",
-        },
-      );
-      final decodedResponse = json.decode(response.body);
+      final data = {
+        "file_id": "$id",
+      };
+      final decodedResponse =
+          await Api.post_request_with_token("add-to-my-files", data);
     } catch (e) {
       e.toString();
     }
@@ -720,7 +672,7 @@ class HomeController extends GetxController {
       if (appData!.getString("connection_result") !=
           "[ConnectivityResult.none]") {
         files_content = await FileDownloader.downloadFile(
-          url: "http://10.0.2.2:8000/${files_paths[index]}",
+          url: "${Api.public_url}/${files_paths[index]}",
           name: files_paths[index].substring(10).replaceAll(' ', ''),
           subPath: "files/$type",
           onProgress: (String? fileName, double progress) {
@@ -816,7 +768,7 @@ class HomeController extends GetxController {
       if (appData!.getString("connection_result") !=
           "[ConnectivityResult.none]") {
         files_content = await FileDownloader.downloadFile(
-          url: "http://10.0.2.2:8000/${files_paths[index]}",
+          url: "${Api.public_url}/${files_paths[index]}",
           name: files_paths[index].substring(12).replaceAll(' ', ''),
           subPath: "files/images",
           onProgress: (String? fileName, double progress) {
@@ -877,7 +829,7 @@ class HomeController extends GetxController {
       if (appData!.getString("connection_result") !=
           "[ConnectivityResult.none]") {
         files_content = await FileDownloader.downloadFile(
-          url: "http://10.0.2.2:8000/${saved_files_paths[index]}",
+          url: "${Api.public_url}/${saved_files_paths[index]}",
           name: saved_files_paths[index].substring(10).replaceAll(' ', ''),
           subPath: "files/$type",
           onProgress: (String? fileName, double progress) {
@@ -931,14 +883,7 @@ class HomeController extends GetxController {
 
   void getStudentSavedFiles() async {
     try {
-      var url = Uri.parse('http://10.0.2.2:8000/api/student-files');
-      var response = await http.get(
-        url,
-        headers: {
-          "Authorization": "Bearer ${Auth!.getString('token')}",
-        },
-      );
-      final decodedResponse = json.decode(response.body);
+      final decodedResponse = await Api.get_request("student-files");
       if (decodedResponse["status"] == 200) {
         savedFiles_information = [];
         isStudentSavedFiles = [];
@@ -959,17 +904,11 @@ class HomeController extends GetxController {
 
   void remove_from_saved_files(int file_id, int index) async {
     try {
-      var url = Uri.parse('http://10.0.2.2:8000/api/remove-from-my-files');
-      var response = await http.post(
-        body: {
-          "file_id": "$file_id",
-        },
-        url,
-        headers: {
-          "Authorization": "Bearer ${Auth!.getString('token')}",
-        },
-      );
-      final decodedResponse = json.decode(response.body);
+      final data = {
+        "file_id": "$file_id",
+      };
+      final decodedResponse =
+          await Api.post_request_with_token("remove-from-my-files", data);
       if (decodedResponse["status"] == 200) {
         isStudentSavedFiles.removeAt(index);
         saved_files_ids.remove(saved_files_ids[index]);
@@ -1087,7 +1026,6 @@ class HomeController extends GetxController {
       }
       appData!.setStringList("subjects", []);
     }
-    log(Auth!.getString("token").toString());
 
     super.onInit();
   }

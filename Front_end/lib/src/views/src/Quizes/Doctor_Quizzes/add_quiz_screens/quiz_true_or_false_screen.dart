@@ -152,55 +152,61 @@ class QuizTrueOrFalseScreen extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(top: 15.0, right: 5),
-                        child: InkWell(
-                          onTap: () {
-                            quizController
-                                .publishQuiz_TrueORFalse(numQuestions);
-                          },
-                          child: Container(
-                            width: width / 2.8,
-                            height: width / 6.7,
-                            decoration: BoxDecoration(
-                              color: Themes.colorScheme.onPrimaryContainer,
-                              border: Border.all(
-                                width: 3,
-                                color:
-                                    Themes.getColor(Colors.white, Colors.white),
-                              ),
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Themes.getColor(
-                                      Colors.green, Colors.blue),
-                                  blurStyle: BlurStyle.outer,
-                                  blurRadius: 5,
-                                  offset: const Offset(0, 1),
-                                )
-                              ],
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Publish',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge!
-                                      .copyWith(
-                                        fontSize: 18,
-                                        color: Colors.white,
+                        child: GetBuilder<QuizController>(
+                            id: 'publish',
+                            builder: (controller) {
+                              return InkWell(
+                                onTap: () {
+                                  quizController
+                                      .publishQuiz_TrueORFalse(numQuestions);
+                                },
+                                child: Container(
+                                  width: width / 2.8,
+                                  height: width / 6.7,
+                                  decoration: BoxDecoration(
+                                    color:
+                                        Themes.colorScheme.onPrimaryContainer,
+                                    border: Border.all(
+                                      width: 3,
+                                      color: Themes.getColor(
+                                          Colors.white, Colors.white),
+                                    ),
+                                    borderRadius: BorderRadius.circular(15),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Themes.getColor(
+                                            Colors.green, Colors.blue),
+                                        blurStyle: BlurStyle.outer,
+                                        blurRadius: 5,
+                                        offset: const Offset(0, 1),
+                                      )
+                                    ],
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'Publish',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleLarge!
+                                            .copyWith(
+                                              fontSize: 18,
+                                              color: Colors.white,
+                                            ),
                                       ),
+                                      const SizedBox(width: 10),
+                                      controller.circle ??
+                                          const Icon(
+                                            size: 35,
+                                            Iconsax.arrow_up_1,
+                                            color: Colors.white,
+                                          ),
+                                    ],
+                                  ),
                                 ),
-                                const SizedBox(width: 10),
-                                const Icon(
-                                  size: 35,
-                                  Iconsax.arrow_up_1,
-                                  color: Colors.white,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                              );
+                            }),
                       )
                     ],
                   ),

@@ -139,7 +139,7 @@ class Files extends StatelessWidget {
                             ),
                           ),
                           Positioned(
-                            right: 20,
+                            right: 25,
                             top: 22,
                             child: UploadButton(
                               subject_id: subject_id!,

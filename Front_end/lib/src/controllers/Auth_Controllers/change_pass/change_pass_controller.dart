@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:public_testing_app/src/models/Themes.dart';
+import 'package:public_testing_app/src/models/api.dart';
 import '../../../../main.dart';
 import '../../../models/SnackBar.dart';
 
@@ -24,20 +25,13 @@ class ChangePassController extends GetxController {
   void change_password_for_user(String user_url) async {
     try {
       // email url :
-      var url = Uri.parse('http://10.0.2.2:8000/api/$user_url');
-      var response = await http.post(
-        url,
-        headers: {
-          "Authorization": "Bearer ${Auth!.getString('token')}",
-        },
-        body: {
-          'old_password': oldPass.text,
-          'new_password': newPass.text,
-          "confirm_password": confirm_new_pass_word.text,
-        },
-      );
+      final data = {
+        'old_password': oldPass.text,
+        'new_password': newPass.text,
+        "confirm_password": confirm_new_pass_word.text,
+      };
       // decoded response :
-      final decodedResponse = json.decode(response.body);
+      final decodedResponse = await  Api.post_request_with_token(user_url, data);
       if (decodedResponse["status"] == 200) {
         Get.back();
         Get.back();

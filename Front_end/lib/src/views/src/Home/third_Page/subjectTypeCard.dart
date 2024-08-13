@@ -9,7 +9,6 @@ import 'package:public_testing_app/src/controllers/Dark_mode_Controller.dart';
 import 'package:public_testing_app/src/controllers/Home_Controllers/Home_Controller.dart';
 import 'package:public_testing_app/src/models/Themes.dart';
 
-
 class SubjectTypeCard extends StatelessWidget {
   SubjectTypeCard({
     super.key,
@@ -111,8 +110,8 @@ class SubjectTypeCard extends StatelessWidget {
                         right: width / 2.5,
                       ),
                       child: Image(
-                        width: width / 3,
-                        height: height / 5,
+                        width: width / 3.4,
+                        height: height / 5.4,
                         image: AssetImage(path),
                       ),
                     ),
@@ -120,8 +119,8 @@ class SubjectTypeCard extends StatelessWidget {
                 ),
                 // Button To go to subjects screen :
                 Positioned(
-                  top: width / 2.2,
-                  left: width / 2.1,
+                  right: 10,
+                  bottom: 10,
                   child: Container(
                     width: width / 3,
                     height: width / 6,

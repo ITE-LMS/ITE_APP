@@ -205,7 +205,6 @@ class _HomePageState extends State<HomePage> {
                           onDestinationSelected: (index) async {
                             final String? token =
                                 await FirebaseMessaging.instance.getToken();
-                            log(token.toString());
                             if (Auth!.getString("user") == "active_student") {
                               if (index == 2) {
                                 final StudentSubjectsController controller =

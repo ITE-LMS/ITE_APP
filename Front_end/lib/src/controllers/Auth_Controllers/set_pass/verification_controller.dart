@@ -3,9 +3,11 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:public_testing_app/src/models/api.dart';
 import 'package:public_testing_app/src/widgets/ElevatedButton.dart';
 import 'package:public_testing_app/src/models/SnackBar.dart';
 import 'package:public_testing_app/main.dart';
@@ -30,14 +32,14 @@ class VerificationController extends GetxController {
   void verify_user_code(String user_type, String user_url) async {
     try {
       // email url :
-      var url = Uri.parse('http://10.0.2.2:8000/api/$user_url');
-      var response = await http.post(url, body: {
+      final data = {
         'email': Auth!.getString('email'),
         'verificationCode': code.text,
-      });
+      };
 
       // decoded response :
-      final decodedResponse = json.decode(response.body);
+      final decodedResponse =
+          await Api.post_request_without_token(user_url, data);
 
       // verfication code is true :
       if (decodedResponse["status"] == 200) {
@@ -48,6 +50,16 @@ class VerificationController extends GetxController {
         circle = null;
         update(["circleIndicater"]);
         Get.offNamed('RegisterPassPageScreen');
+
+       if(user_type == "student"){
+         final String? token = await FirebaseMessaging.instance.getToken();
+        final data = {
+          "fcm_token": token,
+        };
+        Api.post_request_with_token("register-fcm-token", data);
+        }
+
+        //! send device key
       }
       //verfication code is false :
       else if (decodedResponse["status"] == 201) {
@@ -93,13 +105,11 @@ class VerificationController extends GetxController {
 
   void ResendCode() async {
     try {
-      var url = Uri.parse('http://10.0.2.2:8000/api/forget-password');
-      final response = await http.post(
-        url,
-        body: {
-          "email": Auth!.getString('email'),
-        },
-      );
+      final data = {
+        "email": Auth!.getString('email'),
+      };
+      final decodedResponse =
+          await Api.post_request_without_token("forget-password", data);
     } catch (e) {
       log(e.toString());
     }

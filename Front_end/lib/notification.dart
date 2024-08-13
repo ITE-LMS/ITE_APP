@@ -40,17 +40,19 @@ class NotificationSetUp {
 
     FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      print("================");
-      print("=========${message.notification!.body}=======");
-      print("================");
-      if (message.notification != null) {
-        createOrderNotifications(
-          title: message.notification!.title,
-          body: message.notification!.body,
-        );
-      }
-    });
+    FirebaseMessaging.onMessage.listen(
+      (RemoteMessage message) async {
+        print("================");
+        print("=========${message.notification!.body}=======");
+        print("================");
+        if (message.notification != null) {
+          createOrderNotifications(
+            title: message.notification!.title,
+            body: message.notification!.body,
+          );
+        }
+      },
+    );
   }
 
   Future<void> createOrderNotifications({String? title, String? body}) async {
@@ -87,9 +89,8 @@ Future<dynamic> myBackgroundMessageHandler(RemoteMessage message) async {
 class NotificationController {
   /// Use this method to detect when a new notification or a schedule is created
   @pragma("vm:entry-point")
-  static Future<void> onActionReceivedMethod(ReceivedNotification receivedNotification) async {
-
-
+  static Future<void> onActionReceivedMethod(
+      ReceivedNotification receivedNotification) async {
     // Your code goes here
   }
 }

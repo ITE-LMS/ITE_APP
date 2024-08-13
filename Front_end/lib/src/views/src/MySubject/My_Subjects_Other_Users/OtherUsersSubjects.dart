@@ -51,12 +51,20 @@ class Otheruserssubjects extends StatelessWidget {
             id: 'other_user_subjects',
             init: OtherusersSubjectsController(),
             builder: (st_sub_controller) {
-              return ListView.builder(
-                itemCount:
-                    st_sub_controller.other_user_subjects_information.length,
-                itemBuilder: (ctx, index) {
-                  return OtherUserSubjectsCard(index: index);
-                },
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 0.8,
+                    crossAxisSpacing: 10,
+                  ),
+                  itemCount:
+                      st_sub_controller.other_user_subjects_information.length,
+                  itemBuilder: (ctx, index) {
+                    return OtherUserSubjectsCard(index: index);
+                  },
+                ),
               );
             },
           ),
