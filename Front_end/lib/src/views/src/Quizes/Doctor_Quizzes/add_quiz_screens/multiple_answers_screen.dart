@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:public_testing_app/src/controllers/Quizzes_Controllers/quiz_controller.dart';
 import 'package:public_testing_app/src/models/Themes.dart';
+import 'package:public_testing_app/src/views/Introduction/IntroductionScreen.dart';
 
 class MultipleAnswersScreen extends StatelessWidget {
   final int numQuestions;
@@ -226,7 +227,7 @@ class MultipleAnswersScreen extends StatelessWidget {
                   style: Get.textTheme.titleLarge,
                 ),
                 const SizedBox(
-                  width: 30,
+                  width: 120,
                 ),
                 GetBuilder<QuizController>(
                     id: 'publish',
@@ -236,8 +237,10 @@ class MultipleAnswersScreen extends StatelessWidget {
                           quizController.publishQuiz_MultiAnswers(numQuestions);
                         },
                         child: Container(
-                          width: width / 2.8,
-                          height: width / 6.7,
+                          padding:  EdgeInsets.symmetric(
+                              horizontal:quizController.circle==null? 10:15, vertical: 10),
+                          width: width / 6.5,
+                          height: width / 7,
                           decoration: BoxDecoration(
                             color: Themes.colorScheme.onPrimaryContainer,
                             border: Border.all(
@@ -256,28 +259,12 @@ class MultipleAnswersScreen extends StatelessWidget {
                               )
                             ],
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Publish',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge!
-                                    .copyWith(
-                                      fontSize: 18,
-                                      color: Colors.white,
-                                    ),
+                          child: controller.circle ??
+                              const Icon(
+                                size: 35,
+                                Iconsax.arrow_up_1,
+                                color: Colors.white,
                               ),
-                              const SizedBox(width: 10),
-                              controller.circle ??
-                                  const Icon(
-                                    size: 35,
-                                    Iconsax.arrow_up_1,
-                                    color: Colors.white,
-                                  ),
-                            ],
-                          ),
                         ),
                       );
                     }),

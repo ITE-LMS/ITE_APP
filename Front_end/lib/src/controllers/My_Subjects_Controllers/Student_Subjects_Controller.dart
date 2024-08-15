@@ -14,7 +14,7 @@ import 'package:public_testing_app/src/views/src/Home/fourth_Page/FilesTypes.dar
 
 class StudentSubjectsController extends GetxController {
   List<int> year_id = [1, 2, 3];
-  List<Map<String, dynamic>> student_subjects = [];
+  dynamic student_subjects = [];
   Widget? circle_for_files;
   Files_Types ctrl_type = Files_Types.adds;
   HomeController controller = Get.put(HomeController());
@@ -45,19 +45,16 @@ class StudentSubjectsController extends GetxController {
   // Fetch student subjects :
   void getStudentSubjects() async {
     try {
-      student_subjects = [];
-
       final decodedResponse = await Api.get_request("student-subjects");
       if (decodedResponse["status"] == 200) {
-        for (int i = 0; i < decodedResponse["data"].length; i++) {
-          student_subjects.add(decodedResponse["data"][i]);
-        }
+        student_subjects = decodedResponse["data"];
+        log(student_subjects.toString());
       }
       update(["subjects"]);
       controller.update(['doctor_upload']);
     } catch (e) {
       if (!Get.isSnackbarOpen) {
-        Themes.no_internet_connection();
+        Themes.get_notification_info("cross", "Something Went", "Wrong!");
       }
     }
   }
@@ -258,11 +255,5 @@ class StudentSubjectsController extends GetxController {
         ),
       ),
     );
-  }
-
-  @override
-  void onInit() {
-    getStudentSubjects();
-    super.onInit();
   }
 }

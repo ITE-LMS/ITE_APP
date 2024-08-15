@@ -42,9 +42,9 @@ class AIController extends GetxController {
     } else {
       state = "online";
       update(["state"]);
-      // if (Get.isSnackbarOpen) {
-      //   Get.closeAllSnackbars();
-      // }
+      if (Get.isSnackbarOpen) {
+        Get.closeAllSnackbars();
+      }
     }
   }
 

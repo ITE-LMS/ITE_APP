@@ -151,7 +151,7 @@ class QuizTrueOrFalseScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 15.0, right: 5),
+                        padding: const EdgeInsets.only(top: 15.0, right: 20),
                         child: GetBuilder<QuizController>(
                             id: 'publish',
                             builder: (controller) {
@@ -161,8 +161,13 @@ class QuizTrueOrFalseScreen extends StatelessWidget {
                                       .publishQuiz_TrueORFalse(numQuestions);
                                 },
                                 child: Container(
-                                  width: width / 2.8,
-                                  height: width / 6.7,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: quizController.circle == null
+                                          ? 10
+                                          : 15,
+                                      vertical: 10),
+                                  width: width / 6.5,
+                                  height: width / 7,
                                   decoration: BoxDecoration(
                                     color:
                                         Themes.colorScheme.onPrimaryContainer,
@@ -182,27 +187,13 @@ class QuizTrueOrFalseScreen extends StatelessWidget {
                                       )
                                     ],
                                   ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'Publish',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleLarge!
-                                            .copyWith(
-                                              fontSize: 18,
-                                              color: Colors.white,
-                                            ),
-                                      ),
-                                      const SizedBox(width: 10),
-                                      controller.circle ??
-                                          const Icon(
-                                            size: 35,
-                                            Iconsax.arrow_up_1,
-                                            color: Colors.white,
-                                          ),
-                                    ],
+                                  child: Center(
+                                    child: controller.circle ??
+                                        const Icon(
+                                          size: 35,
+                                          Iconsax.arrow_up_1,
+                                          color: Colors.white,
+                                        ),
                                   ),
                                 ),
                               );

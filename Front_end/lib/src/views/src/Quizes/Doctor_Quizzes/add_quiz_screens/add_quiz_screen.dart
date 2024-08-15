@@ -66,71 +66,71 @@ class AddQuizScreen extends StatelessWidget {
                   child: GetBuilder<QuizController>(
                     init: QuizController(),
                     builder: (controller) {
-                      return Container(
-                          padding: const EdgeInsets.only(left: 10),
-                          width: width / 2.8,
-                          height: width / 8,
-                          decoration: BoxDecoration(
-                            color: Themes.colorScheme.onPrimaryContainer,
-                            border: Border.all(
-                              width: 3,
-                              color: Colors.white,
+                      return InkWell(
+                        onTap: () {
+                          controller
+                              .dialog_for_choosing_subject_from_MySubjects(
+                                  context);
+                        },
+                        child: Container(
+                            padding: const EdgeInsets.only(left: 10),
+                            width: width / 2.8,
+                            height: width / 8,
+                            decoration: BoxDecoration(
+                              color: Themes.colorScheme.onPrimaryContainer,
+                              border: Border.all(
+                                width: 3,
+                                color: Colors.white,
+                              ),
+                              borderRadius: BorderRadius.circular(15),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Themes.getColor(
+                                      Colors.green, Colors.blue),
+                                  blurStyle: BlurStyle.outer,
+                                  blurRadius: 5,
+                                  offset: const Offset(0, 1),
+                                )
+                              ],
                             ),
-                            borderRadius: BorderRadius.circular(15),
-                            boxShadow: [
-                              BoxShadow(
-                                color:
-                                    Themes.getColor(Colors.green, Colors.blue),
-                                blurStyle: BlurStyle.outer,
-                                blurRadius: 5,
-                                offset: const Offset(0, 1),
-                              )
-                            ],
-                          ),
-                          child: Row(
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  controller
-                                      .dialog_for_choosing_subject_from_MySubjects(
-                                          context);
-                                },
-                                child: const Icon(
+                            child: Row(
+                              children: [
+                                const Icon(
                                   Iconsax.sidebar_top,
                                   color: Colors.white,
                                 ),
-                              ),
-                              const SizedBox(width: 10),
-                              GetBuilder<QuizController>(
-                                  id: 'choose_subject',
-                                  builder: (add_controller) {
-                                    return Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          controller.selectedSubject,
-                                          style: Get.textTheme.titleLarge!
-                                              .copyWith(
-                                            fontSize: 12,
-                                            color: Colors.white,
+                                const SizedBox(width: 10),
+                                GetBuilder<QuizController>(
+                                    id: 'choose_subject',
+                                    builder: (add_controller) {
+                                      return Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            controller.selectedSubject,
+                                            style: Get.textTheme.titleLarge!
+                                                .copyWith(
+                                              fontSize: 12,
+                                              color: Colors.white,
+                                            ),
                                           ),
-                                        ),
-                                        Text(
-                                          controller.Selected_Type_Subject,
-                                          style: Get.textTheme.titleLarge!
-                                              .copyWith(
-                                            fontSize: 12,
-                                            color: Colors.white,
+                                          Text(
+                                            controller.Selected_Type_Subject,
+                                            style: Get.textTheme.titleLarge!
+                                                .copyWith(
+                                              fontSize: 12,
+                                              color: Colors.white,
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    );
-                                  }),
-                            ],
-                          ));
+                                        ],
+                                      );
+                                    }),
+                              ],
+                            )),
+                      );
                     },
                   ),
                 ),
@@ -357,8 +357,8 @@ class AddQuizScreen extends StatelessWidget {
                   right: 10,
                   bottom: 10,
                   child: Container(
-                    width: width / 3.4,
-                    height: width / 7,
+                    width: width / 4,
+                    height: width / 8,
                     decoration: BoxDecoration(
                       color: Themes.colorScheme.onPrimaryContainer,
                       border: Border.all(
@@ -375,10 +375,13 @@ class AddQuizScreen extends StatelessWidget {
                         )
                       ],
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
+                    child: InkWell(
+                      onTap: () {
+                        controller.onSave();
+                        controller.init_num_question(controller.numQuestion);
+                      },
+                      child: Center(
+                        child: Text(
                           'Next',
                           style:
                               Theme.of(context).textTheme.titleLarge!.copyWith(
@@ -386,20 +389,7 @@ class AddQuizScreen extends StatelessWidget {
                                     color: Colors.white,
                                   ),
                         ),
-                        const SizedBox(width: 10),
-                        InkWell(
-                          onTap: () {
-                            controller.onSave();
-                            controller
-                                .init_num_question(controller.numQuestion);
-                          },
-                          child: const Icon(
-                            size: 35,
-                            Iconsax.arrow_right,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ),

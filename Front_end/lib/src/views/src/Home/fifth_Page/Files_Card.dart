@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -5,7 +7,9 @@ import 'package:public_testing_app/main.dart';
 import 'package:public_testing_app/src/controllers/Home_Controllers/Home_Controller.dart';
 import 'package:public_testing_app/src/controllers/My_Subjects_Controllers/Student_Subjects_Controller.dart';
 import 'package:public_testing_app/src/models/Themes.dart';
+import 'package:public_testing_app/src/views/Introduction/IntroductionScreen.dart';
 import 'package:public_testing_app/src/views/src/Home/fifth_Page/OpenFile.dart';
+import 'package:public_testing_app/src/views/src/Home/fourth_Page/FilesTypes.dart';
 
 class FilesCard extends StatelessWidget {
   const FilesCard(
@@ -25,7 +29,7 @@ class FilesCard extends StatelessWidget {
     final HomeController controller = Get.find();
     StudentSubjectsController? student_controller;
     if (Auth!.getString("user") == "active_student") {
-      student_controller = Get.find();
+     student_controller = Get.put(StudentSubjectsController());
     }
 
     Widget added_to_saved_files = const Icon(
@@ -166,6 +170,48 @@ class FilesCard extends StatelessWidget {
                     },
                   ),
                 ),
+                if (Auth!.getString("user") != "active_student")
+                  Positioned(
+                    right: 70,
+                    bottom: 10,
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      width: controller.download_circle == null
+                          ? width / 8
+                          : width / 6,
+                      height: width / 8,
+                      decoration: BoxDecoration(
+                        color: Themes.colorScheme.onPrimaryContainer,
+                        border: Border.all(
+                          width: 3,
+                          color: Themes.getColor(Colors.white, Colors.white),
+                        ),
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Themes.getColor(Colors.green, Colors.blue),
+                            blurStyle: BlurStyle.outer,
+                            blurRadius: 3,
+                            offset: const Offset(0, 1),
+                          )
+                        ],
+                      ),
+                      child: InkWell(
+                        onTap: () {
+                          controller.delete_file(
+                            controller.files_ids[index],
+                            index,
+                            Files_Types.pdf,
+                          );
+                        },
+                        child: const Icon(
+                          Iconsax.trash,
+                          color: Colors.red,
+                          size: 26,
+                        ),
+                      ),
+                    ),
+                  ),
                 if (Auth!.getString("user") == "active_student")
                   Positioned(
                     bottom: 10,

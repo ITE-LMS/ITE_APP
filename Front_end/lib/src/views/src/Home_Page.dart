@@ -203,6 +203,7 @@ class _HomePageState extends State<HomePage> {
                           elevation: 2,
                           selectedIndex: nav_controller.selectedIndex,
                           onDestinationSelected: (index) async {
+                            log(Auth!.getString("token").toString());
                             final String? token =
                                 await FirebaseMessaging.instance.getToken();
                             if (Auth!.getString("user") == "active_student") {

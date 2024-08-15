@@ -12,29 +12,32 @@ import 'package:public_testing_app/src/models/SnackBar.dart';
 import 'package:public_testing_app/src/models/Themes.dart';
 import 'package:public_testing_app/src/models/api.dart';
 import 'package:public_testing_app/src/views/src/Home/fourth_Page/FilesTypes.dart';
+import 'package:public_testing_app/src/widgets/TextFormField.dart';
 
 class OtherusersSubjectsController extends GetxController {
   List<Map<String, dynamic>> other_user_subjects_information = [];
   Widget? fail_request;
   File? file;
   Widget? Circle;
+  final form_key = GlobalKey<FormState>();
+  final body = TextEditingController();
 
   @override
   void onInit() {
     appData!.setBool("is_my_subjects", false);
     if (Auth!.getString("user") == "active_doctor") {
       other_user_subjects_information = [];
-      get_Other_User_Subjects("doctor-subjects-theoretical", false);
-      get_Other_User_Subjects("doctor-subjects-practical", true);
+      get_Other_User_Subjects("doctor-subjects-theoretical");
+      get_Other_User_Subjects("doctor-subjects-practical");
     } else if (Auth!.getString("user") == "active_teacher") {
       other_user_subjects_information = [];
-      get_Other_User_Subjects("teacher-subjects", true);
+      get_Other_User_Subjects("teacher-subjects");
     }
     super.onInit();
   }
 
   // fetching doctor or teacher subjects who is responsible for :
-  void get_Other_User_Subjects(String subjects_type, bool done) async {
+  void get_Other_User_Subjects(String subjects_type) async {
     try {
       final decodedResponse = await Api.get_request(subjects_type);
       if (decodedResponse["status"] == 200) {
@@ -79,8 +82,8 @@ class OtherusersSubjectsController extends GetxController {
   }
 
   // Pick Files or images then upload it :
-  void upload_files(String type, int subject_id, String subject_type,
-      String subject_name, int year) async {
+  void upload_files(BuildContext context, String type, int subject_id,
+      String subject_type, String subject_name, int year) async {
     String? path;
     String? name;
     if (type == "pdf") {
@@ -132,7 +135,164 @@ class OtherusersSubjectsController extends GetxController {
       } catch (e) {
         print('Error picking PDF file: $e');
       }
+    } else if (type == "adds") {
+      dialog_for_publish_notification(context, subject_id);
     }
+  }
+
+  Future dialog_for_publish_notification(
+      BuildContext context, int subject_id) async {
+    showGeneralDialog(
+      context: context,
+      pageBuilder: (context, animation_1, animation_2) {
+        return Container();
+      },
+      transitionDuration: const Duration(milliseconds: 200),
+      transitionBuilder: (context, a1, a2, widget) {
+        return ShowDialog(subject_id, a1, a2);
+      },
+    );
+  }
+
+  // bottom Sheet to choose image source : (Gallery || Camera): //? not done :
+  Widget ShowDialog(
+      int subject_id, Animation<double> a1, Animation<double> a2) {
+    return ScaleTransition(
+      scale: Tween<double>(begin: 0.5, end: 1.0).animate(a1),
+      child: FadeTransition(
+        opacity: Tween<double>(begin: 0.5, end: 1.0).animate(a1),
+        child: AlertDialog(
+          backgroundColor: Themes.getColor(
+              Themes.darkColorScheme.primaryContainer,
+              Themes.colorScheme.primaryContainer),
+          content: SizedBox(
+            width: Get.size.width - 50,
+            height: Get.size.width - 180,
+            child: GetBuilder<HomeController>(
+              id: 'add_TP_or_T',
+              builder: (controller) {
+                return Stack(
+                  children: [
+                    // title :
+                    Text(
+                      'Enter Notification :',
+                      style: Get.textTheme.titleLarge!.copyWith(fontSize: 25),
+                    ),
+                    // body field :
+                    Positioned(
+                      top: 80,
+                      child: SizedBox(
+                        width: 270,
+                        height: 75,
+                        child: Form(
+                          key: form_key,
+                          child: MyTextFormField(
+                            label: "enter notification to publish ...",
+                            validate: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return "content required";
+                              }
+                            },
+                            save: (value) {
+                              body.text = value!;
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                    // add button :
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          boxShadow: const [
+                            BoxShadow(
+                              blurStyle: BlurStyle.outer,
+                              blurRadius: 2,
+                              offset: Offset(0, 0.5),
+                            )
+                          ],
+                          color: Themes.colorScheme.onPrimaryContainer
+                              .withOpacity(.8),
+                          border: Border.all(
+                            width: 2,
+                            color: is_Dark!.getString('is_dark') == 'true'
+                                ? Themes.darkColorScheme.primary
+                                : Colors.blue,
+                          ),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        width: Get.size.width / 5,
+                        height: Get.size.height / 19,
+                        child: Center(
+                          child: InkWell(
+                            onTap: () {
+                              if (form_key.currentState!.validate()) {
+                                form_key.currentState!.save();
+                                publish_notification(subject_id, body.text);
+                                Get.back();
+                                body.text = '';
+                              }
+                            },
+                            child: Text(
+                              'publish',
+                              style: Get.textTheme.titleLarge!
+                                  .copyWith(fontSize: 17, color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    // cancel button :
+                    Positioned(
+                      bottom: 0,
+                      right: 90,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          boxShadow: const [
+                            BoxShadow(
+                              blurStyle: BlurStyle.outer,
+                              blurRadius: 2,
+                              offset: Offset(0, 0.5),
+                            )
+                          ],
+                          color: Themes.colorScheme.onPrimaryContainer
+                              .withOpacity(.8),
+                          border: Border.all(
+                            width: 2,
+                            color: is_Dark!.getString('is_dark') == 'true'
+                                ? Themes.darkColorScheme.primary
+                                : Colors.blue,
+                          ),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        width: Get.size.width / 5,
+                        height: Get.size.height / 19,
+                        child: Center(
+                          child: InkWell(
+                            onTap: () => Get.back(),
+                            child: Text(
+                              'cancel',
+                              style: Get.textTheme.titleLarge!
+                                  .copyWith(fontSize: 17, color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+          shape: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide.none,
+          ),
+        ),
+      ),
+    );
   }
 
   // General Upload File :
@@ -170,5 +330,25 @@ class OtherusersSubjectsController extends GetxController {
     }
   }
 
-  void register_teacher() {}
+  void publish_notification(int subject_id, String body) async {
+    HomeController controller = Get.put(HomeController());
+    try {
+      final data = {
+        "subject_id": "$subject_id",
+        "body": body,
+      };
+      final response =
+          await Api.post_request_with_token("add-notifications-subject", data);
+      if (response["status"] == 200) {
+        Themes.get_notification_info(
+            "check", "Notification Published", "Successfully");
+        controller.get_notifications(subject_id);
+        controller.update(["doctor_upload"]);
+      } else {
+        Themes.get_notification_info("cross", "Something Went", "Wrong!");
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+  }
 }

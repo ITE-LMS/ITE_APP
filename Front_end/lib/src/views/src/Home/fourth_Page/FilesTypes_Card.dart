@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:public_testing_app/main.dart';
 import 'package:public_testing_app/src/controllers/Home_Controllers/Home_Controller.dart';
+import 'package:public_testing_app/src/controllers/My_Subjects_Controllers/OtherUsers_Subjects_Controller.dart';
 import 'package:public_testing_app/src/controllers/My_Subjects_Controllers/Student_Subjects_Controller.dart';
 import 'package:public_testing_app/src/models/Themes.dart';
 import 'FilesTypes.dart';
@@ -31,14 +34,37 @@ class FilestypesCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final Home_Controller = Get.put(HomeController());
     StudentSubjectsController? student_controller;
+    OtherusersSubjectsController? other_controller;
     if (Auth!.getString("user") == "active_student") {
-      student_controller = Get.put(StudentSubjectsController());
+      log("message");
+      student_controller = Get.find<StudentSubjectsController>();
+    } else {
+      other_controller = Get.put(OtherusersSubjectsController());
     }
+
     final width = Themes.getWidth(context);
     final height = Themes.getHeight(context);
 
     final go_to_file_screen = InkWell(
       onTap: () {
+        if (type == Files_Types.adds &&
+            (Auth!.getString("user") == "active_doctor" ||
+                Auth!.getString("user") == "active_teacher")) {
+          Home_Controller.get_notifications(subject_id!);
+          return;
+        }
+        if (type == Files_Types.adds &&
+            Auth!.getString("user") == "active_student") {
+          int id = 0;
+          if (subject_type == "Theoritical") {
+            id = student_controller!.student_subjects[index_for_student!]
+                ["id_theo"];
+          } else if (subject_type == "Practical") {
+            id = student_controller!.student_subjects[index_for_student!]
+                ["id_pra"];
+          }
+          Home_Controller.get_notifications(id);
+        }
         if (appData!.getBool("is_my_subjects") == false) {
           Home_Controller.get_files_names_for_type(
             type,
@@ -51,6 +77,7 @@ class FilestypesCard extends StatelessWidget {
             null,
           );
         } else {
+          //log(student_controller!.student_subjects.toString());
           int id = 0;
           if (subject_type == "Theoritical") {
             id = student_controller!.student_subjects[index_for_student!]

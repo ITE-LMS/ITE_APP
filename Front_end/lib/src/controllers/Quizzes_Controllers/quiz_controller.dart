@@ -295,6 +295,16 @@ class QuizController extends GetxController {
         'num_of_questions': numQuestions.toString(),
       };
 
+      circle = const SizedBox(
+        height: 50,
+        width: 50,
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          color: Colors.white,
+        ),
+      );
+      update(['publish']);
+
       final decodedResponse =
           await Api.post_request_with_token_using_json("add-quiz", data);
 
@@ -306,6 +316,12 @@ class QuizController extends GetxController {
         Get.back();
         Themes.get_notification_info(
             "check", "Quiz Published", "Successfully!");
+        circle = null;
+        update(['publish']);
+      } else {
+        Themes.get_notification_info("cross", "Something Went", "Wrong!");
+        circle = null;
+        update(['publish']);
       }
     } catch (e) {
       log(e.toString());
@@ -445,6 +461,7 @@ class QuizController extends GetxController {
         width: 50,
         child: CircularProgressIndicator(
           strokeWidth: 2,
+          color: Colors.white,
         ),
       );
       update(['publish']);
@@ -458,6 +475,10 @@ class QuizController extends GetxController {
         Get.back();
         Themes.get_notification_info(
             "check", "Quiz Published", "Successfully!");
+        circle = null;
+        update(['publish']);
+      } else {
+        Themes.get_notification_info("cross", "Something Went", "Wrong!");
         circle = null;
         update(['publish']);
       }
@@ -685,7 +706,6 @@ class QuizController extends GetxController {
       init_num_question(3);
       quizzes = [];
       quizzes_ids = [];
-      get_other_users_quizes();
     }
     if (Auth!.getString("user") == "active_student") {
       quizzes = [];

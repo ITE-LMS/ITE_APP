@@ -43,7 +43,7 @@ class UploadButton extends StatelessWidget {
         ],
       ),
       child: InkWell(
-        onTap: () => other_users_controller.upload_files(
+        onTap: () => other_users_controller.upload_files(context,
             type, subject_id, subject_name, subject_type, year),
         child: const Icon(
           size: 35,

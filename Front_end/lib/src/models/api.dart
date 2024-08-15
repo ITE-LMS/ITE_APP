@@ -4,15 +4,18 @@ import 'package:http/http.dart' as http;
 import 'package:public_testing_app/src/models/Themes.dart';
 
 class Api {
-  static String public_url = "http://10.0.2.2:8000";
+  static String public_url = "http://192.168.1.102:8000";
 
   static get_request(String Url) async {
     final response = await http.get(
       Uri.parse('$public_url/api/$Url'),
       headers: {
         "Authorization": "Bearer ${Themes.getUserToken()}",
+        "Accept": "application/json",
+        "Content-Type": "application/json"
       },
     );
+
     final decodedResponse = json.decode(response.body);
     return decodedResponse;
   }

@@ -76,6 +76,8 @@ class HomeController extends GetxController {
   double _progress = 0;
   late Timer _timer;
   RxInt start_timer = 4.obs;
+  List<dynamic> notifications_ids = [];
+  List<bool> is_colapse = [];
 
   // this function for fetching the subjects :
   void viewSubjectsOfTheYear(int yearNumber) async {
@@ -1028,6 +1030,66 @@ class HomeController extends GetxController {
     }
 
     super.onInit();
+  }
+
+  void get_notifications(int id) async {
+    dynamic noti;
+    try {
+      noti = await Api.get_request("get-notifications-subject/$id");
+
+      if (noti["status"] == 200) {
+        log(id.toString());
+        notifications_ids = noti["data"];
+        log(noti["data"].toString());
+        log(notifications_ids.toString());
+        for (int i = 0; i < notifications_ids.length; i++) {
+          is_colapse.add(false);
+        }
+      } else {
+        Themes.get_notification_info("cross", "Something Went", "Wrong!");
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  void delete_notification(int id) async {
+    dynamic noti;
+    try {
+      noti = await Api.get_request("delete-notifications-subject/$id");
+      if (noti["status"] == 200) {
+        Themes.get_notification_info(
+            "check", "Notification Deleted", "Successfully");
+        update(["doctor_upload"]);
+      } else {
+        Themes.get_notification_info("cross", "Something Went", "Wrong!");
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  void delete_file(int file_id, int index, Files_Types type) async {
+    try {
+      final response = await Api.get_request("delete_file/$file_id");
+      if (response["status"] == 200) {
+        Themes.get_notification_info("check", "file deleted", "successfully");
+
+        if (type.name == "pdf") {
+          appData!.setString("file[${type.name}][${files_ids[index]}]", '');
+        } else if (type.name == "image") {
+          appData!.setString("photo[${files_ids[index]}]", '');
+        }
+        files_ids.removeAt(index);
+        files_names.removeAt(index);
+        files_paths.removeAt(index);
+        update(["doctor_upload"]);
+      } else {
+        Themes.get_notification_info("cross", "Something Went", "Wrong!");
+      }
+    } catch (e) {
+      log(e.toString());
+    }
   }
 
   @override

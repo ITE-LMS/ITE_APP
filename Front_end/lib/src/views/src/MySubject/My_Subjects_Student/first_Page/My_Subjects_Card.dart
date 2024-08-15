@@ -121,7 +121,8 @@ class MySubjectsCard extends StatelessWidget {
                             style: Theme.of(context)
                                 .textTheme
                                 .titleLarge!
-                                .copyWith(fontSize: 18),
+                                .copyWith(
+                                    fontSize: type == "theoritical" ? 18 : 16),
                           ),
                           const SizedBox(height: 10),
                           Text(

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:public_testing_app/main.dart';
@@ -35,9 +37,30 @@ class Files extends StatelessWidget {
     StudentSubjectsController? student_controller;
 
     if (Auth!.getString("user") == "active_student") {
-      student_controller = Get.find();
+     student_controller = Get.put(StudentSubjectsController());
     }
     int index = -1;
+
+    final Widget empty = Center(
+      child: Padding(
+        padding: EdgeInsets.only(top: Get.size.height / 3),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Image(
+              width: 100,
+              height: 100,
+              image: AssetImage('assets/images/error-404.png'),
+            ),
+            Text(
+              'No items added yet',
+              style: Get.textTheme.titleMedium,
+            ),
+          ],
+        ),
+      ),
+    );
 
     return Scaffold(
       backgroundColor: is_Dark!.getString('is_dark') == 'true'
@@ -143,7 +166,7 @@ class Files extends StatelessWidget {
                             top: 22,
                             child: UploadButton(
                               subject_id: subject_id!,
-                              type: type.toString().substring(12),
+                              type: type.name,
                               year: year,
                               subject_type: subject_type,
                               subject_name: subject_name,
@@ -167,44 +190,39 @@ class Files extends StatelessWidget {
                       ),
               ),
               const SizedBox(height: 10),
-              Home_Controller.files_names.isEmpty
-                  ? Center(
-                      child: Padding(
-                        padding: EdgeInsets.only(top: Get.size.height / 3),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const Image(
-                              width: 100,
-                              height: 100,
-                              image: AssetImage('assets/images/error-404.png'),
-                            ),
-                            Text(
-                              'No items added yet',
-                              style: Get.textTheme.titleMedium,
-                            ),
-                          ],
+              Home_Controller.notifications_ids.isEmpty && type.name == "adds"
+                  ? empty
+                  : Home_Controller.files_ids.isEmpty && type.name != "adds"
+                      ? empty
+                      : Expanded(
+                          child: ListView.builder(
+                            itemCount: type.name == "adds"
+                                ? Home_Controller.notifications_ids.length
+                                : Home_Controller.files_ids.length,
+                            itemBuilder: (ctx, index) {
+                              return type.name == 'pdf'
+                                  ? (Home_Controller.files_ids.isEmpty
+                                      ? empty
+                                      : FilesCard(
+                                          index: index,
+                                          type: type.name,
+                                          subject: subject_name))
+                                  : (type.name == 'image'
+                                      ? (Home_Controller.files_names.isEmpty
+                                          ? empty
+                                          : ImagesCard(
+                                              year: year,
+                                              index: index,
+                                              subject_name: subject_name,
+                                              subject_type: subject_type,
+                                            ))
+                                      : (Home_Controller
+                                              .notifications_ids.isEmpty
+                                          ? empty
+                                          : AddsCard(index: index)));
+                            },
+                          ),
                         ),
-                      ),
-                    )
-                  : Expanded(
-                      child: ListView.builder(
-                        itemCount: Home_Controller.files_ids.length,
-                        itemBuilder: (ctx, index) {
-                          return type.name == 'pdf'
-                              ? FilesCard(index: index, type: type.name , subject: subject_name)
-                              : type.name == 'image'
-                                  ? ImagesCard(
-                                      year: year,
-                                      index: index,
-                                      subject_name: subject_name,
-                                      subject_type: subject_type,
-                                    )
-                                  : AddsCard(index: index);
-                        },
-                      ),
-                    ),
             ],
           );
         },
